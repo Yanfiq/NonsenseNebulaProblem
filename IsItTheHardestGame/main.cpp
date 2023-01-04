@@ -1,7 +1,6 @@
 #include "SFML/Graphics.hpp"
 #include <stdbool.h>
 #include "SFML/Window.hpp"
-#include "func.h"
 #include <string.h>
 #include "SFML/Rect.hpp"
 #include <sstream>
@@ -13,16 +12,17 @@
 //OBJECT CLASS
 class object
 {
-public:
-	float positionX, positionY;
-	float velocityX = 0, velocityY = 0;
-	float width, height;
+public:												
+	float positionX, positionY;	
+	float velocityX = 0, velocityY = 0;	
+	float width, height;							
 	float gravity = 0.01f;
-	float maxY = 2;
+	float maxY = 2;	
 	float minY = -2;
 	float HP = 100;
-	void Update(float time)
-	{
+	void Update(float time)	
+	{	
+
 		positionX += velocityX * time;
 		if (minY < velocityY < maxY)
 		{
@@ -32,38 +32,44 @@ public:
 	}
 };
 
-int main() {
-	sf::RenderWindow window(sf::VideoMode(2400, 1350), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close);
+int main()
+{
+	sf::RenderWindow window(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close);
 	sf::Event event;
 
 	//BACKGROUND
 	sf::Texture background;
 	background.loadFromFile("images/background.png");
 	sf::RectangleShape Background;
-	Background.setTexture(&background);
-	Background.setSize(sf::Vector2f(2400, 1350));
+	Background.setTexture(&background);	
+	Background.setSize(sf::Vector2f(1280, 720));
 
 	//OBJECT ID: PLANE
 	object Plane;
-	Plane.positionX = 200;
-	Plane.positionY = 212;
-	Plane.width = 120;
-	Plane.height = 60;
-	sf::RectangleShape spritePlane(sf::Vector2f(Plane.width, Plane.height));
-	spritePlane.setFillColor(sf::Color(0, 255, 160));
-	spritePlane.setOrigin(sf::Vector2f::Vector2(60.f, 30.f));
+	sf::Texture texturePlane;
+	texturePlane.loadFromFile("images/plane.png");
+	Plane.positionX = 200;	
+	Plane.positionY = 212;		
+	Plane.width = 60;	
+	Plane.height = 29;				
+	Plane.gravity = 0.005;
 
+	sf::RectangleShape spritePlane(sf::Vector2f(Plane.width, Plane.height));
+	spritePlane.setTexture(&texturePlane);
+	spritePlane.setScale(2, 2);	
+	spritePlane.setOrigin(sf::Vector2f::Vector2(30.f, 15.f));			
+																				
 	//TIME LIMIT
-	const int limit = 60;
-	int remain = 60;
+	const int limit = 20;
+	int remain = 20;
 	sf::Text Time;
 	sf::Font font;
 	int time = 0;
 	int last_time = 0;
 	font.loadFromFile("fonts/OCR A Extended Regular.ttf");
 	Time.setFont(font);
-	Time.setPosition(1800, 50);
-	Time.setCharacterSize(50);
+	Time.setPosition(800, 50);
+	Time.setCharacterSize(40);
 	Time.setFillColor(sf::Color::Black);
 
 	//OBJECT ID: BULLET
@@ -71,43 +77,43 @@ int main() {
 	object bullet[30];
 	for (int i = 0; i < 30; i++)
 	{
-		bullet[i].gravity = 0;
+		bullet[i].gravity = 0.001;
 		bullet[i].velocityY = 0;
-		bullet[i].velocityX = 5;
-		spriteBullet[i].setOrigin(sf::Vector2f::Vector2(15.f, 15.f));
-		spriteBullet[i].setSize(sf::Vector2f::Vector2(30.f, 30.f));
+		bullet[i].velocityX = 1;
+		spriteBullet[i].setOrigin(sf::Vector2f::Vector2(5.f, 5.f));
+		spriteBullet[i].setSize(sf::Vector2f::Vector2(10.f, 10.f));
 		spriteBullet[i].setFillColor(sf::Color(255, 255, 255));
 	}
 
 	//OBJECT ID: ENEMY A
-	sf::Texture EnemyATexture;
-	EnemyATexture.loadFromFile("images/EnemyA.png");
 	object enemyA[5];
+	sf::Texture enemyATex;
+	enemyATex.loadFromFile("images/enemyA.png");
 	sf::RectangleShape spriteEnemyA[5];
 	for (int i = 0; i < 5; i++)
 	{
-		enemyA[i].width = 120;
-		enemyA[i].height = 60;
+		enemyA[i].width = 69;
+		enemyA[i].height = 37;
 		enemyA[i].gravity = 0;
 		spriteEnemyA[i].setSize(sf::Vector2f::Vector2(enemyA[i].width, enemyA[i].height));
-		spriteEnemyA[i].setOrigin(sf::Vector2f::Vector2(60.f, 30.f));
-		spriteEnemyA[i].setFillColor(sf::Color(0, 0, 0));
+		spriteEnemyA[i].setOrigin(sf::Vector2f::Vector2(35.f, 18.f));
+		spriteEnemyA[i].setTexture(&enemyATex);
 	}
 
 	//OBJECT ID:: ENEMY B
-	sf::Texture EnemyBTexture;
-	EnemyBTexture.loadFromFile("images/EnemyB.png");
 	object enemyB[5];
+	sf::Texture enemyBTex;
+	enemyBTex.loadFromFile("images/enemyB.png");
 	sf::RectangleShape spriteEnemyB[5];
 	for (int i = 0; i < 5; i++)
 	{
-		enemyB[i].width = 180;
-		enemyB[i].height = 90;
+		enemyB[i].width = 68;
+		enemyB[i].height = 44;
 		enemyB[i].gravity = 0;
-		enemyB[i].HP = 50;
+		enemyB[i].HP = 60;
 		spriteEnemyB[i].setSize(sf::Vector2f::Vector2(enemyB[i].width, enemyB[i].height));
-		spriteEnemyB[i].setOrigin(sf::Vector2f::Vector2(90.f, 45.f));
-		spriteEnemyB[i].setFillColor(sf::Color(0, 0, 0));
+		spriteEnemyB[i].setOrigin(sf::Vector2f::Vector2(34.f, 22.f));
+		spriteEnemyB[i].setTexture(&enemyBTex);
 	}
 
 	//SCORE
@@ -115,24 +121,24 @@ int main() {
 	sf::Text Score;
 	sf::Font fontScore;
 	fontScore.loadFromFile("fonts/OCR A Extended Regular.ttf");
-	Score.setCharacterSize(50);
+	Score.setCharacterSize(40);
 	Score.setPosition(50, 50);
 	Score.setFillColor(sf::Color::Black);
 	Score.setFont(fontScore);
 
 	//PLAYFIELD BORDER DECLARATION
-	sf::RectangleShape borderUp(sf::Vector2f(2400.f, 1.f));
+	sf::RectangleShape borderUp(sf::Vector2f(1280.f, 1.f));
 	borderUp.setFillColor(sf::Color(0, 0, 0));
 	borderUp.setPosition(0, 0);
-	sf::RectangleShape borderDown(sf::Vector2f(2400.f, 1.f));
+	sf::RectangleShape borderDown(sf::Vector2f(1280.f, 1.f));
 	borderDown.setFillColor(sf::Color(0, 0, 0));
-	borderDown.setPosition(0, 1349);
-	sf::RectangleShape borderLeft(sf::Vector2f(1.f, 1350.f));
+	borderDown.setPosition(0, 720);
+	sf::RectangleShape borderLeft(sf::Vector2f(1.f, 720.f));
 	borderLeft.setFillColor(sf::Color(0, 0, 0));
 	borderLeft.setPosition(0, 0);
-	sf::RectangleShape borderRight(sf::Vector2f(1.f, 1350.f));
+	sf::RectangleShape borderRight(sf::Vector2f(1.f, 720.f));
 	borderRight.setFillColor(sf::Color(0, 0, 0));
-	borderRight.setPosition(2401, 0);
+	borderRight.setPosition(1280, 0);
 
 	//MUSIC
 	sf::Music music;
@@ -265,28 +271,28 @@ int main() {
 
 			sf::Texture texture;
 			texture.loadFromFile("images/gameTitle.png");
-			sf::RectangleShape title(sf::Vector2f(1010.f, 298.f));
+			sf::RectangleShape title(sf::Vector2f(425.f, 144.f));
 			title.setOrigin(505, 149);
 			title.setTexture(&texture);
-			title.setPosition(1200, 250);
+			title.setPosition(925, 250);
 
 			sf::Text newGame;
-			newGame.setPosition(1000, 500);
+			newGame.setPosition(550, 400);
 			newGame.setString("START");
 			newGame.setFont(font);
-			newGame.setCharacterSize(50);
+			newGame.setCharacterSize(30);
 
 			sf::Text tutorial;
-			tutorial.setPosition(1000, 600);
+			tutorial.setPosition(550, 450);
 			tutorial.setString("TUTORIAL");
 			tutorial.setFont(font);
-			tutorial.setCharacterSize(50);
+			tutorial.setCharacterSize(30);
 
 			sf::Text exit;
-			exit.setPosition(1000, 700);
+			exit.setPosition(550, 500);
 			exit.setString("EXIT");
 			exit.setFont(font);
-			exit.setCharacterSize(50);
+			exit.setCharacterSize(30);
 
 			if (choose < 1)
 				choose = 1;
@@ -295,21 +301,21 @@ int main() {
 
 			if (choose == 1)
 			{
-				newGame.setFillColor(sf::Color::Red);
-				tutorial.setFillColor(sf::Color::Blue);
-				exit.setFillColor(sf::Color::Blue);
+				newGame.setFillColor(sf::Color::Cyan);
+				tutorial.setFillColor(sf::Color::White);
+				exit.setFillColor(sf::Color::White);
 			}
 			if (choose == 2)
 			{
-				newGame.setFillColor(sf::Color::Blue);
-				tutorial.setFillColor(sf::Color::Red);
-				exit.setFillColor(sf::Color::Blue);
+				newGame.setFillColor(sf::Color::White);
+				tutorial.setFillColor(sf::Color::Cyan);
+				exit.setFillColor(sf::Color::White);
 			}
 			if (choose == 3)
 			{
-				newGame.setFillColor(sf::Color::Blue);
-				tutorial.setFillColor(sf::Color::Blue);
-				exit.setFillColor(sf::Color::Red);
+				newGame.setFillColor(sf::Color::White);
+				tutorial.setFillColor(sf::Color::White);
+				exit.setFillColor(sf::Color::Cyan);
 			}
 			window.draw(title);
 			window.draw(newGame);
@@ -323,7 +329,9 @@ int main() {
 			tutorial.loadFromFile("images/tutorial.png");
 			sf::RectangleShape Help;
 			Help.setTexture(&tutorial);
-			Help.setSize(sf::Vector2f(2400, 1350));
+			Help.setOrigin(sf::Vector2f(593, 271));
+			Help.setPosition(640, 360);
+			Help.setSize(sf::Vector2f(1186, 542));
 			window.draw(Help);
 		}
 
@@ -341,7 +349,7 @@ int main() {
 			//PLANE MECHANICS
 			spritePlane.setPosition(sf::Vector2f(Plane.positionX, Plane.positionY));
 			if (thrust == true)
-				Plane.velocityY -= 0.02;
+				Plane.velocityY -= 0.01;
 
 			if (Plane.velocityY < -0)
 				spritePlane.setRotation(-30.f);
@@ -402,9 +410,9 @@ int main() {
 			if ((emptyA == true && emptyB == true && bulletCounterA == 30) || (emptyB == true && emptyA == true && bulletCounterB == 30))
 			{
 				sf::Font font;
-				font.loadFromFile("fonts/ComicSansMS3.ttf");
+				font.loadFromFile("fonts/OCR A Extended Regular.ttf");
 				sf::Text text;
-				text.setPosition(100, 100);
+				text.setPosition(200, 100);
 				text.setString("PRESS X TO RELOAD THE BULLET");
 				text.setFont(font);
 				text.setCharacterSize(50);
@@ -413,38 +421,41 @@ int main() {
 			}
 
 			//BORDER
-			if (spritePlane.getGlobalBounds().intersects(borderDown.getGlobalBounds())) {
+			if (spritePlane.getGlobalBounds().intersects(borderDown.getGlobalBounds())) 
+			{
 				Plane.velocityY = 0;
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 				{
 					Plane.velocityY = -0.1;
 				}
 			}
-			if (spritePlane.getGlobalBounds().intersects(borderUp.getGlobalBounds())) {
+			if (spritePlane.getGlobalBounds().intersects(borderUp.getGlobalBounds())) 
+			{
 				Plane.velocityY = 0.1;
 				spritePlane.setRotation(0);
 			}
 
 			//LEVEL
-			float XNowA[5];
-			float XNowB[5];
-			float YNowA[5];
-			float YNowB[5];
+			static float XNowA[5];
+			static float XNowB[5];
+			static float YNowA[5];
+			static float YNowB[5];
 			if (next == true)
 			{
 				for (int i = 0; i < 5; i++)
 				{
-					enemyA[i].positionX = 1500;
-					enemyA[i].positionY = (100 * i) + 200;
-					enemyB[i].positionX = 2000;
-					enemyB[i].positionY = (100 * i) + 200;
+					enemyA[i].positionX = 600;
+					enemyA[i].positionY = float (70 * i) + 200;
+					enemyB[i].positionX = 500;
+					enemyB[i].positionY = float (70 * i) + 50;
 				}
-				for (int a = 0; a < 30; a++) { hitA[a] = 0; }
+				for (int a = 0; a < 5; a++) { hitA[a] = 0; }
+				for (int a = 0; a < 5; a++) { hitB[a] = 0; }
 				for (int a = 0; a < 5; a++) { XNowA[a] = enemyA[a].positionX; }
 				for (int a = 0; a < 5; a++) { XNowB[a] = enemyB[a].positionX; YNowB[a] = enemyB[a].positionY; }
 			}
 			next = false;
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 5; i++)
 			{
 				for (int j = 0; j < 30; j++)
 				{
@@ -456,8 +467,8 @@ int main() {
 						static int RevVerticalA = 0;
 						if (horizontalA == 1)
 						{
-							enemyA[i].velocityX = 0.1;
-							if (enemyA[i].positionX - XNowA[i] >= 500)
+							enemyA[i].velocityX = 0.05f;
+							if (enemyA[i].positionX - XNowA[i] > 500)
 							{
 								enemyA[i].velocityX = 0;
 								if (enemyA[0].velocityX == 0 && enemyA[1].velocityX == 0 && enemyA[2].velocityX == 0 && enemyA[3].velocityX == 0 && enemyA[4].velocityX == 0)
@@ -470,8 +481,8 @@ int main() {
 						}
 						if (verticalA == 1)
 						{
-							enemyA[i].velocityY = 0.1;
-							if (enemyA[i].positionY - YNowA[i] >= 500)
+							enemyA[i].velocityY = 0.05f;
+							if (enemyA[i].positionY - YNowA[i] >= 200)
 							{
 								enemyA[i].velocityY = 0;
 								if (enemyA[0].velocityY == 0 && enemyA[1].velocityY == 0 && enemyA[2].velocityY == 0 && enemyA[3].velocityY == 0 && enemyA[4].velocityY == 0)
@@ -484,7 +495,7 @@ int main() {
 						}
 						if (RevHorizontalA == 1)
 						{
-							enemyA[i].velocityX = -0.1;
+							enemyA[i].velocityX = -0.05f;
 							if (enemyA[i].positionX - XNowA[i] <= -500)
 							{
 								enemyA[i].velocityX = 0;
@@ -498,8 +509,8 @@ int main() {
 						}
 						if (RevVerticalA == 1)
 						{
-							enemyA[i].velocityY = -0.1;
-							if (enemyA[i].positionY - YNowA[i] <= -500)
+							enemyA[i].velocityY = -0.05f;
+							if (enemyA[i].positionY - YNowA[i] <= -200)
 							{
 								enemyA[i].velocityY = 0;
 								if (enemyA[0].velocityY == 0 && enemyA[1].velocityY == 0 && enemyA[2].velocityY == 0 && enemyA[3].velocityY == 0 && enemyA[4].velocityY == 0)
@@ -524,15 +535,111 @@ int main() {
 							spriteBullet[j].setPosition(0, 0);
 							bulletVisibility[j] = 0;
 							score = score + 10;
-						} 
-						if (hitA[0] == 1 && hitA[1] == 1 && hitA[2] == 1 && hitA[3] == 1 && hitA[4] == 1)
-						{
-							start = false;
-							win = true;
 						}
 					}
 				}
 			}
+			for (int i = 0; i < 5; i++)
+			{
+				for (int j = 0; j < 30; j++)
+				{
+					if (hitB[i] == 0)
+					{
+						static int horizontalB = 0;
+						static int verticalB = 0;
+						static int RevHorizontalB = 0;
+						static int RevVerticalB = 0;
+						static int move = 1;
+						if (move == 1)
+						{
+							enemyB[i].velocityX = 0.09;
+							enemyB[i].velocityY = 0.09;
+							if (enemyB[i].positionX - XNowB[i] >= 400 && enemyB[i].positionY - YNowB[i] >= 400)
+							{
+								enemyB[i].velocityX = 0;
+								enemyB[i].velocityY = 0;
+								if (enemyB[0].velocityY == 0 && enemyB[1].velocityY == 0 && enemyB[2].velocityY == 0 && enemyB[3].velocityY == 0 && enemyB[4].velocityY == 0 && enemyB[0].velocityX == 0 && enemyB[1].velocityX == 0 && enemyB[2].velocityX == 0 && enemyB[3].velocityX == 0 && enemyB[4].velocityX == 0)
+								{
+									for (int a = 0; a < 5; a++) { YNowB[a] = enemyB[a].positionY; }
+									for (int a = 0; a < 5; a++) { XNowB[a] = enemyB[a].positionX; }
+									move = 2;
+								}
+							}
+						}
+						if (move == 2)
+						{
+							enemyB[i].velocityX = -0.09;
+							if (enemyB[i].positionX - XNowB[i] <= -400)
+							{
+								enemyB[i].velocityX = 0;
+								if (enemyB[0].velocityY == 0 && enemyB[1].velocityY == 0 && enemyB[2].velocityY == 0 && enemyB[3].velocityY == 0 && enemyB[4].velocityY == 0 && enemyB[0].velocityX == 0 && enemyB[1].velocityX == 0 && enemyB[2].velocityX == 0 && enemyB[3].velocityX == 0 && enemyB[4].velocityX == 0)
+								{
+									for (int a = 0; a < 5; a++) { YNowB[a] = enemyB[a].positionY; }
+									for (int a = 0; a < 5; a++) { XNowB[a] = enemyB[a].positionX; }
+									move = 3;
+								}
+							}
+						}
+						if (move == 3)
+						{
+							enemyB[i].velocityX = 0.09;
+							enemyB[i].velocityY = -0.09;
+							if (enemyB[i].positionY - YNowB[i] <= -400 && enemyB[i].positionX - XNowB[i] >= 400)
+							{
+								enemyB[i].velocityX = 0;
+								enemyB[i].velocityY = 0;
+								if (enemyB[0].velocityY == 0 && enemyB[1].velocityY == 0 && enemyB[2].velocityY == 0 && enemyB[3].velocityY == 0 && enemyB[4].velocityY == 0 && enemyB[0].velocityX == 0 && enemyB[1].velocityX == 0 && enemyB[2].velocityX == 0 && enemyB[3].velocityX == 0 && enemyB[4].velocityX == 0)
+								{
+									for (int a = 0; a < 5; a++) { YNowB[a] = enemyB[a].positionY; }
+									for (int a = 0; a < 5; a++) { XNowB[a] = enemyB[a].positionX; }
+									move = 4;
+								}
+							}
+						}
+						if (move == 4)
+						{
+							enemyB[i].velocityX = -0.09;
+							if (enemyB[i].positionX - XNowB[i] <= -400)
+							{
+								enemyB[i].velocityX = 0;
+								enemyB[i].velocityY = 0;
+								if (enemyB[0].velocityY == 0 && enemyB[1].velocityY == 0 && enemyB[2].velocityY == 0 && enemyB[3].velocityY == 0 && enemyB[4].velocityY == 0 && enemyB[0].velocityX == 0 && enemyB[1].velocityX == 0 && enemyB[2].velocityX == 0 && enemyB[3].velocityX == 0 && enemyB[4].velocityX == 0)
+								{
+									for (int a = 0; a < 5; a++) { YNowB[a] = enemyB[a].positionY; }
+									for (int a = 0; a < 5; a++) { XNowB[a] = enemyB[a].positionX; }
+									move = 1;
+								}
+							}
+						}
+
+						enemyB[i].Update(1);
+						spriteEnemyB[i].setPosition(enemyB[i].positionX, enemyB[i].positionY);
+						window.draw(spriteEnemyB[i]);
+						if (spriteEnemyB[i].getGlobalBounds().intersects(spriteBullet[j].getGlobalBounds()))
+						{
+							enemyB[i].HP = enemyB[i].HP - 20;
+							spriteBullet[j].setPosition(0, 0);
+							bulletVisibility[j] = 0;
+							if (enemyB[i].HP <= 0)
+							{
+								hitB[i] = 1;
+								enemyB[i].velocityX = 0;
+								enemyB[i].positionX = 0;
+								enemyB[i].velocityY = 0;
+								enemyB[i].positionY = 0;
+								spriteEnemyB[i].setPosition(0, 0);
+								score = score + 30;
+							}
+						}
+					}
+				}
+			}
+			if (hitA[0] == 1 && hitA[1] == 1 && hitA[2] == 1 && hitA[3] == 1 && hitA[4] == 1 && hitB[0] == 1 && hitB[1] == 1 && hitB[2] == 1 && hitB[3] == 1 && hitB[4] == 1)
+			{
+				start = false;
+				win = true;
+			}
+
 			std::stringstream ss;
 			ss << score;
 			Score.setString("Score : " + ss.str());
@@ -563,7 +670,7 @@ int main() {
 			font.loadFromFile("fonts/SAOUITT-Regular.ttf");
 			sf::Text text;
 			text.setFont(font);
-			text.setCharacterSize(100);
+			text.setCharacterSize(80);
 			text.setPosition(50, 50);
 			text.setString("CONGRATULATIONS\nYOU WIN");
 			text.setFillColor(sf::Color::Black);
@@ -572,14 +679,14 @@ int main() {
 			std::stringstream ss;
 			ss << score;
 			Score.setFont(font);
-			Score.setPosition(100, 1200);
-			Score.setCharacterSize(100);
+			Score.setPosition(50, 600);
+			Score.setCharacterSize(60);
 			Score.setFillColor(sf::Color::White);
 			Score.setString("Your final score is " + ss.str());
 			window.draw(Score);
 		}
 
-		if (win == false && start == false && menu == false)
+		if (win == false && start == false && menu == false && help == false)
 		{
 			sf::Font font;
 			font.loadFromFile("fonts/SAOUITT-Regular.ttf");
@@ -594,8 +701,8 @@ int main() {
 			std::stringstream ss;
 			ss << score;
 			Score.setFont(font);
-			Score.setPosition(100, 1200);
-			Score.setCharacterSize(100);
+			Score.setPosition(50, 600);
+			Score.setCharacterSize(60);
 			Score.setFillColor(sf::Color::White);
 			Score.setString("Your final score is " + ss.str());
 			window.draw(Score);
