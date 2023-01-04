@@ -18,7 +18,7 @@ Tugas Akhir Konsep Pemrograman membuat game menggunakan C++ dan SFML sebagai lib
 1. Unduh folder audio, fonts, dan images yang terletak di IsItTheHardestGame
 2. Unduh juga folder release di dalam folder x64
 3. Masukkan folder audio, fonts, dan images kedalam folder release
-4. Jalankan file .exe nya
+4. Jalankan file Platypus-ScuffedEdition.exe nya
 
 
 Warning : Kalo mau lihat source code saya. Saya ingatkan, "I'm not a good coder :)".
