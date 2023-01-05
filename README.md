@@ -1,28 +1,29 @@
 # Platypus - Scuffed Edition
-Tugas Akhir Konsep Pemrograman membuat game menggunakan C++ dan SFML sebagai librarynya.
+"Programming Concepts" Final Project is making a game using C++ and SFML as the library.
 
-========== KELOMPOK 2 ==========
+========== GROUP 2 ==========
 - Muhammad Ryan Fikri Fakhrezi
 - Khansa Ardhani Nareswari
 - Muhammad Qayyim Mafaza
 - Naila Iffah Aulia
 
-### Cara memainkan
-**Cara 1**
-1. Unduh semua file diatas
-2. Download dan install visual studio
-3. Buka file Platypus_ScuffedEdition.sln di visual studio
-4. Build dengan menekan tombol F5
 
-**Cara 2**
-1. Unduh folder audio, fonts, dan images yang terletak di IsItTheHardestGame
-2. Unduh juga folder release di dalam folder x64
-3. Masukkan folder audio, fonts, dan images kedalam folder release
-4. Jalankan file Platypus-ScuffedEdition.exe nya
+### How to play
+**Method 1**
+1. Download all the files above
+2. Download and install visual studio
+3. Open the Platypus_ScuffedEdition.sln file in visual studio
+4. Build by pressing the F5 key
 
-**Cara 3**
-1. Unduh zip di release terbaru
-2. extract file zip tersebut
-3. Jalankan file Platypus-ScuffedEdition.exe nya
+**Method 2**
+1. Download the audio, fonts, and images folder located in IsItTheHardestGame
+2. Also download the release folder inside the x64 folder
+3. Enter the audio, fonts, and images folder into the release folder
+4. Run the Platypus-ScuffedEdition.exe file
 
-Warning : Kalo mau lihat source code saya. Saya ingatkan, "I'm not a good coder :)".
+**Method 3**
+1. Download the zip in the latest release
+2. extract the zip file
+3. Run the Platypus-ScuffedEdition.exe file
+
+Warning: If you want to see my source code. I remind you, "I'm not a good coder :)".
