@@ -20,5 +20,9 @@ Tugas Akhir Konsep Pemrograman membuat game menggunakan C++ dan SFML sebagai lib
 3. Masukkan folder audio, fonts, dan images kedalam folder release
 4. Jalankan file Platypus-ScuffedEdition.exe nya
 
+**Cara 3**
+1. Unduh zip di release terbaru
+2. extract file zip tersebut
+3. Jalankan file Platypus-ScuffedEdition.exe nya
 
 Warning : Kalo mau lihat source code saya. Saya ingatkan, "I'm not a good coder :)".
