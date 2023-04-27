@@ -26,4 +26,4 @@
 2. extract the zip file
 3. Run the Platypus-ScuffedEdition.exe file
 
-Warning: If you want to see my source code. I remind you, "I'm not a good coder :)".
+Warning: severe broken codes ahead.
