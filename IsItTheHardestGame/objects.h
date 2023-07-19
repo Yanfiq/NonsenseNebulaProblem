@@ -7,12 +7,12 @@
 
 class object{
 private:
-	float positionX = 0, positionY = 0;
-	float velocityX = 0, velocityY = 0;
+	float positionX = 0.f, positionY = 0.f;
+	float velocityX = 0.f, velocityY = 0.f;
 	float width = 0, height = 0;
-	float gravity = 0.01f;
-	float maxY = 2;
-	float minY = -2;
+	float gravity = 0.0002f;
+	float maxY = 0.6f;
+	float minY = -0.6f;
 	float HP = 100;
 	std::string object_id;
 	sf::RectangleShape object_sprite;
@@ -28,7 +28,8 @@ public:
 	void reduceHP(float damage);
 	float getPositionX();
 	float getPositionY();
-	void Update(float time);
+	void update(float time);
+	void setVelocity(float vx, float vy);
 	std::string getId();
 	void thrust();
 };

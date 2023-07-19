@@ -14,18 +14,26 @@ float object::getPositionY() {
 	return positionY;
 }
 
-void object::Update(float time) {
-	positionX += velocityX;
-	if (minY < velocityY < maxY)
+void object::update(float time) {
+	positionX += velocityX * time;
+	positionY += velocityY * time;
+	if (velocityY <= maxY)
 	{
-		positionY += velocityY * time;
 		velocityY += gravity * time;
 	}
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 }
 
 void object::thrust() {
-	velocityY = velocityY - 0.2;
+	if (minY <= velocityY) {
+		velocityY -= 0.2;
+	}
+}
+
+void object::setVelocity(float vx, float vy) {
+	velocityX = vx;
+	velocityY = vy;
+
 }
 
 std::string object::getId() {
