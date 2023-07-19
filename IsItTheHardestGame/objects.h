@@ -11,15 +11,15 @@ private:
 	float velocityX = 0.f, velocityY = 0.f;
 	float width = 0, height = 0;
 	float gravity = 0.0002f;
-	float maxY = 0.6f;
-	float minY = -0.6f;
+	float maxY = 0.4f;
+	float minY = -0.4f;
 	float HP = 100;
 	std::string object_id;
 	sf::RectangleShape object_sprite;
 
 public:
-	object(std::string _object_id, float _positionX, float _positionY, float _width, float _height) {
-		positionX = _positionX; positionY = _positionY; width = _width; height = _height; object_id = _object_id;
+	object(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity) {
+		positionX = _positionX; positionY = _positionY; width = _width; height = _height; object_id = _object_id; gravity = _gravity;
 		object_sprite.setSize(sf::Vector2f(width, height));
 		object_sprite.setFillColor(sf::Color(0, 0, 0, 255));
 		object_sprite.setPosition(sf::Vector2f(positionX, positionY));
@@ -30,6 +30,8 @@ public:
 	float getPositionY();
 	void update(float time);
 	void setVelocity(float vx, float vy);
+	float getVelocityY();
+	float getVelocityX();
 	std::string getId();
 	void thrust();
 };

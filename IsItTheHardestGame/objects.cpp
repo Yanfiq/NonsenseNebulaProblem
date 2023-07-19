@@ -33,7 +33,14 @@ void object::thrust() {
 void object::setVelocity(float vx, float vy) {
 	velocityX = vx;
 	velocityY = vy;
+}
 
+float object::getVelocityY(){
+	return velocityY;
+}
+
+float object::getVelocityX() {
+	return velocityX;
 }
 
 std::string object::getId() {
