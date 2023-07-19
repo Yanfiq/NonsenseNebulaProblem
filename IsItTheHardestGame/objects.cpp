@@ -26,7 +26,7 @@ void object::update(float time) {
 
 void object::thrust() {
 	if (minY <= velocityY) {
-		velocityY -= 0.2;
+		velocityY -= 0.06;
 	}
 }
 

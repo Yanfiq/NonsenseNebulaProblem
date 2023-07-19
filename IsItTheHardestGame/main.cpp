@@ -4,27 +4,29 @@
 #include <stdbool.h>
 #include "objects.h"
 
-std::map <std::string, object*> all_object;
+std::map <std::string, object*> objects;
 
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close);
 	sf::Event event;
 
-	//OBJECT ID: PLANE
+	//create player
 	object *Plane = new object("player", 100, 100, 60, 29, 0.0002);
-	all_object[Plane->getId()] = Plane;
+	objects[Plane->getId()] = Plane;
 
 	//border
-	object* down = new object("down", 0, 720, 1280, 1, 0); all_object[down->getId()] = down;
-	object* up = new object("up", 0, 0, 1280, 1, 0); all_object[up->getId()] = up;
+	object* up = new object("up", 0, 0, 1280, 1, 0); objects[up->getId()] = up;
+	object* down = new object("down", 0, 720, 1280, 1, 0); objects[down->getId()] = down;
+	object* left = new object("left", 0, 0, 1, 720, 0); objects[left->getId()] = left;
+	object* right = new object("right", 1280, 0, 1, 720, 0); objects[right->getId()] = right;
 
 	while (window.isOpen())
 	{
 		bool gas = false;
 		window.clear(sf::Color(255, 255, 255));
 		//draw object
-		for (const auto& it : all_object) {
+		for (const auto& it : objects) {
 			object* Object = it.second;
 			Object->update(1);
 			window.draw(Object->getSprite());
@@ -45,18 +47,19 @@ int main()
 				}
 			}
 		}
+
 		if (gas == true) {
-			all_object["player"]->thrust();
+			objects["player"]->thrust();
 		}
 
-		object* Player = all_object["player"];
-		if (Player->getSprite().getGlobalBounds().intersects(all_object["down"]->getSprite().getGlobalBounds())) {
+		object* Player = objects["player"];
+		if (Player->getSprite().getGlobalBounds().intersects(objects["down"]->getSprite().getGlobalBounds())) {
 			Player->setVelocity(0, 0);
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 				Player->thrust();
 			}
 		}
-		if (Player->getSprite().getGlobalBounds().intersects(all_object["up"]->getSprite().getGlobalBounds())) {
+		if (Player->getSprite().getGlobalBounds().intersects(objects["up"]->getSprite().getGlobalBounds())) {
 			Player->setVelocity(0, Player->getVelocityY()*(-1));
 		}
 		window.display();
