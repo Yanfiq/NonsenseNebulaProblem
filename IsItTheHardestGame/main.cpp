@@ -1,17 +1,9 @@
-#include "SFML/Graphics.hpp"
-#include <stdbool.h>
-#include "object.h"
-#include "SFML/Window.hpp"
-#include <string.h>
-#include "SFML/Rect.hpp"
 #include <string>
-#include <iostream>
-#include <stdlib.h>
-#include"SFML/Audio.hpp"
-#include "Func.h"
 #include <map>
+#include <iostream>
+#include "objects.h"
 
-std::map <std::string, *object> all_object;
+std::map <std::string, object*> all_object;
 
 int main()
 {
@@ -19,8 +11,8 @@ int main()
 	sf::Event event;
 
 	//OBJECT ID: PLANE
-	object* Plane = new object("player", 200, 212, 60, 29);
-	all_object["player"] = Plane;
+	object *Plane = new object("player", 0, 0, 60, 29);
+	all_object[Plane->getId()] = Plane;
 
 	while (window.isOpen())
 	{
@@ -33,19 +25,22 @@ int main()
 				window.close();
 				break;
 
-				//case sf::Event::KeyPressed:
-					//if (event.key.code == sf::Keyboard::Space)
-					//{
-					//	if (Plane.maxY > Plane.velocityY > Plane.minY)
-					//	{
-					//		thrust = true;
-					//	}
-					//}
+			//case sf::Event::KeyPressed:
+			//	if (event.key.code == sf::Keyboard::Space)
+			//	{
+			//		object* Object = all_object["player"];
+			//		Object->thrust();
+			//	}
 			}
 		}
 
-		window.draw(Plane->draw_object());
 
+		//draw object
+		for (const auto& it : all_object) {
+			object *Object = it.second;
+			window.draw(Object->getSprite());
+			Object->Update(1);
+		}
 		window.display();
 	}
 	return 0;

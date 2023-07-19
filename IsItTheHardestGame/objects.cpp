@@ -1,10 +1,6 @@
-#include "object.h"
+#include "objects.h"
 
-object::object(std::string _object_id, float _positionX, float _positionY, float _width, float _height) {
-	positionX = _positionX; positionY = _positionY; width = _width; height = _height; object_id = _object_id;
-	object_sprite.setSize(sf::Vector2f(width, height));
-}
-sf::RectangleShape object::draw_object() {
+sf::RectangleShape object::getSprite() {
 	return object_sprite;
 }
 
@@ -19,10 +15,19 @@ float object::getPositionY() {
 }
 
 void object::Update(float time) {
-	positionX += velocityX * time;
+	positionX += velocityX;
 	if (minY < velocityY < maxY)
 	{
 		positionY += velocityY * time;
 		velocityY += gravity * time;
 	}
+	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
+}
+
+void object::thrust() {
+	velocityY = velocityY - 0.2;
+}
+
+std::string object::getId() {
+	return object_id;
 }
