@@ -13,7 +13,7 @@ int main(){
 
 	//create player
 	object *Plane = new object("player", 100, 100, 60, 29, 0.0002);
-	objects[Plane->getId()] = Plane;
+	objects["player"] = Plane;
 
 	//bullet counter
 	static int bullet = 1;
@@ -49,7 +49,7 @@ int main(){
 		}
 
 		if (gas == true) {
-			objects["player"]->thrust();
+			Plane->thrust();
 		}
 
 		object* Player = objects["player"];
@@ -58,11 +58,8 @@ int main(){
 			if (velocityY < 0) {
 				Player->setVelocity(0, velocityY*(-1) - 0.02);
 			}
-			else if(velocityY > 0){
+			else if(velocityY >= 0){
 				Player->setVelocity(0, velocityY*(-1) + 0.02);
-			}
-			else {
-				Player->setVelocity(0, -0.0002);
 			}
 		}
 
@@ -72,9 +69,8 @@ int main(){
 			Object->update(1);
 			window.draw(Object->getSprite());
 		}
-		// Collect keys of bullets to be deleted
+		// Collect keys of bullets to be deleted and draw the bullet's object
 		std::vector<std::string> bulletsToDelete;
-
 		for (const auto& it : bullets_object) {
 			object* Object = it.second;
 			if (!(Object->getSprite().getGlobalBounds().intersects(objects["right"]->getSprite().getGlobalBounds()))) {
@@ -86,7 +82,6 @@ int main(){
 				delete Object;
 			}
 		}
-
 		// Erase bullets from bullets_object map
 		for (const auto& bulletKey : bulletsToDelete) {
 			bullets_object.erase(bulletKey);
