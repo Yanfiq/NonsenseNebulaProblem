@@ -59,6 +59,8 @@ int main(){
 					object* bullet = new object(bullet_id, objects["player"]->getPositionX(), objects["player"]->getPositionY(), 20, 20, 0);
 					bullet->setVelocity(0.5, 0);
 					bullets_object[bullet_id] = bullet;
+					will_be_draw.push_back(std::make_unique<sf::RectangleShape>(bullet->getSprite()));
+					sprite_indices[bullet->getId()] = will_be_draw.size() - 1;
 				}
 			}
 		}
@@ -92,17 +94,21 @@ int main(){
 			it.second->update(1);
 		}
 
-		// Collect keys of bullets to be deleted and draw the bullet's object
+		// Collect keys of bullets to be deleted
 		std::vector<std::string> bulletsToDelete;
 		for (const auto& it : bullets_object) {
 			object* Object = it.second;
 			if (!(Object->getSprite().getGlobalBounds().intersects(objects["right"]->getSprite().getGlobalBounds()))) {
 				Object->update(1);
-				will_be_draw.push_back(std::make_unique<sf::RectangleShape>(Object->getSprite()));
-				sprite_indices[Object->getId()] = will_be_draw.size() - 1;
 			}
 			else {
 				bulletsToDelete.push_back(it.first);
+				auto it = sprite_indices.find(Object->getId());
+				if (it != sprite_indices.end()) {
+					size_t index = it->second;
+					will_be_draw.erase(will_be_draw.begin() + index);
+					sprite_indices.erase(it);
+				}
 				delete Object;
 			}
 		}
