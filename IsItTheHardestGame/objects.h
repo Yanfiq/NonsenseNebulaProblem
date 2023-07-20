@@ -18,12 +18,7 @@ private:
 	sf::RectangleShape object_sprite;
 
 public:
-	object(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity) {
-		positionX = _positionX; positionY = _positionY; width = _width; height = _height; object_id = _object_id; gravity = _gravity;
-		object_sprite.setSize(sf::Vector2f(width, height));
-		object_sprite.setFillColor(sf::Color(0, 0, 0, 255));
-		object_sprite.setPosition(sf::Vector2f(positionX, positionY));
-	}
+	object(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity);
 	sf::RectangleShape getSprite();
 	void reduceHP(float damage);
 	float getPositionX();

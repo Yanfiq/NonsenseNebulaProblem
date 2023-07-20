@@ -16,7 +16,7 @@ int main(){
 	objects[Plane->getId()] = Plane;
 
 	//bullet counter
-	int bullet = 1;
+	static int bullet = 1;
 
 	//border
 	object* up = new object("up", 0, 0, 1280, 1, 0); objects[up->getId()] = up;
@@ -40,8 +40,9 @@ int main(){
 				}
 				if (event.key.code == sf::Keyboard::LShift) {
 					std::string bullet_id = "bullet_" + std::to_string(bullet);
+					bullet++;
 					object* bullet = new object(bullet_id, objects["player"]->getPositionX(), objects["player"]->getPositionY(), 20, 20, 0);
-					bullet->setVelocity(2, 0);
+					bullet->setVelocity(0.5, 0);
 					bullets_object[bullet_id] = bullet;
 				}
 			}
@@ -52,14 +53,17 @@ int main(){
 		}
 
 		object* Player = objects["player"];
-		if (Player->getSprite().getGlobalBounds().intersects(objects["down"]->getSprite().getGlobalBounds())) {
-			Player->setVelocity(0, 0);
-			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-				Player->thrust();
+		if (Player->getSprite().getGlobalBounds().intersects(objects["up"]->getSprite().getGlobalBounds()) || Player->getSprite().getGlobalBounds().intersects(objects["down"]->getSprite().getGlobalBounds())) {
+			float velocityY = Player->getVelocityY();
+			if (velocityY < 0) {
+				Player->setVelocity(0, velocityY*(-1) - 0.02);
 			}
-		}
-		if (Player->getSprite().getGlobalBounds().intersects(objects["up"]->getSprite().getGlobalBounds())) {
-			Player->setVelocity(0, Player->getVelocityY()*(-1));
+			else if(velocityY > 0){
+				Player->setVelocity(0, velocityY*(-1) + 0.02);
+			}
+			else {
+				Player->setVelocity(0, -0.0002);
+			}
 		}
 
 		//draw object
