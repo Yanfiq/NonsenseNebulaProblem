@@ -93,6 +93,7 @@ int main(){
 		}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		}
 =======
 >>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
@@ -101,12 +102,17 @@ int main(){
 		std::vector<std::string> bulletsToDelete;
 		for (const auto& it : manageObject::getBulletsMap()) {
 =======
+=======
+>>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
 
 		// Collect keys of bullets to be deleted
 		std::vector<std::string> bulletsToDelete;
 		for (const auto& it : bullets_object) {
 			object* Object = it.second;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
+=======
 >>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
 =======
 >>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
@@ -116,7 +122,11 @@ int main(){
 			else {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			if (Object->getSprite()->getGlobalBounds().intersects(objects["right"]->getSprite()->getGlobalBounds())) {
+=======
+				bulletsToDelete.push_back(it.first);
+>>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
 =======
 				bulletsToDelete.push_back(it.first);
 >>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
@@ -131,7 +141,10 @@ int main(){
 				}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 				spritesThatWillBeDrawn.erase(it.first);
+=======
+>>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
 =======
 >>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
 =======
@@ -147,8 +160,13 @@ int main(){
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		for (const auto& sprite : will_be_draw) {
 			sf::RectangleShape* sprite = it.second;
+=======
+		//draw
+		for (const auto& sprite : will_be_draw) {
+>>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
 =======
 		//draw
 		for (const auto& sprite : will_be_draw) {
