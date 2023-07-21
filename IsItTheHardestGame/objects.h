@@ -18,7 +18,8 @@ private:
 
 public:
 	object(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity);
-	sf::RectangleShape* getSprite();
+	sf::RectangleShape getSprite();
+	sf::RectangleShape shoot(float velocity_x, object shooter);
 	void reduceHP(float damage);
 	float getPositionX();
 	float getPositionY();
