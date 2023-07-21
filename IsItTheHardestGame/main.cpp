@@ -91,77 +91,22 @@ int main(){
 		for (const auto& it : objects) {
 			it.second->update(1);
 		}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		}
-=======
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
-
-		// Collect keys of bullets to be deleted
-		std::vector<std::string> bulletsToDelete;
-		for (const auto& it : manageObject::getBulletsMap()) {
-=======
-=======
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
-=======
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
 
 		// Collect keys of bullets to be deleted
 		std::vector<std::string> bulletsToDelete;
 		for (const auto& it : bullets_object) {
 			object* Object = it.second;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
-=======
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
-=======
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
-=======
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
 			if (!(Object->getSprite().getGlobalBounds().intersects(objects["right"]->getSprite().getGlobalBounds()))) {
 				Object->update(1);
 			}
 			else {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-			if (Object->getSprite()->getGlobalBounds().intersects(objects["right"]->getSprite()->getGlobalBounds())) {
-=======
 				bulletsToDelete.push_back(it.first);
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
-=======
-				bulletsToDelete.push_back(it.first);
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
-=======
-				bulletsToDelete.push_back(it.first);
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
-=======
-				bulletsToDelete.push_back(it.first);
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
 				auto it = sprite_indices.find(Object->getId());
 				if (it != sprite_indices.end()) {
 					size_t index = it->second;
 					will_be_draw.erase(will_be_draw.begin() + index);
 					sprite_indices.erase(it);
 				}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-				spritesThatWillBeDrawn.erase(it.first);
-=======
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
-=======
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
-=======
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
-=======
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
 				delete Object;
 			}
 		}
@@ -171,28 +116,8 @@ int main(){
 		}
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-		for (const auto& sprite : will_be_draw) {
-			sf::RectangleShape* sprite = it.second;
-=======
 		//draw
 		for (const auto& sprite : will_be_draw) {
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
-=======
-		//draw
-		for (const auto& sprite : will_be_draw) {
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
-=======
-		//draw
-		for (const auto& sprite : will_be_draw) {
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
-=======
-		//draw
-		for (const auto& sprite : will_be_draw) {
->>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
 			window.draw(*sprite);
 		}
 		window.display();

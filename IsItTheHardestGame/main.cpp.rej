@@ -1,0 +1,82 @@
+diff a/IsItTheHardestGame/main.cpp b/IsItTheHardestGame/main.cpp	(rejected hunks)
+@@ -93,6 +93,7 @@
+ 		}
+ <<<<<<< HEAD
+ <<<<<<< HEAD
++<<<<<<< HEAD
+ <<<<<<< HEAD
+ 		}
+ =======
+@@ -103,6 +104,8 @@
+ 		for (const auto& it : manageObject::getBulletsMap()) {
+ =======
+ =======
++>>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
++=======
+ >>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
+ 
+ 		// Collect keys of bullets to be deleted
+@@ -111,6 +114,9 @@
+ 			object* Object = it.second;
+ <<<<<<< HEAD
+ <<<<<<< HEAD
++<<<<<<< HEAD
++>>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
++=======
+ >>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
+ =======
+ >>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
+@@ -122,6 +128,7 @@
+ 			else {
+ <<<<<<< HEAD
+ <<<<<<< HEAD
++<<<<<<< HEAD
+ <<<<<<< HEAD
+ 			if (Object->getSprite()->getGlobalBounds().intersects(objects["right"]->getSprite()->getGlobalBounds())) {
+ =======
+@@ -130,6 +137,9 @@
+ =======
+ 				bulletsToDelete.push_back(it.first);
+ >>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
++=======
++				bulletsToDelete.push_back(it.first);
++>>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
+ =======
+ 				bulletsToDelete.push_back(it.first);
+ >>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
+@@ -141,6 +151,7 @@
+ 				}
+ <<<<<<< HEAD
+ <<<<<<< HEAD
++<<<<<<< HEAD
+ <<<<<<< HEAD
+ 				spritesThatWillBeDrawn.erase(it.first);
+ =======
+@@ -148,6 +159,8 @@
+ =======
+ >>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
+ =======
++>>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
++=======
+ >>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
+ 				delete Object;
+ 			}
+@@ -160,6 +173,7 @@
+ 
+ <<<<<<< HEAD
+ <<<<<<< HEAD
++<<<<<<< HEAD
+ <<<<<<< HEAD
+ 		for (const auto& sprite : will_be_draw) {
+ 			sf::RectangleShape* sprite = it.second;
+@@ -171,6 +185,10 @@
+ 		//draw
+ 		for (const auto& sprite : will_be_draw) {
+ >>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
++=======
++		//draw
++		for (const auto& sprite : will_be_draw) {
++>>>>>>> parent of 89ee668 (converting smart pointers to raw pointers because I'm too noob to understand.)
+ =======
+ 		//draw
+ 		for (const auto& sprite : will_be_draw) {
