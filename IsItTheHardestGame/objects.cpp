@@ -7,8 +7,10 @@ object::object(std::string _object_id, float _positionX, float _positionY, float
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 }
 
-sf::RectangleShape object::getSprite() {
-	return object_sprite;
+sf::RectangleShape* object::getSprite() {
+	sf::RectangleShape *sprite;
+	sprite = &object_sprite;
+	return sprite;
 }
 
 void object::reduceHP(float damage) {
