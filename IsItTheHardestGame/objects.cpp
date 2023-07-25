@@ -33,12 +33,6 @@ void object::update(float time) {
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 }
 
-void object::thrust() {
-	if (minY <= velocityY) {
-		velocityY -= 0.04;
-	}
-}
-
 void object::setVelocity(float vx, float vy) {
 	velocityX = vx;
 	velocityY = vy;
