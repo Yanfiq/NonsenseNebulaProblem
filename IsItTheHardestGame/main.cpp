@@ -41,19 +41,19 @@ int main() {
 				if (event.key.code == sf::Keyboard::Space) {
 					gas = true;
 				}
-				//if (event.key.code == sf::Keyboard::LShift) {
-				//	std::string bullet_id = "bullet_" + std::to_string(bulletCount);
-				//	bulletCount++;
-				//	manageObject::createObject_bullet(bullet_id, manageObject::get_objectptr("player")->getPositionX(), manageObject::get_objectptr("player")->getPositionY(), 20, 20, 0);
-				//	manageObject::get_objectptr(bullet_id)->setVelocity(0.5, 0);
-				//	manageObject::show_object(bullet_id);
-				//}
+				if (event.key.code == sf::Keyboard::LShift) {
+					std::string bullet_id = "bullet_" + std::to_string(bulletCount);
+					bulletCount++;
+					manageObject::createObject_bullet(bullet_id, manageObject::get_objectptr("player")->getPositionX(), manageObject::get_objectptr("player")->getPositionY(), 20, 20, 0);
+					manageObject::get_objectptr(bullet_id)->setVelocity(0.5, 0);
+					manageObject::show_object(bullet_id);
+				}
 			}
 		}
 
-		//if (gas == true) {
-		//	Plane->thrust();
-		//}
+		if (gas == true) {
+			manageObject::get_objectptr("player")->setVelocity(manageObject::get_objectptr("player")->getVelocityX(), manageObject::get_objectptr("player")->getVelocityY() - 0.06);
+		}
 		
 		//Reflection
 		object* Player = manageObject::get_objectptr("player");
