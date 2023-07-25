@@ -1,7 +1,17 @@
 #include "object_manager.h"
 
-void manageObject::assign_objectptr(std::string id, object* Object) {
-	objects_ptr[id] = Object;
+std::unordered_map<std::string, object*> manageObject::objects_ptr;
+std::unordered_map<std::string, object*> manageObject::bullets_object_ptr;
+std::unordered_map<std::string, sf::RectangleShape*> manageObject::sprites_ptr;
+
+void manageObject::createObject(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity) {
+	object* Object = new object(_object_id, _positionX, _positionY, _width, _height, _gravity);
+	objects_ptr[_object_id] = Object;
+}
+
+void manageObject::createObject_bullet(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity) {
+	object* Object = new object(_object_id, _positionX, _positionY, _width, _height, _gravity);
+	bullets_object_ptr[_object_id] = Object;
 }
 
 void manageObject::delete_object(std::string id) {
@@ -27,14 +37,10 @@ object* manageObject::get_objectptr(std::string id) {
 	return Object;
 }
 
-void manageObject::assign_bulletptr(std::string id, object* Object) {
-	bullets_object_ptr[id] = Object;
-}
-
-bool manageObject::isintersect(std::string id_1, std::string id_2) {
-	return sprites_ptr[id_1]->getGlobalBounds().intersects(sprites_ptr[id_2]->getGlobalBounds());
-}
-
 std::unordered_map<std::string, sf::RectangleShape*> manageObject::getSpritesMap() {
 	return sprites_ptr;
+}
+
+bool manageObject::isintersect(sf::RectangleShape* shape_1, sf::RectangleShape* shape_2) {
+	return shape_1->getGlobalBounds().intersects(shape_2->getGlobalBounds());
 }
