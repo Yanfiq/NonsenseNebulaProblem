@@ -10,7 +10,6 @@ protected:
 
 public:
 	static void createObject(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity);
-	static void createObject_bullet(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity);
 	static void delete_object(std::string id);
 	static object* get_objectptr(std::string id);
 	static std::unordered_map<std::string, sf::RectangleShape*> getSpritesMap();

@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 #include <stdbool.h>
 #include "object_manager.h"
 
@@ -44,7 +45,7 @@ int main() {
 				if (event.key.code == sf::Keyboard::LShift) {
 					std::string bullet_id = "bullet_" + std::to_string(bulletCount);
 					bulletCount++;
-					manageObject::createObject_bullet(bullet_id, manageObject::get_objectptr("player")->getPositionX(), manageObject::get_objectptr("player")->getPositionY(), 20, 20, 0);
+					manageObject::createObject(bullet_id, manageObject::get_objectptr("player")->getPositionX(), manageObject::get_objectptr("player")->getPositionY(), 20, 20, 0);
 					manageObject::get_objectptr(bullet_id)->setVelocity(0.5, 0);
 					manageObject::show_object(bullet_id);
 				}
@@ -64,28 +65,23 @@ int main() {
 
 		//update
 		std::unordered_map<std::string, sf::RectangleShape*> spritesMap;
+		std::vector<std::string> bulletsToDelete;
 		spritesMap = manageObject::getSpritesMap();
 		for (const auto& it : spritesMap) {
 			object* Object = manageObject::get_objectptr(it.first);
 			Object->update(1);
 			sf::RectangleShape *sprite = it.second;
 			window.draw(*sprite);
+			if (it.first.substr(0, 6) == "bullet" && manageObject::isintersect(it.second, manageObject::get_objectptr("right")->getSprite())) {
+				bulletsToDelete.push_back(it.first);
+				manageObject::unshow_object(it.first);
+			}
 		}
 
-		// Collect keys of bullets to be deleted
-		//std::vector<std::string> bulletsToDelete;
-		//for (const auto& it : bullets_object) {
-		//	object* Object = it.second;
-		//	if (Object->getSprite()->getGlobalBounds().intersects(objects["right"]->getSprite()->getGlobalBounds())) {
-		//		bulletsToDelete.push_back(it.first);
-		//		spritesThatWillBeDrawn.erase(it.first);
-		//		delete Object;
-		//	}
-		//}
-		//// Erase bullets from bullets_object map
-		//for (const auto& bulletKey : bulletsToDelete) {
-		//	bullets_object.erase(bulletKey);
-		//}
+		// Erase bullets from bullets_object map
+		for (const auto& bulletKey : bulletsToDelete) {
+			manageObject::delete_object(bulletKey);
+		}
 		window.display();
 	}
 	return 0;

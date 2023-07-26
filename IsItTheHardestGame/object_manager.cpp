@@ -6,20 +6,31 @@ std::unordered_map<std::string, sf::RectangleShape*> manageObject::sprites_ptr;
 
 void manageObject::createObject(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity) {
 	object* Object = new object(_object_id, _positionX, _positionY, _width, _height, _gravity);
-	objects_ptr[_object_id] = Object;
-}
-
-void manageObject::createObject_bullet(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity) {
-	object* Object = new object(_object_id, _positionX, _positionY, _width, _height, _gravity);
-	bullets_object_ptr[_object_id] = Object;
+	if (_object_id.substr(0, 6) == "bullet") {
+		bullets_object_ptr[_object_id] = Object;
+	}
+	else {
+		objects_ptr[_object_id] = Object;
+	}
 }
 
 void manageObject::delete_object(std::string id) {
-	delete objects_ptr[id];
+	if (id.substr(0, 6) == "bullet") {
+		delete bullets_object_ptr[id];
+	}
+	else {
+		delete objects_ptr[id];
+	}
 }
 
 void manageObject::show_object(std::string id) {
-	object* Object = objects_ptr[id];
+	object* Object;
+	if (id.substr(0, 6) == "bullet") {
+		Object = bullets_object_ptr[id];
+	}
+	else {
+		Object = objects_ptr[id];
+	}
 	sprites_ptr[id] = Object->getSprite();
 }
 
@@ -33,7 +44,13 @@ sf::RectangleShape* manageObject::draw_sprite(std::string id) {
 }
 
 object* manageObject::get_objectptr(std::string id) {
-	object* Object = objects_ptr[id];
+	object* Object;
+	if (id.substr(0, 6) == "bullet") {
+		Object = bullets_object_ptr[id];
+	}
+	else {
+		Object = objects_ptr[id];
+	}
 	return Object;
 }
 
