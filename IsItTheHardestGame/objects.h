@@ -1,3 +1,6 @@
+#ifndef OBJECT_H
+#define OBJECT_H
+
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
 #include "SFML/Rect.hpp"
@@ -26,3 +29,5 @@ public:
 	void update(float time);
 	std::string getId();
 };
+
+#endif

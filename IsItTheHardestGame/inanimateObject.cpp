@@ -1,0 +1,1 @@
+#include "inanimateObject.h"

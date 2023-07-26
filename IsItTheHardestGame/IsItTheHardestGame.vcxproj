@@ -140,13 +140,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="inanimateObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="objects.cpp" />
-    <ClCompile Include="object_manager.cpp" />
+    <ClCompile Include="manageObject.cpp" />
+    <ClCompile Include="player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bullet.h" />
+    <ClInclude Include="inanimateObject.h" />
     <ClInclude Include="objects.h" />
-    <ClInclude Include="object_manager.h" />
+    <ClInclude Include="manageObject.h" />
+    <ClInclude Include="player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
