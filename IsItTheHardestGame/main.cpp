@@ -28,6 +28,14 @@ int main() {
 	manageObject::createObject("right", 1000, 0, 1, 720, 0);
 	manageObject::show_object("right");
 
+	sf::Text text;
+	sf::Font font; font.loadFromFile("fonts/SAOUITT-Regular.ttf");
+	text.setString("The bullet is empty\nPress X to reload the bullet");
+	text.setFont(font);
+	text.setCharacterSize(100);
+	text.setFillColor(sf::Color::Black);
+	bool bulletEmpty = false;
+
 	while (window.isOpen()) {
 		bool gas = false;
 		window.clear(sf::Color(255, 255, 255));
@@ -42,18 +50,28 @@ int main() {
 				if (event.key.code == sf::Keyboard::Space) {
 					gas = true;
 				}
-				if (event.key.code == sf::Keyboard::LShift) {
+				if (event.key.code == sf::Keyboard::LShift && bulletCount <= 30) {
 					std::string bullet_id = "bullet_" + std::to_string(bulletCount);
 					bulletCount++;
 					manageObject::createObject(bullet_id, manageObject::get_objectptr("player")->getPositionX(), manageObject::get_objectptr("player")->getPositionY(), 20, 20, 0);
 					manageObject::get_objectptr(bullet_id)->setVelocity(0.5, 0);
 					manageObject::show_object(bullet_id);
+					if (bulletCount > 30) {
+						bulletEmpty = true;
+					}
+				}
+				if (event.key.code == sf::Keyboard::X && bulletEmpty == true) {
+					bulletCount = 1;
+					bulletEmpty = false;
 				}
 			}
 		}
 
 		if (gas == true) {
 			manageObject::get_objectptr("player")->setVelocity(manageObject::get_objectptr("player")->getVelocityX(), manageObject::get_objectptr("player")->getVelocityY() - 0.06);
+		}
+		if (bulletEmpty == true) {
+			window.draw(text);
 		}
 		
 		//Reflection
@@ -63,24 +81,17 @@ int main() {
 			Player->setVelocity(Player->getVelocityX(), velocityY * (-1));
 		}
 
-		//update
-		std::unordered_map<std::string, sf::RectangleShape*> spritesMap;
-		std::vector<std::string> bulletsToDelete;
-		spritesMap = manageObject::getSpritesMap();
+		//update & draw
+		std::unordered_map<std::string, sf::RectangleShape*> spritesMap = manageObject::getSpritesMap();
 		for (const auto& it : spritesMap) {
 			object* Object = manageObject::get_objectptr(it.first);
 			Object->update(1);
 			sf::RectangleShape *sprite = it.second;
 			window.draw(*sprite);
 			if (it.first.substr(0, 6) == "bullet" && manageObject::isintersect(it.second, manageObject::get_objectptr("right")->getSprite())) {
-				bulletsToDelete.push_back(it.first);
+				manageObject::delete_object(it.first);
 				manageObject::unshow_object(it.first);
 			}
-		}
-
-		// Erase bullets from bullets_object map
-		for (const auto& bulletKey : bulletsToDelete) {
-			manageObject::delete_object(bulletKey);
 		}
 		window.display();
 	}
