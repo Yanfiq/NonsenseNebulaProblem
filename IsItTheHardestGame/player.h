@@ -5,11 +5,11 @@
 
 class player : public object {
 private:
-	int bullet_count;
+	static int bullet_count;
 
 public:
 	using object::object;
-	//void shoot();
+	object* shoot();
 	void resetBulletCount();
 	int getBulletCount();
 	void thrust();

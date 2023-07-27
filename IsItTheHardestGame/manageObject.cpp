@@ -1,40 +1,52 @@
 #include "manageObject.h"
 
+std::unordered_map<std::string, player*> manageObject::player_object_ptr;
+std::unordered_map<std::string, bullet*> manageObject::bullets_object_ptr;
+std::unordered_map<std::string, inanimateObject*> manageObject::another_object_ptr;
 
+std::unordered_map<std::string, sf::RectangleShape*> manageObject::sprites_ptr;
 //template <>
-//bullet* manageObject::get_objectptr<bullet>(std::string id) {
+// 
+//bullet* manageObject::get_objectptr<bullet>(const std::string& id) {
 //	// Implementation to retrieve Bullet objects from the unordered_map
 //	return bullets_object_ptr[id];
 //}
 //
 //template <>
-//player* manageObject::get_objectptr<player>(std::string id) {
+//player* manageObject::get_objectptr<player>(const std::string& id) {
 //	// Implementation to retrieve Player objects from the unordered_map
 //	return player_object_ptr[id];
 //}
 //
 //template <>
-//inanimateObject* manageObject::get_objectptr<inanimateObject>(std::string id) {
+//inanimateObject* manageObject::get_objectptr<inanimateObject>(const std::string& id) {
 //	// Implementation to retrieve InanimateObject objects from the unordered_map
 //	return another_object_ptr[id];
 //}
 
-std::unordered_map<std::string, player*> manageObject::player_object_ptr;
-std::unordered_map<std::string, bullet*> manageObject::bullets_object_ptr;
-std::unordered_map<std::string, sf::RectangleShape*> manageObject::sprites_ptr;
-std::unordered_map<std::string, inanimateObject*> another_object_ptr;
+//template <typename T>
+//T* get_objectptr(const std::string& id) {
+//	if (id.substr(0, 6) == "bullet") {
+//		return static_cast<T*>(bullets_object_ptr[id]);
+//	}
+//	else if (id.substr(0, 6) == "player") {
+//		return static_cast<T*>(player_object_ptr[id]);
+//	}
+//	else {
+//		return static_cast<T*>(another_object_ptr[id]);
+//	}
+//}
 
-template <typename T>
-T* get_objectptr(std::string id) {
-	if (id.substr(0, 6) == "bullet") {
-		return static_cast<T*>(bullets_object_ptr[id]);
-	}
-	else if (id.substr(0, 6) == "player") {
-		return static_cast<T*>(player_object_ptr[id]);
-	}
-	else {
-		return static_cast<T*>(another_object_ptr[id]);
-	}
+player* manageObject::get_object_player(std::string id) {
+	return player_object_ptr[id];
+}
+
+bullet* manageObject::get_object_bullet(std::string id) {
+	return bullets_object_ptr[id];
+}
+
+inanimateObject* manageObject::get_another_object(std::string id) {
+	return another_object_ptr[id];
 }
 
 void manageObject::createObject(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity) {
@@ -49,6 +61,21 @@ void manageObject::createObject(std::string _object_id, float _positionX, float 
 	else {
 		inanimateObject* Object = new inanimateObject(_object_id, _positionX, _positionY, _width, _height, _gravity);
 		another_object_ptr[_object_id] = Object;
+	}
+}
+
+void manageObject::assign_object(std::string id, object* Object) {
+	if (id.substr(0, 6) == "bullet") {
+		bullet* Bullet = static_cast<bullet*>(Object);
+		bullets_object_ptr[Bullet->getId()] = Bullet;
+	}
+	else if (id.substr(0, 6) == "player") {
+		player* Player = static_cast<player*>(Object);
+		player_object_ptr[Player->getId()] = Player;
+	}
+	else {
+		inanimateObject* anotherObject = static_cast<inanimateObject*>(Object);
+		another_object_ptr[anotherObject->getId()] = anotherObject;
 	}
 }
 

@@ -33,7 +33,7 @@ int main() {
 	bool bulletEmpty = false;
 
 	while (window.isOpen()) {
-		bool gas = false; static int bullet_count = 1;
+		bool gas = false;
 		window.clear(sf::Color(255, 255, 255));
 
 		while (window.pollEvent(event)) {
@@ -46,34 +46,36 @@ int main() {
 				if (event.key.code == sf::Keyboard::Space) {
 					gas = true;
 				}
-				if (event.key.code == sf::Keyboard::LShift && manageObject::get_objectptr<player>("player")->getBulletCount() <= 30) {
-					/*manageObject::get_objectptr<player>("player")->shoot();*/
-
-					std::string bullet_id = "bullet_" + std::to_string(bullet_count);
-					manageObject::createObject(bullet_id, manageObject::get_objectptr<player>("player")->getPositionX(), manageObject::get_objectptr<player>("player")->getPositionY(), 20, 20, 0);
-					manageObject::get_objectptr<bullet>(bullet_id)->setVelocity(0.5, 0);
-					manageObject::show_object(bullet_id);
-					if (manageObject::get_objectptr<player>("player")->getBulletCount() > 30) {
+				if (event.key.code == sf::Keyboard::LShift && manageObject::get_object_player("player")->getBulletCount() <= 30) {
+					object* Object = manageObject::get_object_player("player")->shoot();
+					manageObject::assign_object(Object->getId(), Object);
+					manageObject::show_object(Object->getId());
+					//player* Player = manageObject::get_object_player("player");
+					//std::string bullet_id = "bullet_" + std::to_string(Player->getBulletCount());
+					//manageObject::createObject(bullet_id, Player->getPositionX(), Player->getPositionY(), 20, 20, 0);
+					//manageObject::get_object_bullet(bullet_id)->setVelocity(0.5, 0);
+					//manageObject::show_object(bullet_id);
+					if (manageObject::get_object_player("player")->getBulletCount() >= 30) {
 						bulletEmpty = true;
 					}
 				}
 				if (event.key.code == sf::Keyboard::X && bulletEmpty == true) {
-					manageObject::get_objectptr<player>("player")->resetBulletCount();
+					manageObject::get_object_player("player")->resetBulletCount();
 					bulletEmpty = false;
 				}
 			}
 		}
 
 		if (gas == true) {
-			manageObject::get_objectptr<player>("player")->thrust();
+			manageObject::get_object_player("player")->thrust();
 		}
 		if (bulletEmpty == true) {
 			window.draw(text);
 		}
 		
 		//Reflection
-		player* Player = manageObject::get_objectptr<player>("player");
-		if (manageObject::isintersect(Player->getSprite(), manageObject::get_objectptr<inanimateObject>("down")->getSprite())) {
+		player* Player = manageObject::get_object_player("player");
+		if (manageObject::isintersect(Player->getSprite(), manageObject::get_another_object("down")->getSprite())) {
 			float velocityY = Player->getVelocityY();
 			Player->setVelocity(Player->getVelocityX(), velocityY * (-1));
 		}
@@ -82,14 +84,14 @@ int main() {
 		std::unordered_map<std::string, sf::RectangleShape*> spritesMap = manageObject::getSpritesMap();
 		for (const auto& it : spritesMap) {
 			if (it.first.substr(0, 6) == "player") {
-				manageObject::get_objectptr<player>(it.first)->update(1);
+				manageObject::get_object_player(it.first)->update(1);
 			}
 			else if (it.first.substr(0, 6) == "bullet") {
-				manageObject::get_objectptr<bullet>(it.first)->update(1);
+				manageObject::get_object_bullet(it.first)->update(1);
 			}
 			sf::RectangleShape *sprite = it.second;
 			window.draw(*sprite);
-			if (it.first.substr(0, 6) == "bullet" && manageObject::isintersect(it.second, manageObject::get_objectptr<inanimateObject>("right")->getSprite())) {
+			if (it.first.substr(0, 6) == "bullet" && manageObject::isintersect(it.second, manageObject::get_another_object("right")->getSprite())) {
 				manageObject::delete_object(it.first);
 				manageObject::unshow_object(it.first);
 			}
