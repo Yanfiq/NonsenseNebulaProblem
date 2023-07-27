@@ -26,7 +26,7 @@ public:
 	float getVelocityX();
 	float getVelocityY();
 	void setVelocity(float vx, float vy);
-	void update(float time);
+	void update(double time);
 	std::string getId();
 };
 

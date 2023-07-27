@@ -23,7 +23,7 @@ float object::getPositionY() {
 	return positionY;
 }
 
-void object::update(float time) {
+void object::update(double time) {
 	positionX += velocityX * time;
 	positionY += velocityY * time;
 	if (velocityY <= maxY)

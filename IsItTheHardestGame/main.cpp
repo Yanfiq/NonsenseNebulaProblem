@@ -1,28 +1,31 @@
 #include <string>
+//#include <iomanip>
+//#include <iostream>
 #include <vector>
 #include <stdbool.h>
-#include "manageObject.h"
+#include "objectsContainer.h"
+#include <chrono>
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close);
 	sf::Event event;
 
 	//create player
-	manageObject::createObject("player", 100, 100, 60, 29, 0.0002f);
-	manageObject::show_object("player");
+	objectsContainer::createObject("player", 100, 100, 60, 29, 0.0002f);
+	objectsContainer::show_object("player");
 
 	//border
-	manageObject::createObject("up", 0, 0, 1280, 1, 0);
-	manageObject::show_object("up");
+	objectsContainer::createObject("up", 0, 0, 1280, 1, 0);
+	objectsContainer::show_object("up");
 
-	manageObject::createObject("down", 0, 720, 1280, 1, 0);
-	manageObject::show_object("down");
+	objectsContainer::createObject("down", 0, 720, 1280, 1, 0);
+	objectsContainer::show_object("down");
 
-	manageObject::createObject("left", 0, 0, 1, 720, 0);
-	manageObject::show_object("left");
+	objectsContainer::createObject("left", 0, 0, 1, 720, 0);
+	objectsContainer::show_object("left");
 
-	manageObject::createObject("right", 1000, 0, 1, 720, 0);
-	manageObject::show_object("right");
+	objectsContainer::createObject("right", 1000, 0, 1, 720, 0);
+	objectsContainer::show_object("right");
 
 	sf::Text text;
 	sf::Font font; font.loadFromFile("fonts/SAOUITT-Regular.ttf");
@@ -33,6 +36,7 @@ int main() {
 	bool bulletEmpty = false;
 
 	while (window.isOpen()) {
+		/*auto start = std::chrono::high_resolution_clock::now();*/
 		bool gas = false;
 		window.clear(sf::Color(255, 255, 255));
 
@@ -46,54 +50,58 @@ int main() {
 				if (event.key.code == sf::Keyboard::Space) {
 					gas = true;
 				}
-				if (event.key.code == sf::Keyboard::LShift && manageObject::get_object_player("player")->getBulletCount() <= 30) {
-					object* Object = manageObject::get_object_player("player")->shoot();
-					manageObject::assign_object(Object->getId(), Object);
-					manageObject::show_object(Object->getId());
-					//player* Player = manageObject::get_object_player("player");
+				if (event.key.code == sf::Keyboard::LShift && objectsContainer::get_object_player("player")->getBulletCount() <= 30) {
+					object* Object = objectsContainer::get_object_player("player")->shoot();
+					objectsContainer::assign_object(Object->getId(), Object);
+					objectsContainer::show_object(Object->getId());
+					//player* Player = objectsContainer::get_object_player("player");
 					//std::string bullet_id = "bullet_" + std::to_string(Player->getBulletCount());
-					//manageObject::createObject(bullet_id, Player->getPositionX(), Player->getPositionY(), 20, 20, 0);
-					//manageObject::get_object_bullet(bullet_id)->setVelocity(0.5, 0);
-					//manageObject::show_object(bullet_id);
-					if (manageObject::get_object_player("player")->getBulletCount() >= 30) {
+					//objectsContainer::createObject(bullet_id, Player->getPositionX(), Player->getPositionY(), 20, 20, 0);
+					//objectsContainer::get_object_bullet(bullet_id)->setVelocity(0.5, 0);
+					//objectsContainer::show_object(bullet_id);
+					if (objectsContainer::get_object_player("player")->getBulletCount() >= 30) {
 						bulletEmpty = true;
 					}
 				}
 				if (event.key.code == sf::Keyboard::X && bulletEmpty == true) {
-					manageObject::get_object_player("player")->resetBulletCount();
+					objectsContainer::get_object_player("player")->resetBulletCount();
 					bulletEmpty = false;
 				}
 			}
 		}
 
 		if (gas == true) {
-			manageObject::get_object_player("player")->thrust();
+			objectsContainer::get_object_player("player")->thrust();
 		}
 		if (bulletEmpty == true) {
 			window.draw(text);
 		}
 		
 		//Reflection
-		player* Player = manageObject::get_object_player("player");
-		if (manageObject::isintersect(Player->getSprite(), manageObject::get_another_object("down")->getSprite())) {
+		player* Player = objectsContainer::get_object_player("player");
+		if (objectsContainer::isintersect(Player->getSprite(), objectsContainer::get_another_object("down")->getSprite())) {
 			float velocityY = Player->getVelocityY();
 			Player->setVelocity(Player->getVelocityX(), velocityY * (-1));
 		}
 
+		//auto stop = std::chrono::high_resolution_clock::now();
+		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+		//double deltaTime = duration.count();
+		//std::cout << std::fixed << std::setprecision(3) << deltaTime << std::endl;
 		//update & draw
-		std::unordered_map<std::string, sf::RectangleShape*> spritesMap = manageObject::getSpritesMap();
+		std::unordered_map<std::string, sf::RectangleShape*> spritesMap = objectsContainer::getSpritesMap();
 		for (const auto& it : spritesMap) {
 			if (it.first.substr(0, 6) == "player") {
-				manageObject::get_object_player(it.first)->update(1);
+				objectsContainer::get_object_player(it.first)->update(0.7);
 			}
 			else if (it.first.substr(0, 6) == "bullet") {
-				manageObject::get_object_bullet(it.first)->update(1);
+				objectsContainer::get_object_bullet(it.first)->update(0.7);
 			}
 			sf::RectangleShape *sprite = it.second;
 			window.draw(*sprite);
-			if (it.first.substr(0, 6) == "bullet" && manageObject::isintersect(it.second, manageObject::get_another_object("right")->getSprite())) {
-				manageObject::delete_object(it.first);
-				manageObject::unshow_object(it.first);
+			if (it.first.substr(0, 6) == "bullet" && objectsContainer::isintersect(it.second, objectsContainer::get_another_object("right")->getSprite())) {
+				objectsContainer::delete_object(it.first);
+				objectsContainer::unshow_object(it.first);
 			}
 		}
 		window.display();

@@ -21,7 +21,7 @@
     <ClCompile Include="objects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="manageObject.cpp">
+    <ClCompile Include="objectsContainer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="player.cpp">
@@ -30,7 +30,7 @@
     <ClCompile Include="bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="inanimateObject.cpp">
+    <ClCompile Include="anotherObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,7 +38,7 @@
     <ClInclude Include="objects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="manageObject.h">
+    <ClInclude Include="objectsContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
@@ -47,7 +47,7 @@
     <ClInclude Include="bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inanimateObject.h">
+    <ClInclude Include="anotherObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

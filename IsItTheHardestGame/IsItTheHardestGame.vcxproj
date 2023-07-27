@@ -141,17 +141,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bullet.cpp" />
-    <ClCompile Include="inanimateObject.cpp" />
+    <ClCompile Include="anotherObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="objects.cpp" />
-    <ClCompile Include="manageObject.cpp" />
+    <ClCompile Include="objectsContainer.cpp" />
     <ClCompile Include="player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h" />
-    <ClInclude Include="inanimateObject.h" />
+    <ClInclude Include="anotherObject.h" />
     <ClInclude Include="objects.h" />
-    <ClInclude Include="manageObject.h" />
+    <ClInclude Include="objectsContainer.h" />
     <ClInclude Include="player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
