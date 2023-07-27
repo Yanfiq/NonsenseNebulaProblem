@@ -13,14 +13,12 @@ protected:
 	float gravity = 0.0002f;
 	float maxY = 0.5f;
 	float minY = -0.5f;
-	float HP = 100;
 	std::string object_id;
 	sf::RectangleShape object_sprite;
 
 public:
 	object(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity);
 	sf::RectangleShape* getSprite();
-	void reduceHP(float damage);
 	float getPositionX();
 	float getPositionY();
 	float getVelocityX();

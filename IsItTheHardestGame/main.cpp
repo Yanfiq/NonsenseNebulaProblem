@@ -1,6 +1,7 @@
 #include <string>
 //#include <iomanip>
-//#include <iostream>
+#include <iostream>
+#include <stack>
 #include <vector>
 #include <stdbool.h>
 #include "objectsContainer.h"
@@ -26,6 +27,10 @@ int main() {
 
 	objectsContainer::createObject("right", 1000, 0, 1, 720, 0);
 	objectsContainer::show_object("right");
+
+	//enemy
+	objectsContainer::createObject("enemy_1", 600, 100, 60, 90, 0.0002f);
+	objectsContainer::show_object("enemy_1");
 
 	sf::Text text;
 	sf::Font font; font.loadFromFile("fonts/SAOUITT-Regular.ttf");
@@ -90,19 +95,41 @@ int main() {
 		//std::cout << std::fixed << std::setprecision(3) << deltaTime << std::endl;
 		//update & draw
 		std::unordered_map<std::string, sf::RectangleShape*> spritesMap = objectsContainer::getSpritesMap();
+		std::stack<std::string> willBeDeleted;
 		for (const auto& it : spritesMap) {
 			if (it.first.substr(0, 6) == "player") {
 				objectsContainer::get_object_player(it.first)->update(0.7);
 			}
 			else if (it.first.substr(0, 6) == "bullet") {
 				objectsContainer::get_object_bullet(it.first)->update(0.7);
+				std::unordered_map <std::string, enemy*> enemyMap = objectsContainer::getEnemyMap();
+				for (const auto& it_enemy : enemyMap) {
+					if (objectsContainer::isintersect(it_enemy.second->getSprite(), it.second)) {
+						bullet* Bullet = objectsContainer::get_object_bullet(it.first);
+						it_enemy.second->reduceHp(Bullet->getDamageValue());
+						std::cout << "enemy damaged\n" << "HP: " << it_enemy.second->getHp() << std::endl;
+						willBeDeleted.push(it.first);
+					}
+				}
 			}
 			sf::RectangleShape *sprite = it.second;
 			window.draw(*sprite);
+			//delete bullet if intersects with the right border
 			if (it.first.substr(0, 6) == "bullet" && objectsContainer::isintersect(it.second, objectsContainer::get_another_object("right")->getSprite())) {
-				objectsContainer::delete_object(it.first);
-				objectsContainer::unshow_object(it.first);
+				willBeDeleted.push(it.first);
 			}
+			//delete enemy if the hp is < 0
+			if (it.first.substr(0, 5) == "enemy") {
+				enemy* Enemy = objectsContainer::get_object_enemy(it.first);
+				if (Enemy->getHp() < 0) {
+					willBeDeleted.push(it.first);
+				}
+			}
+		}
+		while (willBeDeleted.size() != 0) {
+			objectsContainer::unshow_object(willBeDeleted.top());
+			objectsContainer::delete_object(willBeDeleted.top());
+			willBeDeleted.pop();
 		}
 		window.display();
 	}

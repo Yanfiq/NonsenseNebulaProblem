@@ -13,9 +13,6 @@ sf::RectangleShape* object::getSprite() {
 	return sprite;
 }
 
-void object::reduceHP(float damage) {
-	HP -= damage;
-}
 float object::getPositionX() {
 	return positionX;
 }

@@ -1,7 +1,8 @@
 #include "objectsContainer.h"
 
 std::unordered_map<std::string, player*> objectsContainer::player_object_ptr;
-std::unordered_map<std::string, bullet*> objectsContainer::bullets_object_ptr;
+std::unordered_map<std::string, bullet*> objectsContainer::bullet_object_ptr;
+std::unordered_map<std::string, enemy*>  objectsContainer::enemy_object_ptr;
 std::unordered_map<std::string, anotherObject*> objectsContainer::another_object_ptr;
 
 std::unordered_map<std::string, sf::RectangleShape*> objectsContainer::sprites_ptr;
@@ -9,7 +10,7 @@ std::unordered_map<std::string, sf::RectangleShape*> objectsContainer::sprites_p
 // 
 //bullet* objectsContainer::get_objectptr<bullet>(const std::string& id) {
 //	// Implementation to retrieve Bullet objects from the unordered_map
-//	return bullets_object_ptr[id];
+//	return bullet_object_ptr[id];
 //}
 //
 //template <>
@@ -27,7 +28,7 @@ std::unordered_map<std::string, sf::RectangleShape*> objectsContainer::sprites_p
 //template <typename T>
 //T* get_objectptr(const std::string& id) {
 //	if (id.substr(0, 6) == "bullet") {
-//		return static_cast<T*>(bullets_object_ptr[id]);
+//		return static_cast<T*>(bullet_object_ptr[id]);
 //	}
 //	else if (id.substr(0, 6) == "player") {
 //		return static_cast<T*>(player_object_ptr[id]);
@@ -42,7 +43,11 @@ player* objectsContainer::get_object_player(std::string id) {
 }
 
 bullet* objectsContainer::get_object_bullet(std::string id) {
-	return bullets_object_ptr[id];
+	return bullet_object_ptr[id];
+}
+
+enemy* objectsContainer::get_object_enemy(std::string id) {
+	return enemy_object_ptr[id];
 }
 
 anotherObject* objectsContainer::get_another_object(std::string id) {
@@ -52,11 +57,15 @@ anotherObject* objectsContainer::get_another_object(std::string id) {
 void objectsContainer::createObject(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity) {
 	if (_object_id.substr(0, 6) == "bullet") {
 		bullet* Object = new bullet(_object_id, _positionX, _positionY, _width, _height, _gravity);
-		bullets_object_ptr[_object_id] = Object;
+		bullet_object_ptr[_object_id] = Object;
 	}
 	else if(_object_id.substr(0, 6) == "player") {
 		player* Object = new player(_object_id, _positionX, _positionY, _width, _height, _gravity);
 		player_object_ptr[_object_id] = Object;
+	}
+	else if (_object_id.substr(0, 5) == "enemy") {
+		enemy* Object = new enemy(_object_id, _positionX, _positionY, _width, _height, _gravity);
+		enemy_object_ptr[_object_id] = Object;
 	}
 	else {
 		anotherObject* Object = new anotherObject(_object_id, _positionX, _positionY, _width, _height, _gravity);
@@ -67,11 +76,15 @@ void objectsContainer::createObject(std::string _object_id, float _positionX, fl
 void objectsContainer::assign_object(std::string id, object* Object) {
 	if (id.substr(0, 6) == "bullet") {
 		bullet* Bullet = static_cast<bullet*>(Object);
-		bullets_object_ptr[Bullet->getId()] = Bullet;
+		bullet_object_ptr[Bullet->getId()] = Bullet;
 	}
 	else if (id.substr(0, 6) == "player") {
 		player* Player = static_cast<player*>(Object);
 		player_object_ptr[Player->getId()] = Player;
+	}
+	else if (id.substr(0, 5) == "enemy") {
+		enemy* Enemy = static_cast<enemy*>(Object);
+		enemy_object_ptr[Enemy->getId()] = Enemy;
 	}
 	else {
 		anotherObject* anotherobject = static_cast<anotherObject*>(Object);
@@ -81,10 +94,13 @@ void objectsContainer::assign_object(std::string id, object* Object) {
 
 void objectsContainer::delete_object(std::string id) {
 	if (id.substr(0, 6) == "bullet") {
-		delete bullets_object_ptr[id];
+		delete bullet_object_ptr[id];
 	}
 	else if(id.substr(0, 6) == "player") {
 		delete player_object_ptr[id];
+	}
+	else if (id.substr(0, 5) == "enemy") {
+		delete enemy_object_ptr[id];
 	}
 	else {
 		delete another_object_ptr[id];
@@ -93,11 +109,15 @@ void objectsContainer::delete_object(std::string id) {
 
 void objectsContainer::show_object(std::string id) {
 	if (id.substr(0, 6) == "bullet") {
-		bullet* Object = bullets_object_ptr[id];
+		bullet* Object = bullet_object_ptr[id];
 		sprites_ptr[id] = Object->getSprite();
 	}
 	else if(id.substr(0, 6) == "player") {
 		player* Object = player_object_ptr[id];
+		sprites_ptr[id] = Object->getSprite();
+	}
+	else if (id.substr(0, 5) == "enemy") {
+		enemy* Object = enemy_object_ptr[id];
 		sprites_ptr[id] = Object->getSprite();
 	}
 	else {
@@ -117,6 +137,9 @@ sf::RectangleShape* objectsContainer::draw_sprite(std::string id) {
 
 std::unordered_map<std::string, sf::RectangleShape*> objectsContainer::getSpritesMap() {
 	return sprites_ptr;
+}
+std::unordered_map <std::string, enemy*> objectsContainer::getEnemyMap() {
+	return enemy_object_ptr;
 }
 
 bool objectsContainer::isintersect(sf::RectangleShape* shape_1, sf::RectangleShape* shape_2) {
