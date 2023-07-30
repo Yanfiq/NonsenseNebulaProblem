@@ -1,6 +1,6 @@
 #include "player.h"
 
-int player::bullet_count;
+int player::bullet_count = 1;
 
 object* player::shoot() {
 	std::string bullet_id = "bullet_" + std::to_string(bullet_count);

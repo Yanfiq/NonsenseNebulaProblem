@@ -1,5 +1,6 @@
 #include <unordered_map>
 #include <string>
+#include <iostream>
 
 #ifndef OBJECTSCONTAINER_H
 #define OBJECTSCONTAINER_H
@@ -24,8 +25,9 @@ public:
 	static void show_object(std::string id);
 	static void unshow_object(std::string id);
 
-	static std::unordered_map<std::string, sf::RectangleShape*> getSpritesMap();
-	static std::unordered_map <std::string, enemy*> getEnemyMap();
+	static std::unordered_map<std::string, sf::RectangleShape*>* getSpritesMap();
+	static std::unordered_map <std::string, enemy*>* getEnemyMap();
+	static std::unordered_map<std::string, bullet*>* getBulletMap();
 
 	static bool isintersect(sf::RectangleShape* shape_1, sf::RectangleShape* shape_2);
 

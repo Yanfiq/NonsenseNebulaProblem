@@ -6,37 +6,6 @@ std::unordered_map<std::string, enemy*>  objectsContainer::enemy_object_ptr;
 std::unordered_map<std::string, anotherObject*> objectsContainer::another_object_ptr;
 
 std::unordered_map<std::string, sf::RectangleShape*> objectsContainer::sprites_ptr;
-//template <>
-// 
-//bullet* objectsContainer::get_objectptr<bullet>(const std::string& id) {
-//	// Implementation to retrieve Bullet objects from the unordered_map
-//	return bullet_object_ptr[id];
-//}
-//
-//template <>
-//player* objectsContainer::get_objectptr<player>(const std::string& id) {
-//	// Implementation to retrieve Player objects from the unordered_map
-//	return player_object_ptr[id];
-//}
-//
-//template <>
-//anotherObject* objectsContainer::get_objectptr<anotherObject>(const std::string& id) {
-//	// Implementation to retrieve InanimateObject objects from the unordered_map
-//	return another_object_ptr[id];
-//}
-
-//template <typename T>
-//T* get_objectptr(const std::string& id) {
-//	if (id.substr(0, 6) == "bullet") {
-//		return static_cast<T*>(bullet_object_ptr[id]);
-//	}
-//	else if (id.substr(0, 6) == "player") {
-//		return static_cast<T*>(player_object_ptr[id]);
-//	}
-//	else {
-//		return static_cast<T*>(another_object_ptr[id]);
-//	}
-//}
 
 player* objectsContainer::get_object_player(std::string id) {
 	return player_object_ptr[id];
@@ -92,21 +61,6 @@ void objectsContainer::assign_object(std::string id, object* Object) {
 	}
 }
 
-void objectsContainer::delete_object(std::string id) {
-	if (id.substr(0, 6) == "bullet") {
-		delete bullet_object_ptr[id];
-	}
-	else if(id.substr(0, 6) == "player") {
-		delete player_object_ptr[id];
-	}
-	else if (id.substr(0, 5) == "enemy") {
-		delete enemy_object_ptr[id];
-	}
-	else {
-		delete another_object_ptr[id];
-	}
-}
-
 void objectsContainer::show_object(std::string id) {
 	if (id.substr(0, 6) == "bullet") {
 		bullet* Object = bullet_object_ptr[id];
@@ -130,18 +84,72 @@ void objectsContainer::unshow_object(std::string id) {
 	sprites_ptr.erase(id);
 }
 
+void objectsContainer::delete_object(std::string id) {
+	if (id.substr(0, 6) == "bullet") {
+		delete bullet_object_ptr[id];
+	}
+	else if (id.substr(0, 6) == "player") {
+		delete player_object_ptr[id];
+	}
+	else if (id.substr(0, 5) == "enemy") {
+		delete enemy_object_ptr[id];
+	}
+	else {
+		delete another_object_ptr[id];
+	}
+	std::cout << id << " deleted\n";
+}
+
 sf::RectangleShape* objectsContainer::draw_sprite(std::string id) {
 	sf::RectangleShape* sprite = sprites_ptr[id];
 	return sprite;
 }
 
-std::unordered_map<std::string, sf::RectangleShape*> objectsContainer::getSpritesMap() {
-	return sprites_ptr;
+std::unordered_map<std::string, sf::RectangleShape*>* objectsContainer::getSpritesMap() {
+	return &sprites_ptr;
 }
-std::unordered_map <std::string, enemy*> objectsContainer::getEnemyMap() {
-	return enemy_object_ptr;
+
+std::unordered_map <std::string, enemy*>* objectsContainer::getEnemyMap() {
+	return &enemy_object_ptr;
+}
+
+std::unordered_map <std::string, bullet*>* objectsContainer::getBulletMap() {
+	return &bullet_object_ptr;
 }
 
 bool objectsContainer::isintersect(sf::RectangleShape* shape_1, sf::RectangleShape* shape_2) {
 	return shape_1->getGlobalBounds().intersects(shape_2->getGlobalBounds());
 }
+
+//commented code
+//template <>
+// 
+//bullet* objectsContainer::get_objectptr<bullet>(const std::string& id) {
+//	// Implementation to retrieve Bullet objects from the unordered_map
+//	return bullet_object_ptr[id];
+//}
+//
+//template <>
+//player* objectsContainer::get_objectptr<player>(const std::string& id) {
+//	// Implementation to retrieve Player objects from the unordered_map
+//	return player_object_ptr[id];
+//}
+//
+//template <>
+//anotherObject* objectsContainer::get_objectptr<anotherObject>(const std::string& id) {
+//	// Implementation to retrieve InanimateObject objects from the unordered_map
+//	return another_object_ptr[id];
+//}
+
+//template <typename T>
+//T* get_objectptr(const std::string& id) {
+//	if (id.substr(0, 6) == "bullet") {
+//		return static_cast<T*>(bullet_object_ptr[id]);
+//	}
+//	else if (id.substr(0, 6) == "player") {
+//		return static_cast<T*>(player_object_ptr[id]);
+//	}
+//	else {
+//		return static_cast<T*>(another_object_ptr[id]);
+//	}
+//}

@@ -1,7 +1,6 @@
 #include <string>
-//#include <iomanip>
 #include <iostream>
-#include <stack>
+#include <queue>
 #include <vector>
 #include <stdbool.h>
 #include "objectsContainer.h"
@@ -43,7 +42,6 @@ int main() {
 	while (window.isOpen()) {
 		/*auto start = std::chrono::high_resolution_clock::now();*/
 		bool gas = false;
-		window.clear(sf::Color(255, 255, 255));
 
 		while (window.pollEvent(event)) {
 			switch (event.type) {
@@ -59,11 +57,6 @@ int main() {
 					object* Object = objectsContainer::get_object_player("player")->shoot();
 					objectsContainer::assign_object(Object->getId(), Object);
 					objectsContainer::show_object(Object->getId());
-					//player* Player = objectsContainer::get_object_player("player");
-					//std::string bullet_id = "bullet_" + std::to_string(Player->getBulletCount());
-					//objectsContainer::createObject(bullet_id, Player->getPositionX(), Player->getPositionY(), 20, 20, 0);
-					//objectsContainer::get_object_bullet(bullet_id)->setVelocity(0.5, 0);
-					//objectsContainer::show_object(bullet_id);
 					if (objectsContainer::get_object_player("player")->getBulletCount() >= 30) {
 						bulletEmpty = true;
 					}
@@ -88,50 +81,76 @@ int main() {
 			float velocityY = Player->getVelocityY();
 			Player->setVelocity(Player->getVelocityX(), velocityY * (-1));
 		}
-
-		//auto stop = std::chrono::high_resolution_clock::now();
-		//auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-		//double deltaTime = duration.count();
-		//std::cout << std::fixed << std::setprecision(3) << deltaTime << std::endl;
+		
 		//update & draw
-		std::unordered_map<std::string, sf::RectangleShape*> spritesMap = objectsContainer::getSpritesMap();
-		std::stack<std::string> willBeDeleted;
-		for (const auto& it : spritesMap) {
+		std::unordered_map<std::string, sf::RectangleShape*>* spritesMap = objectsContainer::getSpritesMap();
+		for (const auto& it : *spritesMap) {
 			if (it.first.substr(0, 6) == "player") {
 				objectsContainer::get_object_player(it.first)->update(0.7);
 			}
 			else if (it.first.substr(0, 6) == "bullet") {
 				objectsContainer::get_object_bullet(it.first)->update(0.7);
-				std::unordered_map <std::string, enemy*> enemyMap = objectsContainer::getEnemyMap();
-				for (const auto& it_enemy : enemyMap) {
-					if (objectsContainer::isintersect(it_enemy.second->getSprite(), it.second)) {
-						bullet* Bullet = objectsContainer::get_object_bullet(it.first);
-						it_enemy.second->reduceHp(Bullet->getDamageValue());
-						std::cout << "enemy damaged\n" << "HP: " << it_enemy.second->getHp() << std::endl;
-						willBeDeleted.push(it.first);
+			}
+			sf::RectangleShape* sprite = it.second;
+			window.draw(*sprite);
+
+			//testing using the old code
+			//if (it.first.substr(0, 6) == "bullet") {
+			//	if (objectsContainer::isintersect(it.second, objectsContainer::get_another_object("right")->getSprite())) {
+			//		objectsContainer::delete_object(it.first);
+			//		objectsContainer::unshow_object(it.first);
+			//	}
+			//}
+		}
+		window.display();
+		window.clear(sf::Color(255, 255, 255));
+
+		//collision check & deletion
+		std::unordered_map<std::string, bullet*>* bulletMap = objectsContainer::getBulletMap();
+		std::unordered_map<std::string, enemy*>* enemyMap = objectsContainer::getEnemyMap();
+		std::queue<std::string> willBeDeleted;
+
+		for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
+			//check collision with the enemy object
+			//for (const auto& enemy_object : *enemyMap) {
+			//	if (objectsContainer::isintersect(enemy_object.second->getSprite(), bullet_object.second->getSprite())) {
+			//		willBeDeleted.push(enemy_object.first);
+			//		willBeDeleted.push(bullet_object.first);
+			//	}
+			//}
+
+			//check collision with the right border
+			if (objectsContainer::isintersect(bullet_object->second->getSprite(), objectsContainer::get_another_object("right")->getSprite())) {
+				//willBeDeleted.push(bullet_object->first);
+				objectsContainer::unshow_object(bullet_object->first);
+				objectsContainer::delete_object(bullet_object->first);
+				bullet_object = bulletMap->erase(bullet_object);
+			}
+			else if(!enemyMap->empty()){
+				for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end();) {
+					if (objectsContainer::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
+						objectsContainer::unshow_object(enemy_object->first);
+						objectsContainer::unshow_object(bullet_object->first);
+						objectsContainer::delete_object(bullet_object->first);
+						enemy_object = enemyMap->erase(enemy_object);
+						bullet_object = bulletMap->erase(bullet_object);
+					}
+					else {
+						++enemy_object;
+						++bullet_object;
 					}
 				}
 			}
-			sf::RectangleShape *sprite = it.second;
-			window.draw(*sprite);
-			//delete bullet if intersects with the right border
-			if (it.first.substr(0, 6) == "bullet" && objectsContainer::isintersect(it.second, objectsContainer::get_another_object("right")->getSprite())) {
-				willBeDeleted.push(it.first);
-			}
-			//delete enemy if the hp is < 0
-			if (it.first.substr(0, 5) == "enemy") {
-				enemy* Enemy = objectsContainer::get_object_enemy(it.first);
-				if (Enemy->getHp() < 0) {
-					willBeDeleted.push(it.first);
-				}
+			else {
+				++bullet_object;
 			}
 		}
-		while (willBeDeleted.size() != 0) {
-			objectsContainer::unshow_object(willBeDeleted.top());
-			objectsContainer::delete_object(willBeDeleted.top());
-			willBeDeleted.pop();
-		}
-		window.display();
+
+		//while (!willBeDeleted.empty()) {
+		//	objectsContainer::unshow_object(willBeDeleted.front());
+		//	objectsContainer::delete_object(willBeDeleted.front());
+		//	willBeDeleted.pop();
+		//}
 	}
 	return 0;
 }
