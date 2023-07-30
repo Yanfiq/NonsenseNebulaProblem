@@ -24,6 +24,7 @@ public:
 	static void assign_object(std::string id, object* Object);
 	static void show_object(std::string id);
 	static void unshow_object(std::string id);
+	static void clearObject();
 
 	static std::unordered_map<std::string, sf::RectangleShape*>* getSpritesMap();
 	static std::unordered_map <std::string, enemy*>* getEnemyMap();

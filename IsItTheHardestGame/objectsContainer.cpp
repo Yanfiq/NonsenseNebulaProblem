@@ -100,6 +100,15 @@ void objectsContainer::delete_object(std::string id) {
 	std::cout << id << " deleted\n";
 }
 
+void objectsContainer::clearObject() {
+	while (!bullet_object_ptr.empty()) {
+		auto object = bullet_object_ptr.begin();
+		sprites_ptr.erase(object->first);
+		delete bullet_object_ptr[object->first];
+		object = bullet_object_ptr.erase(object);
+	}
+}
+
 sf::RectangleShape* objectsContainer::draw_sprite(std::string id) {
 	sf::RectangleShape* sprite = sprites_ptr[id];
 	return sprite;

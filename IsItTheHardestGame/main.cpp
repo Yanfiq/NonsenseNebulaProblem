@@ -74,6 +74,7 @@ int main() {
 		}
 		if (levelUp) {
 			window.clear(sf::Color(255, 255, 255));
+			objectsContainer::clearObject();
 			static int level = 0;
 			level++;
 			sf::Text confirm;
