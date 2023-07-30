@@ -31,6 +31,9 @@ int main() {
 	objectsContainer::createObject("enemy_1", 600, 100, 60, 90, 0.0002f);
 	objectsContainer::show_object("enemy_1");
 
+	objectsContainer::createObject("enemy_2", 600, 300, 60, 90, 0.0002f);
+	objectsContainer::show_object("enemy_2");
+
 	sf::Text text;
 	sf::Font font; font.loadFromFile("fonts/SAOUITT-Regular.ttf");
 	text.setString("The bullet is empty\nPress X to reload the bullet");
