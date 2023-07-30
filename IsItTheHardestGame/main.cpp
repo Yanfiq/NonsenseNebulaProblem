@@ -1,7 +1,5 @@
 #include <string>
 #include <iostream>
-#include <queue>
-#include <set>
 #include <vector>
 #include <stdbool.h>
 #include "objectsContainer.h"
@@ -29,11 +27,7 @@ int main() {
 	objectsContainer::show_object("right");
 
 	//enemy
-	objectsContainer::createObject("enemy_1", 600, 100, 60, 90, 0.0002f);
-	objectsContainer::show_object("enemy_1");
 
-	objectsContainer::createObject("enemy_2", 600, 300, 60, 90, 0.0002f);
-	objectsContainer::show_object("enemy_2");
 
 	sf::Text text;
 	sf::Font font; font.loadFromFile("fonts/SAOUITT-Regular.ttf");
@@ -46,7 +40,7 @@ int main() {
 	while (window.isOpen()) {
 		/*auto start = std::chrono::high_resolution_clock::now();*/
 		bool gas = false;
-
+		static bool levelUp = false;
 		while (window.pollEvent(event)) {
 			switch (event.type) {
 			case sf::Event::Closed:
@@ -78,7 +72,46 @@ int main() {
 		if (bulletEmpty == true) {
 			window.draw(text);
 		}
+		if (levelUp) {
+			window.clear(sf::Color(255, 255, 255));
+			static int level = 0;
+			level++;
+			sf::Text confirm;
+			confirm.setFont(font);
+			confirm.setCharacterSize(100);
+			confirm.setFillColor(sf::Color::Black);
+			switch (level) {
+			case 1:
+				objectsContainer::createObject("enemy_1", 600, 100, 60, 29, 0.0002f); objectsContainer::show_object("enemy_1");
+				objectsContainer::createObject("enemy_2", 600, 200, 60, 29, 0.0002f); objectsContainer::show_object("enemy_2");
+				objectsContainer::createObject("enemy_3", 600, 300, 60, 29, 0.0002f); objectsContainer::show_object("enemy_3");
+				confirm.setString("DO YOU READY\npress 'c' to continue");
+				window.draw(confirm);
+				window.display();
+				while (true) {
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+						break;
+					}
+				}
+				break;
+			case 2:
+				confirm.setString("LEVEL NOT YET AVAILABLE");
+				window.draw(confirm);
+				window.display();
+				while (true) {
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+						break;
+					}
+				}
+				break;
+			}
+			window.clear(sf::Color(255, 255, 255));
+			levelUp = false;
+		}
 		
+		if (objectsContainer::getEnemyMap()->empty()) {
+			levelUp = true;
+		}
 		//Reflection
 		player* Player = objectsContainer::get_object_player("player");
 		if (objectsContainer::isintersect(Player->getSprite(), objectsContainer::get_another_object("down")->getSprite())) {
@@ -104,7 +137,6 @@ int main() {
 		//collision check & deletion
 		std::unordered_map<std::string, bullet*>* bulletMap = objectsContainer::getBulletMap();
 		std::unordered_map<std::string, enemy*>* enemyMap = objectsContainer::getEnemyMap();
-		std::set<std::string> deleteEnemy;
 
 		//check collision with the right border
 		for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
@@ -129,11 +161,9 @@ int main() {
 				if (objectsContainer::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
 					objectsContainer::unshow_object(bullet_object->first);
 					objectsContainer::delete_object(bullet_object->first);
-					if (!deleteEnemy.count(enemy_object->first)) {
-						deleteEnemy.insert(enemy_object->first);
-					}
-					//skipBulletIncrement = true;
-					++enemy_object;
+					objectsContainer::unshow_object(enemy_object->first);
+					objectsContainer::delete_object(enemy_object->first);
+					enemy_object = enemyMap->erase(enemy_object);
 					bullet_object = bulletMap->erase(bullet_object);
 					goto skipIncrement;
 				}
@@ -144,11 +174,6 @@ int main() {
 			++bullet_object;
 		skipIncrement:
 			continue;
-		}
-		for (auto deleteObject = deleteEnemy.begin(); deleteObject != deleteEnemy.end(); ++deleteObject) {
-			objectsContainer::unshow_object(*deleteObject);
-			//objectsContainer::delete_object(*deleteObject);
-			std::cout << *deleteObject << std::endl;
 		}
 	}
 	return 0;
