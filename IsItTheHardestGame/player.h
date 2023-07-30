@@ -5,7 +5,7 @@
 
 class player : public object {
 private:
-	static int bullet_count;
+	int bullet_count = 1;
 
 public:
 	using object::object;

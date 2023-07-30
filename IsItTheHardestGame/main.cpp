@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <queue>
+#include <set>
 #include <vector>
 #include <stdbool.h>
 #include "objectsContainer.h"
@@ -96,14 +97,6 @@ int main() {
 			}
 			sf::RectangleShape* sprite = it.second;
 			window.draw(*sprite);
-
-			//testing using the old code
-			//if (it.first.substr(0, 6) == "bullet") {
-			//	if (objectsContainer::isintersect(it.second, objectsContainer::get_another_object("right")->getSprite())) {
-			//		objectsContainer::delete_object(it.first);
-			//		objectsContainer::unshow_object(it.first);
-			//	}
-			//}
 		}
 		window.display();
 		window.clear(sf::Color(255, 255, 255));
@@ -111,49 +104,52 @@ int main() {
 		//collision check & deletion
 		std::unordered_map<std::string, bullet*>* bulletMap = objectsContainer::getBulletMap();
 		std::unordered_map<std::string, enemy*>* enemyMap = objectsContainer::getEnemyMap();
-		std::queue<std::string> willBeDeleted;
+		std::set<std::string> deleteEnemy;
 
+		//check collision with the right border
 		for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
-			//check collision with the enemy object
-			//for (const auto& enemy_object : *enemyMap) {
-			//	if (objectsContainer::isintersect(enemy_object.second->getSprite(), bullet_object.second->getSprite())) {
-			//		willBeDeleted.push(enemy_object.first);
-			//		willBeDeleted.push(bullet_object.first);
-			//	}
-			//}
-
-			//check collision with the right border
+			bool bulletIntersects = false;
 			if (objectsContainer::isintersect(bullet_object->second->getSprite(), objectsContainer::get_another_object("right")->getSprite())) {
-				//willBeDeleted.push(bullet_object->first);
 				objectsContainer::unshow_object(bullet_object->first);
 				objectsContainer::delete_object(bullet_object->first);
+				bulletIntersects = true;
+			}
+			if (bulletIntersects == true) {
 				bullet_object = bulletMap->erase(bullet_object);
 			}
-			else if(!enemyMap->empty()){
-				for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end();) {
-					if (objectsContainer::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
-						objectsContainer::unshow_object(enemy_object->first);
-						objectsContainer::unshow_object(bullet_object->first);
-						objectsContainer::delete_object(bullet_object->first);
-						enemy_object = enemyMap->erase(enemy_object);
-						bullet_object = bulletMap->erase(bullet_object);
-					}
-					else {
-						++enemy_object;
-						++bullet_object;
-					}
-				}
-			}
-			else {
+			else if (bulletIntersects == false) {
 				++bullet_object;
 			}
 		}
 
-		//while (!willBeDeleted.empty()) {
-		//	objectsContainer::unshow_object(willBeDeleted.front());
-		//	objectsContainer::delete_object(willBeDeleted.front());
-		//	willBeDeleted.pop();
-		//}
+		//check collision with the enemy object
+		for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
+			bool skipBulletIncrement = false;
+			for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end();) {
+				if (objectsContainer::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
+					objectsContainer::unshow_object(bullet_object->first);
+					objectsContainer::delete_object(bullet_object->first);
+					if (!deleteEnemy.count(enemy_object->first)) {
+						deleteEnemy.insert(enemy_object->first);
+					}
+					//skipBulletIncrement = true;
+					++enemy_object;
+					bullet_object = bulletMap->erase(bullet_object);
+					goto skipIncrement;
+				}
+				else {
+					++enemy_object;
+				}
+			}
+			++bullet_object;
+		skipIncrement:
+			continue;
+		}
+		for (auto deleteObject = deleteEnemy.begin(); deleteObject != deleteEnemy.end(); ++deleteObject) {
+			objectsContainer::unshow_object(*deleteObject);
+			//objectsContainer::delete_object(*deleteObject);
+			std::cout << *deleteObject << std::endl;
+		}
 	}
 	return 0;
 }
