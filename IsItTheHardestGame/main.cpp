@@ -95,6 +95,10 @@ int main() {
 				}
 				break;
 			case 2:
+				objectsContainer::createObject("enemy_1", 500, 100, 60, 29, 0.0002f); objectsContainer::show_object("enemy_1");
+				objectsContainer::createObject("enemy_2", 700, 100, 60, 29, 0.0002f); objectsContainer::show_object("enemy_2");
+				objectsContainer::createObject("enemy_3", 500, 300, 60, 29, 0.0002f); objectsContainer::show_object("enemy_3");
+				objectsContainer::createObject("enemy_4", 700, 300, 60, 29, 0.0002f); objectsContainer::show_object("enemy_4");
 				confirm.setString("LEVEL NOT YET AVAILABLE");
 				window.draw(confirm);
 				window.display();
