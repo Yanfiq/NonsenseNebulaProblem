@@ -64,10 +64,10 @@ int main() {
 		}
 
 		//level mechanism
+		static int level = 0;
 		if (levelUp) {
 			window.clear(sf::Color(255, 255, 255));
 			objectsContainer::clearObject();
-			static int level = 0;
 			level++;
 			sf::Text confirm;
 			confirm.setFont(font);
@@ -75,9 +75,9 @@ int main() {
 			confirm.setFillColor(sf::Color::Black);
 			switch (level) {
 			case 1:
-				objectsContainer::createObject("enemy_1", 600, 100, 60, 29, 0.0002f); objectsContainer::show_object("enemy_1");
-				objectsContainer::createObject("enemy_2", 600, 200, 60, 29, 0.0002f); objectsContainer::show_object("enemy_2");
-				objectsContainer::createObject("enemy_3", 600, 300, 60, 29, 0.0002f); objectsContainer::show_object("enemy_3");
+				objectsContainer::createObject("enemy_1", 600, 100, 60, 29, 0.0f); objectsContainer::show_object("enemy_1"); objectsContainer::get_object_enemy("enemy_1")->setVelocity(0.2, 0.1);
+				objectsContainer::createObject("enemy_2", 600, 200, 60, 29, 0.0f); objectsContainer::show_object("enemy_2"); objectsContainer::get_object_enemy("enemy_2")->setVelocity(0.3, 0.1);
+				objectsContainer::createObject("enemy_3", 600, 300, 60, 29, 0.0f); objectsContainer::show_object("enemy_3"); objectsContainer::get_object_enemy("enemy_3")->setVelocity(0.3, 0.2);
 				confirm.setString("LEVEL 1\nDO YOU READY\npress 'c' to continue");
 				window.draw(confirm);
 				window.display();
@@ -88,10 +88,10 @@ int main() {
 				}
 				break;
 			case 2:
-				objectsContainer::createObject("enemy_1", 500, 100, 60, 29, 0.0002f); objectsContainer::show_object("enemy_1");
-				objectsContainer::createObject("enemy_2", 700, 100, 60, 29, 0.0002f); objectsContainer::show_object("enemy_2");
-				objectsContainer::createObject("enemy_3", 500, 300, 60, 29, 0.0002f); objectsContainer::show_object("enemy_3");
-				objectsContainer::createObject("enemy_4", 700, 300, 60, 29, 0.0002f); objectsContainer::show_object("enemy_4");
+				objectsContainer::createObject("enemy_1", 500, 100, 60, 29, 0.0f); objectsContainer::show_object("enemy_1"); objectsContainer::get_object_enemy("enemy_1")->setVelocity(0.2, 0.1);
+				objectsContainer::createObject("enemy_2", 700, 100, 60, 29, 0.0f); objectsContainer::show_object("enemy_2"); objectsContainer::get_object_enemy("enemy_2")->setVelocity(0.3, 0.4);
+				objectsContainer::createObject("enemy_3", 500, 300, 60, 29, 0.0f); objectsContainer::show_object("enemy_3"); objectsContainer::get_object_enemy("enemy_3")->setVelocity(0.1, 0.2);
+				objectsContainer::createObject("enemy_4", 700, 300, 60, 29, 0.0f); objectsContainer::show_object("enemy_4"); objectsContainer::get_object_enemy("enemy_4")->setVelocity(0.4, 0.3);
 				confirm.setString("LEVEL 2\nDO YOU READY?\npress 'c' to continue");
 				window.draw(confirm);
 				window.display();
@@ -142,8 +142,11 @@ int main() {
 			else if (it.first.substr(0, 5) == "enemy") {
 				enemy* Enemy = objectsContainer::get_object_enemy(it.first);
 				Enemy->update(dt);
-				if (Enemy->getPositionY() >= 720) {
+				if (Enemy->getPositionY() >= 720 || Enemy->getPositionY() <= 0) {
 					Enemy->setVelocity(Enemy->getVelocityX(), Enemy->getVelocityY() * -1);
+				}
+				if (Enemy->getPositionX() >=1280 || Enemy->getPositionX() <=400) {
+					Enemy->setVelocity(Enemy->getVelocityX() * -1, Enemy->getVelocityY());
 				}
 			}
 			sf::RectangleShape* sprite = it.second;
