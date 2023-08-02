@@ -1,11 +1,13 @@
 #include "player.h"
 
-object* player::shoot() {
+bullet* player::shoot() {
 	std::string bullet_id = "bullet_" + std::to_string(bullet_count);
-	object* Object = new object(bullet_id, getPositionX(), getPositionY(), 20, 20, 0);
-	Object->setVelocity(0.5, 0);
+	bullet* Bullet = new bullet(bullet_id, positionX, positionY, 20, 20, 0);
+	Bullet->setVelocity(0.5, 0);
+	Bullet->setDamageValue(20.0f);
+	float test = Bullet->getDamageValue();
 	bullet_count++;
-	return Object;
+	return Bullet;
 }
 
 void player::resetBulletCount() {

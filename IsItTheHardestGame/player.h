@@ -1,7 +1,6 @@
-#ifndef PLAYER_H
-#define PLAYER_H
-
+#pragma once
 #include "objects.h"
+#include "bullet.h"
 
 class player : public object {
 private:
@@ -9,10 +8,8 @@ private:
 
 public:
 	using object::object;
-	object* shoot();
+	bullet* shoot();
 	void resetBulletCount();
 	int getBulletCount();
 	void thrust();
 };
-
-#endif

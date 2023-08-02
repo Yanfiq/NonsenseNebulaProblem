@@ -42,23 +42,9 @@ void objectsContainer::createObject(std::string _object_id, float _positionX, fl
 	}
 }
 
-void objectsContainer::assign_object(std::string id, object* Object) {
-	if (id.substr(0, 6) == "bullet") {
-		bullet* Bullet = static_cast<bullet*>(Object);
-		bullet_object_ptr[Bullet->getId()] = Bullet;
-	}
-	else if (id.substr(0, 6) == "player") {
-		player* Player = static_cast<player*>(Object);
-		player_object_ptr[Player->getId()] = Player;
-	}
-	else if (id.substr(0, 5) == "enemy") {
-		enemy* Enemy = static_cast<enemy*>(Object);
-		enemy_object_ptr[Enemy->getId()] = Enemy;
-	}
-	else {
-		anotherObject* anotherobject = static_cast<anotherObject*>(Object);
-		another_object_ptr[anotherobject->getId()] = anotherobject;
-	}
+void objectsContainer::assign_bullet(std::string id, bullet* bullet_ptr) {
+	bullet* Bullet = bullet_ptr;
+	bullet_object_ptr[Bullet->getId()] = Bullet;
 }
 
 void objectsContainer::show_object(std::string id) {

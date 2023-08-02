@@ -7,27 +7,13 @@
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close);
+	window.setFramerateLimit(60);
+	sf::Clock clock;
 	sf::Event event;
 
 	//create player
 	objectsContainer::createObject("player", 100, 100, 60, 29, 0.0002f);
 	objectsContainer::show_object("player");
-
-	//border
-	objectsContainer::createObject("up", 0, 0, 1280, 1, 0);
-	objectsContainer::show_object("up");
-
-	objectsContainer::createObject("down", 0, 720, 1280, 1, 0);
-	objectsContainer::show_object("down");
-
-	objectsContainer::createObject("left", 0, 0, 1, 720, 0);
-	objectsContainer::show_object("left");
-
-	objectsContainer::createObject("right", 1000, 0, 1, 720, 0);
-	objectsContainer::show_object("right");
-
-	//enemy
-
 
 	sf::Text text;
 	sf::Font font; font.loadFromFile("fonts/SAOUITT-Regular.ttf");
@@ -38,7 +24,6 @@ int main() {
 	bool bulletEmpty = false;
 
 	while (window.isOpen()) {
-		/*auto start = std::chrono::high_resolution_clock::now();*/
 		bool gas = false;
 		static bool levelUp = false;
 		while (window.pollEvent(event)) {
@@ -49,26 +34,31 @@ int main() {
 
 			case sf::Event::KeyPressed:
 				if (event.key.code == sf::Keyboard::Space) {
+					objectsContainer::get_object_player("player")->thrust();
 					gas = true;
 				}
-				if (event.key.code == sf::Keyboard::LShift && objectsContainer::get_object_player("player")->getBulletCount() <= 30) {
-					object* Object = objectsContainer::get_object_player("player")->shoot();
-					objectsContainer::assign_object(Object->getId(), Object);
-					objectsContainer::show_object(Object->getId());
+				if (event.key.code == sf::Keyboard::LShift) {
+					if (objectsContainer::get_object_player("player")->getBulletCount() <= 30) {
+						bullet* Bullet = objectsContainer::get_object_player("player")->shoot();
+						objectsContainer::assign_bullet(Bullet->getId(), Bullet);
+						objectsContainer::show_object(Bullet->getId());
+					}
 					if (objectsContainer::get_object_player("player")->getBulletCount() >= 30) {
 						bulletEmpty = true;
 					}
 				}
-				if (event.key.code == sf::Keyboard::X && bulletEmpty == true) {
-					objectsContainer::get_object_player("player")->resetBulletCount();
-					bulletEmpty = false;
+				if (event.key.code == sf::Keyboard::X) {
+					if (bulletEmpty == true) {
+						objectsContainer::get_object_player("player")->resetBulletCount();
+						bulletEmpty = false;
+					}
 				}
 			}
 		}
 
-		if (gas == true) {
-			objectsContainer::get_object_player("player")->thrust();
-		}
+		//if (gas == true) {
+		//	objectsContainer::get_object_player("player")->thrust();
+		//}
 		if (bulletEmpty == true) {
 			window.draw(text);
 		}
@@ -86,7 +76,7 @@ int main() {
 				objectsContainer::createObject("enemy_1", 600, 100, 60, 29, 0.0002f); objectsContainer::show_object("enemy_1");
 				objectsContainer::createObject("enemy_2", 600, 200, 60, 29, 0.0002f); objectsContainer::show_object("enemy_2");
 				objectsContainer::createObject("enemy_3", 600, 300, 60, 29, 0.0002f); objectsContainer::show_object("enemy_3");
-				confirm.setString("DO YOU READY\npress 'c' to continue");
+				confirm.setString("LEVEL 1\nDO YOU READY\npress 'c' to continue");
 				window.draw(confirm);
 				window.display();
 				while (true) {
@@ -100,7 +90,7 @@ int main() {
 				objectsContainer::createObject("enemy_2", 700, 100, 60, 29, 0.0002f); objectsContainer::show_object("enemy_2");
 				objectsContainer::createObject("enemy_3", 500, 300, 60, 29, 0.0002f); objectsContainer::show_object("enemy_3");
 				objectsContainer::createObject("enemy_4", 700, 300, 60, 29, 0.0002f); objectsContainer::show_object("enemy_4");
-				confirm.setString("LEVEL NOT YET AVAILABLE");
+				confirm.setString("LEVEL 2\nDO YOU READY?\npress 'c' to continue");
 				window.draw(confirm);
 				window.display();
 				while (true) {
@@ -111,31 +101,41 @@ int main() {
 				break;
 			}
 			window.clear(sf::Color(255, 255, 255));
+			objectsContainer::get_object_player("player")->setPosition(100, 100);
+			objectsContainer::get_object_player("player")->setVelocity(0, 0);
 			levelUp = false;
 		}
 		
 		if (objectsContainer::getEnemyMap()->empty()) {
+			player* Player = objectsContainer::get_object_player("player");
+			Player->resetBulletCount();
 			levelUp = true;
-		}
-		//Reflection
-		player* Player = objectsContainer::get_object_player("player");
-		if (objectsContainer::isintersect(Player->getSprite(), objectsContainer::get_another_object("down")->getSprite())) {
-			float velocityY = Player->getVelocityY();
-			Player->setVelocity(Player->getVelocityX(), velocityY * (-1));
 		}
 		
 		//update & draw
 		std::unordered_map<std::string, sf::RectangleShape*>* spritesMap = objectsContainer::getSpritesMap();
+		double dt = clock.restart().asSeconds() * 1500;
 		for (const auto& it : *spritesMap) {
 			if (it.first.substr(0, 6) == "player") {
-				objectsContainer::get_object_player(it.first)->update(0.7);
+				objectsContainer::get_object_player(it.first)->update(dt);
+				if (objectsContainer::get_object_player(it.first)->getPositionY() >= 720 || objectsContainer::get_object_player(it.first)->getPositionY() <= 0) {
+					objectsContainer::get_object_player(it.first)->setVelocity(objectsContainer::get_object_player(it.first)->getVelocityX(), objectsContainer::get_object_player(it.first)->getVelocityY() * -1);
+				}
 			}
 			else if (it.first.substr(0, 6) == "bullet") {
-				objectsContainer::get_object_bullet(it.first)->update(0.7);
+				objectsContainer::get_object_bullet(it.first)->update(dt);
+			}
+			else if (it.first.substr(0, 5) == "enemy") {
+				objectsContainer::get_object_enemy(it.first)->update(dt);
+				if (objectsContainer::get_object_enemy(it.first)->getPositionY() >= 720) {
+					objectsContainer::get_object_enemy(it.first)->setVelocity(objectsContainer::get_object_enemy(it.first)->getVelocityX(), objectsContainer::get_object_enemy(it.first)->getVelocityY() * -1);
+				}
 			}
 			sf::RectangleShape* sprite = it.second;
 			window.draw(*sprite);
 		}
+
+		clock.restart();
 		window.display();
 		window.clear(sf::Color(255, 255, 255));
 
@@ -146,7 +146,7 @@ int main() {
 		//check collision with the right border
 		for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
 			bool bulletIntersects = false;
-			if (objectsContainer::isintersect(bullet_object->second->getSprite(), objectsContainer::get_another_object("right")->getSprite())) {
+			if (bullet_object->second->getPositionX()>=1000) {
 				objectsContainer::unshow_object(bullet_object->first);
 				objectsContainer::delete_object(bullet_object->first);
 				bulletIntersects = true;
@@ -164,11 +164,21 @@ int main() {
 			bool skipBulletIncrement = false;
 			for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end();) {
 				if (objectsContainer::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
+					float damage = bullet_object->second->getDamageValue();
+					enemy_object->second->reduceHp(damage);
+					std::cout << "enemy HP: " << enemy_object->second->getHp() << std::endl;
+					std::cout << "bullet damage: " << damage << std::endl;
 					objectsContainer::unshow_object(bullet_object->first);
 					objectsContainer::delete_object(bullet_object->first);
-					objectsContainer::unshow_object(enemy_object->first);
-					objectsContainer::delete_object(enemy_object->first);
-					enemy_object = enemyMap->erase(enemy_object);
+					if (enemy_object->second->getHp() <= 0) {
+						objectsContainer::unshow_object(enemy_object->first);
+						objectsContainer::delete_object(enemy_object->first);
+						enemy_object = enemyMap->erase(enemy_object);
+					}
+					else {
+						++enemy_object;
+					}
+					
 					bullet_object = bulletMap->erase(bullet_object);
 					goto skipIncrement;
 				}

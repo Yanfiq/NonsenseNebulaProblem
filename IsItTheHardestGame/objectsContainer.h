@@ -1,9 +1,7 @@
+#pragma once
 #include <unordered_map>
 #include <string>
 #include <iostream>
-
-#ifndef OBJECTSCONTAINER_H
-#define OBJECTSCONTAINER_H
 #include "player.h"
 #include "bullet.h"
 #include "enemy.h"
@@ -21,7 +19,7 @@ protected:
 public:
 	static void createObject(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity);
 	static void delete_object(std::string id);
-	static void assign_object(std::string id, object* Object);
+	static void assign_bullet(std::string id, bullet* bullet_ptr);
 	static void show_object(std::string id);
 	static void unshow_object(std::string id);
 	static void clearObject();
@@ -53,5 +51,3 @@ public:
 	//template <typename T>
 	//static T* get_objectptr(const std::string& id);
 };
-
-#endif

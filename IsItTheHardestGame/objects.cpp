@@ -35,6 +35,11 @@ void object::setVelocity(float vx, float vy) {
 	velocityY = vy;
 }
 
+void object::setPosition(float px, float py) {
+	positionX = px;
+	positionY = py;
+}
+
 float object::getVelocityY() {
 	return velocityY;
 }

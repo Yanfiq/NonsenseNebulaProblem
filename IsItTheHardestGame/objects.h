@@ -1,6 +1,4 @@
-#ifndef OBJECT_H
-#define OBJECT_H
-
+#pragma once
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
 #include "SFML/Rect.hpp"
@@ -24,8 +22,7 @@ public:
 	float getVelocityX();
 	float getVelocityY();
 	void setVelocity(float vx, float vy);
+	void setPosition(float px, float py);
 	void update(double time);
 	std::string getId();
 };
-
-#endif
