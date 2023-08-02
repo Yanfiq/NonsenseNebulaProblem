@@ -1,5 +1,6 @@
 #pragma once
 #include "objects.h"
+#include "bullet.h"
 
 class enemy : public object {
 protected:
@@ -8,5 +9,6 @@ protected:
 public:
 	using object::object;
 	void reduceHp(float damage);
+	bullet* shoot();
 	float getHp();
 };

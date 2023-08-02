@@ -5,7 +5,6 @@ bullet* player::shoot() {
 	bullet* Bullet = new bullet(bullet_id, positionX, positionY, 20, 20, 0);
 	Bullet->setVelocity(0.5, 0);
 	Bullet->setDamageValue(20.0f);
-	float test = Bullet->getDamageValue();
 	bullet_count++;
 	return Bullet;
 }

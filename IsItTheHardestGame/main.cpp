@@ -9,6 +9,7 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(60);
 	sf::Clock clock;
+	sf::Clock clock_2;
 	sf::Event event;
 
 	//create player
@@ -127,7 +128,9 @@ int main() {
 		
 		//update & draw
 		std::unordered_map<std::string, sf::RectangleShape*>* spritesMap = objectsContainer::getSpritesMap();
-		double dt = clock.restart().asSeconds() * 1500;
+		double dt = clock.restart().asSeconds();
+		std::cout << dt << std::endl;
+		dt *= 1500;
 		for (const auto& it : *spritesMap) {
 			if (it.first.substr(0, 6) == "player") {
 				player* Player = objectsContainer::get_object_player(it.first);
@@ -138,6 +141,7 @@ int main() {
 			}
 			else if (it.first.substr(0, 6) == "bullet") {
 				objectsContainer::get_object_bullet(it.first)->update(dt);
+				bullet* Bullet = objectsContainer::get_object_bullet(it.first);
 			}
 			else if (it.first.substr(0, 5) == "enemy") {
 				enemy* Enemy = objectsContainer::get_object_enemy(it.first);
@@ -148,6 +152,15 @@ int main() {
 				if (Enemy->getPositionX() >=1280 || Enemy->getPositionX() <=400) {
 					Enemy->setVelocity(Enemy->getVelocityX() * -1, Enemy->getVelocityY());
 				}
+
+				float elapsed = clock_2.getElapsedTime().asSeconds();
+				if (elapsed > 5 && elapsed < 5.03) {
+					bullet* Bullet = Enemy->shoot();
+					objectsContainer::assign_bullet(Bullet->getId(), Bullet);
+					objectsContainer::show_object(Bullet->getId());
+				}
+				if (elapsed > 5.1)
+					clock_2.restart();
 			}
 			sf::RectangleShape* sprite = it.second;
 			window.draw(*sprite);
@@ -162,11 +175,13 @@ int main() {
 		//check collision with the right border
 		for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
 			bool bulletIntersects = false;
-			if (bullet_object->second->getPositionX()>=1280) {
+			if (bullet_object->second->getPositionX() >= 1280 || bullet_object->second->getPositionX() <= 0) {
 				objectsContainer::unshow_object(bullet_object->first);
 				objectsContainer::delete_object(bullet_object->first);
 				bulletIntersects = true;
 			}
+
+			//perform different increment method for different scenario
 			if (bulletIntersects == true) {
 				bullet_object = bulletMap->erase(bullet_object);
 			}
@@ -178,30 +193,34 @@ int main() {
 		//check collision with the enemy object
 		for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
 			bool skipBulletIncrement = false;
-			for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end();) {
-				if (objectsContainer::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
-					float damage = bullet_object->second->getDamageValue();
-					enemy_object->second->reduceHp(damage);
-					std::cout << "enemy HP: " << enemy_object->second->getHp() << std::endl;
-					std::cout << "bullet damage: " << damage << std::endl;
-					objectsContainer::unshow_object(bullet_object->first);
-					objectsContainer::delete_object(bullet_object->first);
-					if (enemy_object->second->getHp() <= 0) {
-						objectsContainer::unshow_object(enemy_object->first);
-						objectsContainer::delete_object(enemy_object->first);
-						enemy_object = enemyMap->erase(enemy_object);
+			if (bullet_object->first.substr(7, 5) != "enemy") {
+				for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end();) {
+					if (objectsContainer::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
+						float damage = bullet_object->second->getDamageValue();
+						enemy_object->second->reduceHp(damage);
+						std::cout << "enemy HP: " << enemy_object->second->getHp() << std::endl;
+						std::cout << "bullet damage: " << damage << std::endl;
+						objectsContainer::unshow_object(bullet_object->first);
+						objectsContainer::delete_object(bullet_object->first);
+						if (enemy_object->second->getHp() <= 0) {
+							objectsContainer::unshow_object(enemy_object->first);
+							objectsContainer::delete_object(enemy_object->first);
+							enemy_object = enemyMap->erase(enemy_object);
+						}
+						else {
+							++enemy_object;
+						}
+						//if the code reaches this part, it means that the object has been deleted,
+						//so we need to move the iterator into the next object while remove it from the map
+						bullet_object = bulletMap->erase(bullet_object);
+						goto skipIncrement;
 					}
 					else {
 						++enemy_object;
 					}
-					
-					bullet_object = bulletMap->erase(bullet_object);
-					goto skipIncrement;
-				}
-				else {
-					++enemy_object;
 				}
 			}
+			//if the code reaches this part, it means that no bullet has been collided, so it'll move the iterator normally using increment
 			++bullet_object;
 		skipIncrement:
 			continue;
