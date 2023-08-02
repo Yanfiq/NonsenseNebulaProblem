@@ -34,7 +34,7 @@ int main() {
 
 			case sf::Event::KeyPressed:
 				if (event.key.code == sf::Keyboard::Space) {
-					objectsContainer::get_object_player("player")->thrust();
+					//objectsContainer::get_object_player("player")->thrust();
 					gas = true;
 				}
 				if (event.key.code == sf::Keyboard::LShift) {
@@ -56,12 +56,14 @@ int main() {
 			}
 		}
 
-		//if (gas == true) {
-		//	objectsContainer::get_object_player("player")->thrust();
-		//}
+		if (gas == true) {
+			objectsContainer::get_object_player("player")->thrust();
+		}
 		if (bulletEmpty == true) {
 			window.draw(text);
 		}
+
+		//level mechanism
 		if (levelUp) {
 			window.clear(sf::Color(255, 255, 255));
 			objectsContainer::clearObject();
@@ -95,6 +97,17 @@ int main() {
 				window.display();
 				while (true) {
 					if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+						break;
+					}
+				}
+				break;
+			default:
+				confirm.setString("CONGRATULATION\nYOU ARE THE WINNER\npress 'r' to restart");
+				window.draw(confirm);
+				window.display();
+				while (true) {
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+						level = 0;
 						break;
 					}
 				}
