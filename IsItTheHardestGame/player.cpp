@@ -20,3 +20,15 @@ int player::getBulletCount() {
 void player::thrust() {
 	setVelocity(getVelocityX(), getVelocityY() - 0.06f);
 }
+
+float player::getPlayerHp() const {
+	return this->hp;
+}
+
+void player::setPlayerHp(float _hp) {
+	this->hp = _hp;
+}
+
+void player::reducePlayerHp(float damage) {
+	this->hp -= damage;
+}

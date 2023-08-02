@@ -93,6 +93,12 @@ void objectsContainer::clearObject() {
 		delete bullet_object_ptr[object->first];
 		object = bullet_object_ptr.erase(object);
 	}
+	while (!enemy_object_ptr.empty()) {
+		auto object = enemy_object_ptr.begin();
+		sprites_ptr.erase(object->first);
+		delete enemy_object_ptr[object->first];
+		object = enemy_object_ptr.erase(object);
+	}
 }
 
 sf::RectangleShape* objectsContainer::draw_sprite(std::string id) {

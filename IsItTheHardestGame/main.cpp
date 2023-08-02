@@ -14,6 +14,7 @@ int main() {
 
 	//create player
 	objectsContainer::createObject("player", 100, 100, 60, 29, 0.0002f);
+	objectsContainer::get_object_player("player")->setPlayerHp(100);
 	objectsContainer::show_object("player");
 
 	sf::Text text;
@@ -102,22 +103,13 @@ int main() {
 					}
 				}
 				break;
-			default:
-				confirm.setString("CONGRATULATION\nYOU ARE THE WINNER\npress 'r' to restart");
-				window.draw(confirm);
-				window.display();
-				while (true) {
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
-						level = 0;
-						break;
-					}
-				}
-				break;
 			}
 			window.clear(sf::Color(255, 255, 255));
+			levelUp = false;
+		restart:
 			objectsContainer::get_object_player("player")->setPosition(100, 100);
 			objectsContainer::get_object_player("player")->setVelocity(0, 0);
-			levelUp = false;
+			continue;
 		}
 		
 		if (objectsContainer::getEnemyMap()->empty()) {
@@ -129,15 +121,18 @@ int main() {
 		//update & draw
 		std::unordered_map<std::string, sf::RectangleShape*>* spritesMap = objectsContainer::getSpritesMap();
 		double dt = clock.restart().asSeconds();
-		std::cout << dt << std::endl;
 		dt *= 1500;
 		for (const auto& it : *spritesMap) {
 			if (it.first.substr(0, 6) == "player") {
 				player* Player = objectsContainer::get_object_player(it.first);
 				objectsContainer::get_object_player(it.first)->update(dt);
-				if (Player->getPositionY() >= 720 || Player->getPositionY() <= 0) {
+				if (Player->getPositionY() >= 720 || Player->getPositionY() <= 0)
 					Player->setVelocity(Player->getVelocityX(),Player->getVelocityY() * -1);
-				}
+
+				if (Player->getPositionY() >= 720)
+					Player->setPosition(Player->getPositionX(), 720);
+				else if(Player->getPositionY() <= 0)
+					Player->setPosition(Player->getPositionX(), 0);
 			}
 			else if (it.first.substr(0, 6) == "bullet") {
 				objectsContainer::get_object_bullet(it.first)->update(dt);
@@ -148,9 +143,17 @@ int main() {
 				Enemy->update(dt);
 				if (Enemy->getPositionY() >= 720 || Enemy->getPositionY() <= 0) {
 					Enemy->setVelocity(Enemy->getVelocityX(), Enemy->getVelocityY() * -1);
+					if(Enemy->getPositionY() >= 720)
+						Enemy->setPosition(Enemy->getPositionX(), 720);
+					else if(Enemy->getPositionY() <= 0)
+						Enemy->setPosition(Enemy->getPositionX(), 0);
 				}
 				if (Enemy->getPositionX() >=1280 || Enemy->getPositionX() <=400) {
 					Enemy->setVelocity(Enemy->getVelocityX() * -1, Enemy->getVelocityY());
+					if(Enemy->getPositionX() <= 400)
+						Enemy->setPosition(400, Enemy->getPositionY());
+					else if(Enemy->getPositionX() >= 1280)
+						Enemy->setPosition(1280, Enemy->getPositionY());
 				}
 
 				float elapsed = clock_2.getElapsedTime().asSeconds();
@@ -190,7 +193,7 @@ int main() {
 			}
 		}
 
-		//check collision with the enemy object
+		//check collision with the enemy object 
 		for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
 			bool skipBulletIncrement = false;
 			if (bullet_object->first.substr(7, 5) != "enemy") {
@@ -217,6 +220,18 @@ int main() {
 					}
 					else {
 						++enemy_object;
+					}
+				}
+			}
+			else if (bullet_object->first.substr(7, 5) == "enemy") {
+				player* Player = objectsContainer::get_object_player("player");
+				if (objectsContainer::isintersect(Player->getSprite(), bullet_object->second->getSprite())) {
+					Player->reducePlayerHp(bullet_object->second->getDamageValue());
+					std::cout << "player HP: " << Player->getPlayerHp() << std::endl;
+					if (Player->getPlayerHp() <= 0) {
+						objectsContainer::unshow_object(Player->getId());
+						level = -1;
+						levelUp = true;
 					}
 				}
 			}
