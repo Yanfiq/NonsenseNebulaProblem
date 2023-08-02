@@ -117,25 +117,25 @@ int main() {
 		double dt = clock.restart().asSeconds() * 1500;
 		for (const auto& it : *spritesMap) {
 			if (it.first.substr(0, 6) == "player") {
+				player* Player = objectsContainer::get_object_player(it.first);
 				objectsContainer::get_object_player(it.first)->update(dt);
-				if (objectsContainer::get_object_player(it.first)->getPositionY() >= 720 || objectsContainer::get_object_player(it.first)->getPositionY() <= 0) {
-					objectsContainer::get_object_player(it.first)->setVelocity(objectsContainer::get_object_player(it.first)->getVelocityX(), objectsContainer::get_object_player(it.first)->getVelocityY() * -1);
+				if (Player->getPositionY() >= 720 || Player->getPositionY() <= 0) {
+					Player->setVelocity(Player->getVelocityX(),Player->getVelocityY() * -1);
 				}
 			}
 			else if (it.first.substr(0, 6) == "bullet") {
 				objectsContainer::get_object_bullet(it.first)->update(dt);
 			}
 			else if (it.first.substr(0, 5) == "enemy") {
-				objectsContainer::get_object_enemy(it.first)->update(dt);
-				if (objectsContainer::get_object_enemy(it.first)->getPositionY() >= 720) {
-					objectsContainer::get_object_enemy(it.first)->setVelocity(objectsContainer::get_object_enemy(it.first)->getVelocityX(), objectsContainer::get_object_enemy(it.first)->getVelocityY() * -1);
+				enemy* Enemy = objectsContainer::get_object_enemy(it.first);
+				Enemy->update(dt);
+				if (Enemy->getPositionY() >= 720) {
+					Enemy->setVelocity(Enemy->getVelocityX(), Enemy->getVelocityY() * -1);
 				}
 			}
 			sf::RectangleShape* sprite = it.second;
 			window.draw(*sprite);
 		}
-
-		clock.restart();
 		window.display();
 		window.clear(sf::Color(255, 255, 255));
 
@@ -146,7 +146,7 @@ int main() {
 		//check collision with the right border
 		for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
 			bool bulletIntersects = false;
-			if (bullet_object->second->getPositionX()>=1000) {
+			if (bullet_object->second->getPositionX()>=1280) {
 				objectsContainer::unshow_object(bullet_object->first);
 				objectsContainer::delete_object(bullet_object->first);
 				bulletIntersects = true;
