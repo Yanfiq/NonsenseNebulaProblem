@@ -122,6 +122,8 @@ int main() {
 		restart:
 			objectsContainer::get_object_player("player")->setPosition(100, 100);
 			objectsContainer::get_object_player("player")->setVelocity(0, 0);
+			objectsContainer::get_object_player("player")->setPlayerHp(100);
+			objectsContainer::get_object_player("player")->resetBulletCount();
 			continue;
 		}
 		
