@@ -103,6 +103,19 @@ int main() {
 					}
 				}
 				break;
+			default:
+				confirm.setString("YOU LOSE\nBETTER LUCK NEXT TIME\npress 'r' to restart");
+				window.draw(confirm);
+				window.display();
+				while (true) {
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+						level = 0;
+						objectsContainer::show_object("player");
+						goto restart;
+						break;
+					}
+				}
+				break;
 			}
 			window.clear(sf::Color(255, 255, 255));
 			levelUp = false;
