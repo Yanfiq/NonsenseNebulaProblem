@@ -7,20 +7,32 @@ std::unordered_map<std::string, anotherObject*> objectsContainer::another_object
 
 std::unordered_map<std::string, sf::RectangleShape*> objectsContainer::sprites_ptr;
 
-player* objectsContainer::get_object_player(std::string id) {
-	return player_object_ptr[id];
-}
+//player* objectsContainer::get_object_player(std::string id) {
+//	return player_object_ptr[id];
+//}
+//
+//bullet* objectsContainer::get_object_bullet(std::string id) {
+//	return bullet_object_ptr[id];
+//}
+//
+//enemy* objectsContainer::get_object_enemy(std::string id) {
+//	return enemy_object_ptr[id];
+//}
+//
+//anotherObject* objectsContainer::get_another_object(std::string id) {
+//	return another_object_ptr[id];
+//}
 
-bullet* objectsContainer::get_object_bullet(std::string id) {
-	return bullet_object_ptr[id];
-}
-
-enemy* objectsContainer::get_object_enemy(std::string id) {
-	return enemy_object_ptr[id];
-}
-
-anotherObject* objectsContainer::get_another_object(std::string id) {
-	return another_object_ptr[id];
+object* objectsContainer::get_objectptr(std::string id) {
+	if (id.substr(0, 6) == "bullet") {
+		return static_cast<object*>(bullet_object_ptr[id]);
+	}
+	else if (id.substr(0, 6) == "player") {
+		return static_cast<object*>(player_object_ptr[id]);
+	}
+	else {
+		return static_cast<object*>(another_object_ptr[id]);
+	}
 }
 
 void objectsContainer::createObject(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity) {

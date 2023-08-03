@@ -31,12 +31,14 @@ public:
 	static bool isintersect(sf::RectangleShape* shape_1, sf::RectangleShape* shape_2);
 
 	static sf::RectangleShape* draw_sprite(std::string id);
-	static player* get_object_player(std::string id);
-	static bullet* get_object_bullet(std::string id);
-	static enemy* get_object_enemy(std::string id);
+	//static player* get_object_player(std::string id);
+	//static bullet* get_object_bullet(std::string id);
+	//static enemy* get_object_enemy(std::string id);
 	static anotherObject* get_another_object(std::string id);
-	//template <class T>
-	//static T* get_objectptr(std::string id) {
+
+	static object* get_objectptr(std::string id);
+	//template <typename T>
+	//static object* get_objectptr(std::string id) {
 	//	if (id.substr(0, 6) == "bullet") {
 	//		return static_cast<T*>(bullet_object_ptr[id]);
 	//	}

@@ -2,7 +2,10 @@
 #include <iostream>
 #include <vector>
 #include <stdbool.h>
-#include "objectsContainer.h"
+#include "player.h"
+#include "bullet.h"
+#include "enemy.h"
+#include "objects.h"
 #include <chrono>
 
 int main() {
@@ -13,9 +16,8 @@ int main() {
 	sf::Event event;
 
 	//create player
-	objectsContainer::createObject("player", 100, 100, 60, 29, 0.0002f);
-	objectsContainer::get_object_player("player")->setPlayerHp(100);
-	objectsContainer::show_object("player");
+	player* Player = new player("player", 100, 100, 60, 29, 0.0002f);
+	Player->setPlayerHp(100);
 
 	sf::Text text;
 	sf::Font font; font.loadFromFile("fonts/SAOUITT-Regular.ttf");
@@ -40,18 +42,16 @@ int main() {
 					gas = true;
 				}
 				if (event.key.code == sf::Keyboard::LShift) {
-					if (objectsContainer::get_object_player("player")->getBulletCount() <= 30) {
-						bullet* Bullet = objectsContainer::get_object_player("player")->shoot();
-						objectsContainer::assign_bullet(Bullet->getId(), Bullet);
-						objectsContainer::show_object(Bullet->getId());
+					if (Player->getBulletCount() <= 30) {
+						Player->shoot();
 					}
-					if (objectsContainer::get_object_player("player")->getBulletCount() >= 30) {
+					if (Player->getBulletCount() >= 30) {
 						bulletEmpty = true;
 					}
 				}
 				if (event.key.code == sf::Keyboard::X) {
 					if (bulletEmpty == true) {
-						objectsContainer::get_object_player("player")->resetBulletCount();
+						Player->resetBulletCount();
 						bulletEmpty = false;
 					}
 				}
@@ -59,7 +59,7 @@ int main() {
 		}
 
 		if (gas == true) {
-			objectsContainer::get_object_player("player")->thrust();
+			Player->thrust();
 		}
 		if (bulletEmpty == true) {
 			window.draw(text);
@@ -69,7 +69,7 @@ int main() {
 		static int level = 0;
 		if (levelUp) {
 			window.clear(sf::Color(255, 255, 255));
-			objectsContainer::clearObject();
+			//objectsContainer::clearObject();
 			level++;
 			sf::Text confirm;
 			confirm.setFont(font);
@@ -77,9 +77,11 @@ int main() {
 			confirm.setFillColor(sf::Color::Black);
 			switch (level) {
 			case 1:
-				objectsContainer::createObject("enemy_1", 600, 100, 60, 29, 0.0f); objectsContainer::show_object("enemy_1"); objectsContainer::get_object_enemy("enemy_1")->setVelocity(0.2, 0.1);
-				objectsContainer::createObject("enemy_2", 600, 200, 60, 29, 0.0f); objectsContainer::show_object("enemy_2"); objectsContainer::get_object_enemy("enemy_2")->setVelocity(0.3, 0.1);
-				objectsContainer::createObject("enemy_3", 600, 300, 60, 29, 0.0f); objectsContainer::show_object("enemy_3"); objectsContainer::get_object_enemy("enemy_3")->setVelocity(0.3, 0.2);
+			{
+				enemy* enemy_1 = new enemy("enemy_1", 600, 100, 60, 29, 0.0f); enemy_1->setVelocity(0.2, 0.1);
+				enemy* enemy_2 = new enemy("enemy_2", 600, 200, 60, 29, 0.0f); enemy_2->setVelocity(0.3, 0.1);
+				enemy* enemy_3 = new enemy("enemy_3", 600, 300, 60, 29, 0.0f); enemy_3->setVelocity(0.3, 0.2);
+
 				confirm.setString("LEVEL 1\nDO YOU READY\npress 'c' to continue");
 				window.draw(confirm);
 				window.display();
@@ -89,11 +91,14 @@ int main() {
 					}
 				}
 				break;
+			}
 			case 2:
-				objectsContainer::createObject("enemy_1", 500, 100, 60, 29, 0.0f); objectsContainer::show_object("enemy_1"); objectsContainer::get_object_enemy("enemy_1")->setVelocity(0.2, 0.1);
-				objectsContainer::createObject("enemy_2", 700, 100, 60, 29, 0.0f); objectsContainer::show_object("enemy_2"); objectsContainer::get_object_enemy("enemy_2")->setVelocity(0.3, 0.4);
-				objectsContainer::createObject("enemy_3", 500, 300, 60, 29, 0.0f); objectsContainer::show_object("enemy_3"); objectsContainer::get_object_enemy("enemy_3")->setVelocity(0.1, 0.2);
-				objectsContainer::createObject("enemy_4", 700, 300, 60, 29, 0.0f); objectsContainer::show_object("enemy_4"); objectsContainer::get_object_enemy("enemy_4")->setVelocity(0.4, 0.3);
+			{
+				enemy* enemy_4 = new enemy("enemy_1", 500, 100, 60, 29, 0.0f); enemy_4->setVelocity(0.2, 0.1);
+				enemy* enemy_5 = new enemy("enemy_2", 700, 100, 60, 29, 0.0f); enemy_5->setVelocity(0.3, 0.4);
+				enemy* enemy_6 = new enemy("enemy_3", 500, 300, 60, 29, 0.0f); enemy_6->setVelocity(0.1, 0.2);
+				enemy* enemy_7 = new enemy("enemy_4", 700, 300, 60, 29, 0.0f); enemy_7->setVelocity(0.4, 0.3);
+
 				confirm.setString("LEVEL 2\nDO YOU READY?\npress 'c' to continue");
 				window.draw(confirm);
 				window.display();
@@ -103,44 +108,49 @@ int main() {
 					}
 				}
 				break;
+			}
 			default:
+			{
 				confirm.setString("YOU LOSE\nBETTER LUCK NEXT TIME\npress 'r' to restart");
 				window.draw(confirm);
 				window.display();
 				while (true) {
 					if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
 						level = 0;
-						objectsContainer::show_object("player");
+						player* Player = player::getObjectPtr("player");
+						object::unhideObject("player", Player->getSprite());
 						goto restart;
 						break;
 					}
 				}
 				break;
 			}
+			}
 			window.clear(sf::Color(255, 255, 255));
 			levelUp = false;
 		restart:
-			objectsContainer::get_object_player("player")->setPosition(100, 100);
-			objectsContainer::get_object_player("player")->setVelocity(0, 0);
-			objectsContainer::get_object_player("player")->setPlayerHp(100);
-			objectsContainer::get_object_player("player")->resetBulletCount();
+			player* Player = player::getObjectPtr("player");
+			Player->setPosition(100, 100);
+			Player->setVelocity(0, 0);
+			Player->setPlayerHp(100);
+			Player->resetBulletCount();
 			continue;
 		}
 		
-		if (objectsContainer::getEnemyMap()->empty()) {
-			player* Player = objectsContainer::get_object_player("player");
+		if (enemy::getEnemyMap()->empty()) {
+			player* Player = player::getObjectPtr("player");
 			Player->resetBulletCount();
 			levelUp = true;
 		}
 		
 		//update & draw
-		std::unordered_map<std::string, sf::RectangleShape*>* spritesMap = objectsContainer::getSpritesMap();
+		std::unordered_map<std::string, sf::RectangleShape*>* spritesMap = object::getSpritesMap();
 		double dt = clock.restart().asSeconds();
 		dt *= 1500;
 		for (const auto& it : *spritesMap) {
 			if (it.first.substr(0, 6) == "player") {
-				player* Player = objectsContainer::get_object_player(it.first);
-				objectsContainer::get_object_player(it.first)->update(dt);
+				player* Player = player::getObjectPtr(it.first);
+				Player->update(dt);
 				if (Player->getPositionY() >= 720 || Player->getPositionY() <= 0)
 					Player->setVelocity(Player->getVelocityX(),Player->getVelocityY() * -1);
 
@@ -150,11 +160,11 @@ int main() {
 					Player->setPosition(Player->getPositionX(), 0);
 			}
 			else if (it.first.substr(0, 6) == "bullet") {
-				objectsContainer::get_object_bullet(it.first)->update(dt);
-				bullet* Bullet = objectsContainer::get_object_bullet(it.first);
+				bullet* Bullet = bullet::getObjectPtr(it.first);
+				Bullet->update(dt);
 			}
 			else if (it.first.substr(0, 5) == "enemy") {
-				enemy* Enemy = objectsContainer::get_object_enemy(it.first);
+				enemy* Enemy = enemy::getObjectPtr(it.first);
 				Enemy->update(dt);
 				if (Enemy->getPositionY() >= 720 || Enemy->getPositionY() <= 0) {
 					Enemy->setVelocity(Enemy->getVelocityX(), Enemy->getVelocityY() * -1);
@@ -173,9 +183,7 @@ int main() {
 
 				float elapsed = clock_2.getElapsedTime().asSeconds();
 				if (elapsed > 5 && elapsed < 5.03) {
-					bullet* Bullet = Enemy->shoot();
-					objectsContainer::assign_bullet(Bullet->getId(), Bullet);
-					objectsContainer::show_object(Bullet->getId());
+					Enemy->shoot();
 				}
 				if (elapsed > 5.1)
 					clock_2.restart();
@@ -187,15 +195,14 @@ int main() {
 		window.clear(sf::Color(255, 255, 255));
 
 		//collision check & deletion
-		std::unordered_map<std::string, bullet*>* bulletMap = objectsContainer::getBulletMap();
-		std::unordered_map<std::string, enemy*>* enemyMap = objectsContainer::getEnemyMap();
+		std::unordered_map<std::string, bullet*>* bulletMap = bullet::getBulletMap();
+		std::unordered_map<std::string, enemy*>* enemyMap = enemy::getEnemyMap();
 
 		//check collision with the right border
 		for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
 			bool bulletIntersects = false;
 			if (bullet_object->second->getPositionX() >= 1280 || bullet_object->second->getPositionX() <= 0) {
-				objectsContainer::unshow_object(bullet_object->first);
-				objectsContainer::delete_object(bullet_object->first);
+				bullet::deleteObject(bullet_object->first);
 				bulletIntersects = true;
 			}
 
@@ -213,16 +220,14 @@ int main() {
 			bool skipBulletIncrement = false;
 			if (bullet_object->first.substr(7, 5) != "enemy") {
 				for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end();) {
-					if (objectsContainer::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
+					if (object::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
 						float damage = bullet_object->second->getDamageValue();
 						enemy_object->second->reduceHp(damage);
 						std::cout << "enemy HP: " << enemy_object->second->getHp() << std::endl;
 						std::cout << "bullet damage: " << damage << std::endl;
-						objectsContainer::unshow_object(bullet_object->first);
-						objectsContainer::delete_object(bullet_object->first);
+						bullet::deleteObject(bullet_object->first);
 						if (enemy_object->second->getHp() <= 0) {
-							objectsContainer::unshow_object(enemy_object->first);
-							objectsContainer::delete_object(enemy_object->first);
+							enemy::deleteObject(enemy_object->first);
 							enemy_object = enemyMap->erase(enemy_object);
 						}
 						else {
@@ -239,12 +244,12 @@ int main() {
 				}
 			}
 			else if (bullet_object->first.substr(7, 5) == "enemy") {
-				player* Player = objectsContainer::get_object_player("player");
-				if (objectsContainer::isintersect(Player->getSprite(), bullet_object->second->getSprite())) {
+				player* Player = player::getObjectPtr("player");
+				if (object::isintersect(Player->getSprite(), bullet_object->second->getSprite())) {
 					Player->reducePlayerHp(bullet_object->second->getDamageValue());
 					std::cout << "player HP: " << Player->getPlayerHp() << std::endl;
 					if (Player->getPlayerHp() <= 0) {
-						objectsContainer::unshow_object(Player->getId());
+						object::hideObject(Player->getId());
 						level = -1;
 						levelUp = true;
 					}
