@@ -35,7 +35,6 @@ public:
 	std::string getId();
 
 	static std::unordered_map<std::string, sf::RectangleShape*>* getSpritesMap();
-	//static void clearObject();
 	static bool isintersect(sf::RectangleShape* shape_1, sf::RectangleShape* shape_2);
 	static void hideObject(std::string id);
 	static void unhideObject(std::string id, sf::RectangleShape* sprite);
