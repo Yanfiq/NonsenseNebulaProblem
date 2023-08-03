@@ -35,7 +35,6 @@ void bullet::deleteObject(std::string id) {
 
 void bullet::clearObject() {
 	for (auto it = bullet_map.begin(); it != bullet_map.end();) {
-		//deleteObject(it->first);
 		sprites_map.erase(it->first);
 		delete it->second;
 		it = bullet_map.erase(it);
