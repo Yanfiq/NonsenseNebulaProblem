@@ -17,4 +17,5 @@ public:
 	static bullet* getObjectPtr(std::string id);
 	static void deleteObject(std::string id);
 
+	static void clearObject();
 };

@@ -1,7 +1,6 @@
 #include "enemy.h"
 
 std::unordered_map<std::string, enemy*> enemy::enemy_map;
-//std::unordered_map<std::string, sf::RectangleShape*> object::sprites_map;
 std::unordered_map<std::string, sf::RectangleShape*>* sprites_map_ptr_3 = object::getSpritesMap();
 
 enemy::enemy(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity) : object(_object_id, _positionX, _positionY, _width, _height, _gravity) {
@@ -10,7 +9,6 @@ enemy::enemy(std::string _object_id, float _positionX, float _positionY, float _
 	object_sprite.setFillColor(sf::Color(0, 0, 0, 255));
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 	enemy_map[_object_id] = this;
-	//sprites_map[_object_id] = &object_sprite;
 	(*sprites_map_ptr_3)[_object_id] = &object_sprite;
 }
 
@@ -43,4 +41,11 @@ void enemy::shoot() {
 	Bullet->setDamageValue(20.0f);
 	(*sprites_map_ptr_3)[bullet_id] = Bullet->getSprite();
 	bullet_count++;
+}
+
+void enemy::clearObject() {
+	for (auto it = enemy_map.begin(); it != enemy_map.end();) {
+		deleteObject(it->first);
+		it++;
+	}
 }

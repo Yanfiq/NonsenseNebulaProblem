@@ -10,7 +10,6 @@ bullet::bullet(std::string _object_id, float _positionX, float _positionY, float
 	object_sprite.setFillColor(sf::Color(0, 0, 0, 255));
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 	bullet_map[_object_id] = this;
-	//sprites_map[_object_id] = &object_sprite;
 	(*sprites_map_ptr_2)[_object_id] = &object_sprite;
 }
 
@@ -33,4 +32,13 @@ std::unordered_map<std::string, bullet*>* bullet::getBulletMap() {
 void bullet::deleteObject(std::string id) {
 	sprites_map.erase(id);
 	delete bullet_map[id];
+}
+
+void bullet::clearObject() {
+	for (auto it = bullet_map.begin(); it != bullet_map.end();) {
+		//deleteObject(it->first);
+		sprites_map.erase(it->first);
+		delete it->second;
+		it++;
+	}
 }

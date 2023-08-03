@@ -18,4 +18,6 @@ public:
 	static std::unordered_map<std::string, enemy*>* getEnemyMap();
 	static enemy* getObjectPtr(std::string id);
 	static void deleteObject(std::string id);
+
+	static void clearObject();
 };
