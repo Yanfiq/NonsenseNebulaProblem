@@ -21,9 +21,6 @@
     <ClCompile Include="objects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="objectsContainer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -39,9 +36,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="objects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="objectsContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
