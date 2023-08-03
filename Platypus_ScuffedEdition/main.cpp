@@ -79,8 +79,6 @@ int main() {
 			//level mechanism
 			if (enemy::getEnemyMap()->empty() || level == -1) {
 				window.clear(sf::Color(255, 255, 255));
-				//bullet::clearObject();
-				//enemy::clearObject();
 				level++;
 				switch (level) {
 				case 1:
