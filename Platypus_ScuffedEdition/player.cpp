@@ -36,7 +36,7 @@ int player::getBulletCount() {
 }
 
 void player::thrust() {
-	setVelocity(getVelocityX(), getVelocityY() - 0.06f);
+	setVelocity(getVelocityX(), getVelocityY() - 0.04f);
 }
 
 float player::getPlayerHp() const {

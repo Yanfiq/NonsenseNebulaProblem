@@ -25,11 +25,8 @@ int main() {
 	text.setFont(font);
 	text.setCharacterSize(100);
 	text.setFillColor(sf::Color::Black);
-	bool bulletEmpty = false;
-
+	bool gas = false; bool shoot = false;
 	while (window.isOpen()) {
-		bool gas = false;
-		static bool levelUp = false;
 		while (window.pollEvent(event)) {
 			switch (event.type) {
 			case sf::Event::Closed:
@@ -38,36 +35,39 @@ int main() {
 
 			case sf::Event::KeyPressed:
 				if (event.key.code == sf::Keyboard::Space) {
-					//objectsContainer::get_object_player("player")->thrust();
 					gas = true;
 				}
 				if (event.key.code == sf::Keyboard::LShift) {
-					if (Player->getBulletCount() <= 30) {
-						Player->shoot();
-					}
-					if (Player->getBulletCount() >= 30) {
-						bulletEmpty = true;
-					}
+					shoot = true;
 				}
 				if (event.key.code == sf::Keyboard::X) {
-					if (bulletEmpty == true) {
+					if (Player->getBulletCount() >= 30) {
 						Player->resetBulletCount();
-						bulletEmpty = false;
 					}
+				}
+				break;
+			case sf::Event::KeyReleased:
+				if (event.key.code == sf::Keyboard::Space) {
+					gas = false;
+				}
+				if (event.key.code == sf::Keyboard::LShift) {
+					shoot = false;
 				}
 			}
 		}
 
-		if (gas == true) {
+		if (gas == true)
 			Player->thrust();
-		}
-		if (bulletEmpty == true) {
+		if (shoot == true && Player->getBulletCount() <= 30)
+			Player->shoot();
+
+		if (Player->getBulletCount() >= 30) {
 			window.draw(text);
 		}
 
 		//level mechanism
 		static int level = 0;
-		if (levelUp) {
+		if (enemy::getEnemyMap()->empty() || level == -1) {
 			window.clear(sf::Color(255, 255, 255));
 			//objectsContainer::clearObject();
 			level++;
@@ -86,9 +86,10 @@ int main() {
 				window.draw(confirm);
 				window.display();
 				while (true) {
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 						break;
-					}
+					if (event.type == sf::Event::Closed)
+						window.close();
 				}
 				break;
 			}
@@ -103,9 +104,10 @@ int main() {
 				window.draw(confirm);
 				window.display();
 				while (true) {
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 						break;
-					}
+					if (event.type == sf::Event::Closed)
+						window.close();					
 				}
 				break;
 			}
@@ -122,25 +124,21 @@ int main() {
 						goto restart;
 						break;
 					}
+					if (event.type == sf::Event::Closed)
+						window.close();
 				}
 				break;
 			}
 			}
 			window.clear(sf::Color(255, 255, 255));
-			levelUp = false;
+
 		restart:
 			player* Player = player::getObjectPtr("player");
 			Player->setPosition(100, 100);
-			Player->setVelocity(0, 0);
+			Player->setVelocity(0.0f, 0.0f);
 			Player->setPlayerHp(100);
 			Player->resetBulletCount();
 			continue;
-		}
-		
-		if (enemy::getEnemyMap()->empty()) {
-			player* Player = player::getObjectPtr("player");
-			Player->resetBulletCount();
-			levelUp = true;
 		}
 		
 		//update & draw
@@ -198,7 +196,7 @@ int main() {
 		std::unordered_map<std::string, bullet*>* bulletMap = bullet::getBulletMap();
 		std::unordered_map<std::string, enemy*>* enemyMap = enemy::getEnemyMap();
 
-		//check collision with the right border
+		//check collision with the border border
 		for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
 			bool bulletIntersects = false;
 			if (bullet_object->second->getPositionX() >= 1280 || bullet_object->second->getPositionX() <= 0) {
@@ -217,7 +215,6 @@ int main() {
 
 		//check collision with the enemy object 
 		for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
-			bool skipBulletIncrement = false;
 			if (bullet_object->first.substr(7, 5) != "enemy") {
 				for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end();) {
 					if (object::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
@@ -251,7 +248,6 @@ int main() {
 					if (Player->getPlayerHp() <= 0) {
 						object::hideObject(Player->getId());
 						level = -1;
-						levelUp = true;
 					}
 				}
 			}
