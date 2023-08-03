@@ -39,6 +39,6 @@ void bullet::clearObject() {
 		//deleteObject(it->first);
 		sprites_map.erase(it->first);
 		delete it->second;
-		it++;
+		it = bullet_map.erase(it);
 	}
 }

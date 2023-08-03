@@ -235,8 +235,8 @@ int main() {
 			switch (level) {
 			case -1:
 			{
-				//bullet::clearObject();
-				//enemy::clearObject();
+				bullet::clearObject();
+				enemy::clearObject();
 				confirm.setString("YOU LOSE\nBETTER LUCK NEXT TIME\npress 'r' to restart"); break; 
 			}
 			case 1:	confirm.setString("LEVEL 1\nDO YOU READY\npress 'c' to continue"); break;

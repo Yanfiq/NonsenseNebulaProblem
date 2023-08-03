@@ -45,7 +45,8 @@ void enemy::shoot() {
 
 void enemy::clearObject() {
 	for (auto it = enemy_map.begin(); it != enemy_map.end();) {
-		deleteObject(it->first);
-		it++;
+		sprites_map.erase(it->first);
+		delete it->second;
+		it = enemy_map.erase(it);
 	}
 }
