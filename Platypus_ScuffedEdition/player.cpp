@@ -1,7 +1,6 @@
 #include "player.h"
 
 std::unordered_map<std::string, player*> player::player_map;
-//std::unordered_map<std::string, sf::RectangleShape*> object::sprites_map;
 std::unordered_map<std::string, sf::RectangleShape*>* sprites_map_ptr = object::getSpritesMap();
 
 player::player(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity) : object(_object_id, _positionX, _positionY, _width, _height, _gravity) {
@@ -11,7 +10,6 @@ player::player(std::string _object_id, float _positionX, float _positionY, float
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 	player_map[_object_id] = this;
 	(*sprites_map_ptr)[_object_id] = &object_sprite;
-	//sprites_map[_object_id] = &object_sprite;
 }
 
 player* player::getObjectPtr(std::string id) {
