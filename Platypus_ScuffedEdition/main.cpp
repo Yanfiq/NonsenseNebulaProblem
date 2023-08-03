@@ -109,10 +109,9 @@ int main() {
 			std::unordered_map<std::string, bullet*>* bulletMap = bullet::getBulletMap();
 			std::unordered_map<std::string, enemy*>* enemyMap = enemy::getEnemyMap();
 
-			//check collision with the enemy object 
+			//check collision with the enemy object and border
 			for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
 				bool somethingCollide = false;
-
 				if (bullet_object->first.substr(7, 5) != "enemy") {
 					for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end();) {
 						if (object::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
@@ -137,7 +136,7 @@ int main() {
 							++enemy_object;
 						}
 					}
-					if (bullet_object->second->getPositionX() >= 1000) {
+					if (bullet_object->second->getPositionX() >= 1280) {
 						bullet::deleteObject(bullet_object->first);
 						bullet_object = bulletMap->erase(bullet_object);
 						somethingCollide = true;
@@ -163,6 +162,7 @@ int main() {
 						somethingCollide = true;
 					}
 				}
+
 				//if the code reaches this part, it means that no bullet has been collided, so it'll move the iterator normally using increment
 				if(!somethingCollide)
 					++bullet_object;
