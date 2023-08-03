@@ -109,23 +109,6 @@ int main() {
 			std::unordered_map<std::string, bullet*>* bulletMap = bullet::getBulletMap();
 			std::unordered_map<std::string, enemy*>* enemyMap = enemy::getEnemyMap();
 
-			//check collision with the border border
-			//for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
-			//	bool bulletIntersects = false;
-			//	if (bullet_object->second->getPositionX() >= 1280 || bullet_object->second->getPositionX() <= 0) {
-			//		bullet::deleteObject(bullet_object->first);
-			//		bulletIntersects = true;
-			//	}
-
-			//	//perform different increment method for different scenario
-			//	if (bulletIntersects == true) {
-			//		bullet_object = bulletMap->erase(bullet_object);
-			//	}
-			//	else if (bulletIntersects == false) {
-			//		++bullet_object;
-			//	}
-			//}
-
 			//check collision with the enemy object 
 			for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
 				bool somethingCollide = false;
