@@ -110,24 +110,26 @@ int main() {
 			std::unordered_map<std::string, enemy*>* enemyMap = enemy::getEnemyMap();
 
 			//check collision with the border border
-			for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
-				bool bulletIntersects = false;
-				if (bullet_object->second->getPositionX() >= 1280 || bullet_object->second->getPositionX() <= 0) {
-					bullet::deleteObject(bullet_object->first);
-					bulletIntersects = true;
-				}
+			//for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
+			//	bool bulletIntersects = false;
+			//	if (bullet_object->second->getPositionX() >= 1280 || bullet_object->second->getPositionX() <= 0) {
+			//		bullet::deleteObject(bullet_object->first);
+			//		bulletIntersects = true;
+			//	}
 
-				//perform different increment method for different scenario
-				if (bulletIntersects == true) {
-					bullet_object = bulletMap->erase(bullet_object);
-				}
-				else if (bulletIntersects == false) {
-					++bullet_object;
-				}
-			}
+			//	//perform different increment method for different scenario
+			//	if (bulletIntersects == true) {
+			//		bullet_object = bulletMap->erase(bullet_object);
+			//	}
+			//	else if (bulletIntersects == false) {
+			//		++bullet_object;
+			//	}
+			//}
 
 			//check collision with the enemy object 
 			for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
+				bool somethingCollide = false;
+
 				if (bullet_object->first.substr(7, 5) != "enemy") {
 					for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end();) {
 						if (object::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
@@ -146,11 +148,16 @@ int main() {
 							//if the code reaches this part, it means that the object has been deleted,
 							//so we need to move the iterator into the next object while remove it from the map
 							bullet_object = bulletMap->erase(bullet_object);
-							goto skipIncrement;
+							somethingCollide = true;
 						}
 						else {
 							++enemy_object;
 						}
+					}
+					if (bullet_object->second->getPositionX() >= 1000) {
+						bullet::deleteObject(bullet_object->first);
+						bullet_object = bulletMap->erase(bullet_object);
+						somethingCollide = true;
 					}
 				}
 				else if (bullet_object->first.substr(7, 5) == "enemy") {
@@ -165,13 +172,17 @@ int main() {
 							level = -1;
 							wait = true;
 						}
-						goto skipIncrement;
+						somethingCollide = true;
+					}
+					if (bullet_object->second->getPositionX() <= 0) {
+						bullet::deleteObject(bullet_object->first);
+						bullet_object = bulletMap->erase(bullet_object);
+						somethingCollide = true;
 					}
 				}
 				//if the code reaches this part, it means that no bullet has been collided, so it'll move the iterator normally using increment
-				++bullet_object;
-			skipIncrement:
-				continue;
+				if(!somethingCollide)
+					++bullet_object;
 			}
 
 			//update & draw
