@@ -1,7 +1,6 @@
 #include "bullet.h"
 
 std::unordered_map<std::string, bullet*> bullet::bullet_map;
-//std::unordered_map<std::string, sf::RectangleShape*> object::sprites_map;
 std::unordered_map<std::string, sf::RectangleShape*>* sprites_map_ptr_2 = object::getSpritesMap();
 
 bullet::bullet(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity) : object(_object_id, _positionX, _positionY, _width, _height, _gravity) {
