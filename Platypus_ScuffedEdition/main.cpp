@@ -15,13 +15,16 @@ int main() {
 	sf::Clock clock;
 	sf::Event event;
 
-	//create player
+	//player object creation
 	player* Player = new player("player", 100, 100, 60, 29, 0.0002f);
 	Player->setPlayerHp(100);
  
+	//enumeration for scene changes
+	enum part { start, transition, play };
+
 	// usages
 	/*player's thruster |   player's fir   |    transition scene   | level counter  */
-	bool gas = false;    bool shoot = false; bool transition = false; int level = 0;
+	bool gas = false;    bool shoot = false; int level = 0; int scene = play;
 	while (window.isOpen()) {
 		while (window.pollEvent(event)) {
 			switch (event.type) {
@@ -41,7 +44,7 @@ int main() {
 					}
 				}
 				if (event.key.code == sf::Keyboard::C && level != -1) {
-					transition = false;
+					scene = play;
 				}
 				if (event.key.code == sf::Keyboard::R && level == -1) {
 					level = 0;
@@ -49,7 +52,7 @@ int main() {
 					Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
 					Player->setPlayerHp(100);		Player->resetBulletCount();
 					object::unhideObject("player", Player->getSprite());
-					transition = false;
+					scene = play;
 				}
 				break;
 			case sf::Event::KeyReleased:
@@ -62,8 +65,27 @@ int main() {
 			}
 		}
 
-		//if transition is false
-		if (!transition) {
+		switch (scene) {
+
+		case transition:
+		{
+			switch (level) {
+			case -1:
+			{
+				bullet::clearObject();
+				enemy::clearObject();
+				window.draw(text::lose());
+				break;
+			}
+			case 1: window.draw(text::startLevel(1)); break;
+			case 2: window.draw(text::startLevel(2)); break;
+			}
+			break;
+		}
+
+		//main gameplay
+		case play:
+		{
 			if (gas == true)
 				Player->thrust();
 			if (shoot == true && Player->getBulletCount() <= 30)
@@ -72,7 +94,7 @@ int main() {
 				window.draw(text::bulletEmpty());
 			}
 
-			//level mechanism
+			//level mechanics and enemy object creation
 			if (enemy::getEnemyMap()->empty() || level == -1) {
 				window.clear(sf::Color(255, 255, 255));
 				level++;
@@ -82,7 +104,7 @@ int main() {
 					enemy* enemy_1 = new enemy("enemy_1", 600, 100, 60, 29, 0.0f); enemy_1->setVelocity(0.2, 0.1);
 					enemy* enemy_2 = new enemy("enemy_2", 600, 200, 60, 29, 0.0f); enemy_2->setVelocity(0.3, 0.1);
 					enemy* enemy_3 = new enemy("enemy_3", 600, 300, 60, 29, 0.0f); enemy_3->setVelocity(0.3, 0.2);
-					transition = true;
+					scene = transition;
 					break;
 				}
 				case 2:
@@ -91,7 +113,7 @@ int main() {
 					enemy* enemy_2 = new enemy("enemy_2", 700, 100, 60, 29, 0.0f); enemy_2->setVelocity(0.3, 0.4);
 					enemy* enemy_3 = new enemy("enemy_3", 500, 300, 60, 29, 0.0f); enemy_3->setVelocity(0.1, 0.2);
 					enemy* enemy_4 = new enemy("enemy_4", 700, 300, 60, 29, 0.0f); enemy_4->setVelocity(0.4, 0.3);
-					transition = true;
+					scene = transition;
 					break;
 				}
 				default:
@@ -101,11 +123,9 @@ int main() {
 				}
 			}
 
-			//collision check & deletion
+			//collision detection and object removal
 			std::unordered_map<std::string, bullet*>* bulletMap = bullet::getBulletMap();
 			std::unordered_map<std::string, enemy*>* enemyMap = enemy::getEnemyMap();
-
-			//check collision with the enemy object and border
 			std::set<std::string> willBeDeleted;
 			for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end(); bullet_object++) {
 				//bullets from the player
@@ -127,7 +147,7 @@ int main() {
 							}
 						}
 					}
-					if ((bullet_object->second->getPositionX() >= 1280					) &&
+					if ((bullet_object->second->getPositionX() >= 1280) &&
 						(willBeDeleted.find(bullet_object->first) == willBeDeleted.end())) {
 						//add the bullet's id to the vector
 						willBeDeleted.insert(bullet_object->first);
@@ -141,7 +161,7 @@ int main() {
 
 						//reduce player's HP
 						Player->reducePlayerHp(bullet_object->second->getDamageValue());
-						
+
 						//add the bullet's id to the vector
 						if (willBeDeleted.find(bullet_object->first) == willBeDeleted.end())
 							willBeDeleted.insert(bullet_object->first);
@@ -150,7 +170,7 @@ int main() {
 						if (Player->getPlayerHp() <= 0) {
 							object::hideObject(Player->getId());
 							level = -1;
-							transition = true;
+							scene = transition;
 							break;
 						}
 					}
@@ -161,7 +181,7 @@ int main() {
 				}
 			}
 
-			//deletion
+			//object removal
 			for (const auto& it : willBeDeleted) {
 				if (it.substr(0, 6) == "bullet") {
 					bullet::deleteObject(it);
@@ -170,7 +190,6 @@ int main() {
 					enemy::deleteObject(it);
 			}
 			willBeDeleted.clear();
-
 
 			//update & draw
 			std::unordered_map<std::string, sf::RectangleShape*>* spritesMap = object::getSpritesMap();
@@ -211,7 +230,7 @@ int main() {
 					}
 
 					player* Player = player::getObjectPtr("player");
-					if ((round(Enemy->getPositionY()) < round(Player->getPositionY()) + 5 ) && 
+					if ((round(Enemy->getPositionY()) < round(Player->getPositionY()) + 5) &&
 						(round(Enemy->getPositionY()) > round(Player->getPositionY()) - 5)) {
 						Enemy->shoot();
 					}
@@ -219,21 +238,8 @@ int main() {
 				sf::RectangleShape* sprite = it.second;
 				window.draw(*sprite);
 			}
+			break;
 		}
-
-		//if transition is true
-		else {
-			switch (level) {
-			case -1:
-			{
-				bullet::clearObject();
-				enemy::clearObject();
-				window.draw(text::lose());
-				break;
-			}
-			case 1: window.draw(text::startLevel(1));break;
-			case 2: window.draw(text::startLevel(2));break;
-			}
 		}
 		window.display();
 		window.clear(sf::Color(255, 255, 255));
