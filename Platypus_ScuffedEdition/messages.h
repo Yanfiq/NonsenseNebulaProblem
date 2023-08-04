@@ -2,7 +2,12 @@
 #include "SFML/Graphics.hpp"
 #include <string>
 
-sf::Text bulletEmpty();
-sf::Text lose();
-sf::Text startLevel(int level);
-//sf::Text score(int score);
+class text {
+private:
+	static sf::Font font;
+
+public:
+	static sf::Text bulletEmpty();
+	static sf::Text lose();
+	static sf::Text startLevel(int level);
+};

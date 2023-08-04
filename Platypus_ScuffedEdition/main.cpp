@@ -230,21 +230,17 @@ int main() {
 
 		//if transition is true
 		else {
-			sf::Text text;
-			sf::Font font;
-			font.loadFromFile("fonts/SAOUITT-Regular.ttf");
 			switch (level) {
 			case -1:
 			{
 				bullet::clearObject();
 				enemy::clearObject();
-				text = lose(); break;
+				window.draw(text::lose());
+				break;
 			}
-			case 1: text = startLevel(1); break;
-			case 2: text = startLevel(2); break;
+			case 1: window.draw(text::startLevel(1));break;
+			case 2: window.draw(text::startLevel(2));break;
 			}
-			text.setFont(font);
-			window.draw(text);
 		}
 		window.display();
 		window.clear(sf::Color(255, 255, 255));
