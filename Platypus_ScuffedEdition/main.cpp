@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <set>
+#include <cmath>
 #include <stdbool.h>
 #include "player.h"
 #include "bullet.h"
@@ -12,7 +13,6 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(60);
 	sf::Clock clock;
-	sf::Clock clock_2;
 	sf::Event event;
 
 	//create player
@@ -215,12 +215,11 @@ int main() {
 							Enemy->setPosition(1280, Enemy->getPositionY());
 					}
 
-					float elapsed = clock_2.getElapsedTime().asSeconds();
-					if (elapsed > 5 && elapsed < 5.01) {
+					player* Player = player::getObjectPtr("player");
+					if ((round(Enemy->getPositionY()) < round(Player->getPositionY()) + 5 ) && 
+						(round(Enemy->getPositionY()) > round(Player->getPositionY()) - 5)) {
 						Enemy->shoot();
 					}
-					if (elapsed > 5.1)
-						clock_2.restart();
 				}
 				sf::RectangleShape* sprite = it.second;
 				window.draw(*sprite);
