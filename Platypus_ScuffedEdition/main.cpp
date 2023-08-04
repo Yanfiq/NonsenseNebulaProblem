@@ -1,6 +1,6 @@
 #include <string>
 #include <iostream>
-#include <vector>
+#include <set>
 #include <stdbool.h>
 #include "player.h"
 #include "bullet.h"
@@ -25,6 +25,8 @@ int main() {
 	bulletEmptyText.setFont(font);
 	bulletEmptyText.setCharacterSize(100);
 	bulletEmptyText.setFillColor(sf::Color::Black);
+
+
 	bool gas = false; bool shoot = false; bool wait = false; int level = 0;
 	while (window.isOpen()) {
 		while (window.pollEvent(event)) {
@@ -110,68 +112,70 @@ int main() {
 			std::unordered_map<std::string, enemy*>* enemyMap = enemy::getEnemyMap();
 
 			//check collision with the enemy object and border
-			for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end();) {
-				bool nothingCollide = true;
+			std::set<std::string> willBeDeleted;
+			for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end(); bullet_object++) {
+				//bullets from the player
 				if (bullet_object->first.substr(7, 5) != "enemy") {
-					for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end();) {
+					for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
 						if (object::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
+
+							//reduce the enemy HP
 							float damage = bullet_object->second->getDamageValue();
 							enemy_object->second->reduceHp(damage);
-							std::cout << "enemy HP: " << enemy_object->second->getHp() << std::endl;
-							std::cout << "bullet damage: " << damage << std::endl;
-							bullet::deleteObject(bullet_object->first);
-							if (enemy_object->second->getHp() <= 0) {
-								enemy::deleteObject(enemy_object->first);
-								enemy_object = enemyMap->erase(enemy_object);
+
+							//add the bullet's id to the vector
+							if(willBeDeleted.count(bullet_object->first) == 0)
+								willBeDeleted.insert(bullet_object->first);
+
+							//add the enemy's id to the vector if the HP's is zeroed
+							if (enemy_object->second->getHp() <= 0 && willBeDeleted.count(enemy_object->first) == 0) {
+								willBeDeleted.insert(enemy_object->first);
 							}
-							else {
-								++enemy_object;
-							}
-							//if the code reaches this part, it means that the object has been deleted,
-							//so we need to move the iterator into the next object while remove it from the map
-							bullet_object = bulletMap->erase(bullet_object);
-							nothingCollide = true;
-							break;
-						}
-						else {
-							++enemy_object;
 						}
 					}
-					if (bullet_object->second->getPositionX() >= 1280) {
-						bullet::deleteObject(bullet_object->first);
-						bullet_object = bulletMap->erase(bullet_object);
-						nothingCollide = true;
-						break;
+					if (bullet_object->second->getPositionX() >= 1280 && willBeDeleted.find(bullet_object->first) == willBeDeleted.end()) {
+						//add the bullet's id to the vector
+						willBeDeleted.insert(bullet_object->first);
 					}
 				}
+
+				////bullets from the enemy
 				else if (bullet_object->first.substr(7, 5) == "enemy") {
 					player* Player = player::getObjectPtr("player");
 					if (object::isintersect(Player->getSprite(), bullet_object->second->getSprite())) {
+
+						//reduce player's HP
 						Player->reducePlayerHp(bullet_object->second->getDamageValue());
-						std::cout << "player HP: " << Player->getPlayerHp() << std::endl;
-						bullet::deleteObject(bullet_object->first);
-						bullet_object = bulletMap->erase(bullet_object);
+						
+						//add the bullet's id to the vector
+						if (willBeDeleted.count(bullet_object->first) == 0)
+							willBeDeleted.insert(bullet_object->first);
+
+						//game over
 						if (Player->getPlayerHp() <= 0) {
 							object::hideObject(Player->getId());
 							level = -1;
 							wait = true;
 							break;
 						}
-						nothingCollide = true;
-						break;
 					}
-					if (bullet_object->second->getPositionX() <= 0) {
-						bullet::deleteObject(bullet_object->first);
-						bullet_object = bulletMap->erase(bullet_object);
-						nothingCollide = true;
-						break;
+					if (bullet_object->second->getPositionX() <= 0 && willBeDeleted.find(bullet_object->first) == willBeDeleted.end()) {
+						//add the bullet's id to the vector
+						willBeDeleted.insert(bullet_object->first);
 					}
 				}
-
-				//if the code reaches this part, it means that no bullet has been collided, so it'll move the iterator normally using increment
-				if(nothingCollide)
-					++bullet_object;
 			}
+
+			//deletion
+			for (const auto& it : willBeDeleted) {
+				if (it.substr(0, 6) == "bullet") {
+					bullet::deleteObject(it);
+				}
+				else if (it.substr(0, 5) == "enemy")
+					enemy::deleteObject(it);
+			}
+			willBeDeleted.clear();
+
 
 			//update & draw
 			std::unordered_map<std::string, sf::RectangleShape*>* spritesMap = object::getSpritesMap();
@@ -212,7 +216,7 @@ int main() {
 					}
 
 					float elapsed = clock_2.getElapsedTime().asSeconds();
-					if (elapsed > 5 && elapsed < 5.03) {
+					if (elapsed > 5 && elapsed < 5.01) {
 						Enemy->shoot();
 					}
 					if (elapsed > 5.1)
