@@ -7,7 +7,6 @@
 #include "bullet.h"
 #include "enemy.h"
 #include "objects.h"
-#include <chrono>
 #include "messages.h"
 
 int main() {
@@ -19,13 +18,6 @@ int main() {
 	//create player
 	player* Player = new player("player", 100, 100, 60, 29, 0.0002f);
 	Player->setPlayerHp(100);
-
-	sf::Text bulletEmptyText;
-	sf::Font font; font.loadFromFile("fonts/SAOUITT-Regular.ttf");
-	bulletEmptyText.setString("The bullet is empty\nPress X to reload the bullet");
-	bulletEmptyText.setFont(font);
-	bulletEmptyText.setCharacterSize(100);
-	bulletEmptyText.setFillColor(sf::Color::Black);
  
 	// usages
 	/*player's thruster |   player's fir   |    transition scene   | level counter  */
@@ -77,7 +69,7 @@ int main() {
 			if (shoot == true && Player->getBulletCount() <= 30)
 				Player->shoot();
 			if (Player->getBulletCount() >= 30) {
-				window.draw(bulletEmptyText);
+				window.draw(text::bulletEmpty());
 			}
 
 			//level mechanism
@@ -126,16 +118,17 @@ int main() {
 							enemy_object->second->reduceHp(damage);
 
 							//add the bullet's id to the vector
-							if(willBeDeleted.count(bullet_object->first) == 0)
+							if (willBeDeleted.find(bullet_object->first) == willBeDeleted.end())
 								willBeDeleted.insert(bullet_object->first);
 
 							//add the enemy's id to the vector if the HP's is zeroed
-							if (enemy_object->second->getHp() <= 0 && willBeDeleted.count(enemy_object->first) == 0) {
+							if (enemy_object->second->getHp() <= 0 && willBeDeleted.find(enemy_object->first) == willBeDeleted.end()) {
 								willBeDeleted.insert(enemy_object->first);
 							}
 						}
 					}
-					if (bullet_object->second->getPositionX() >= 1280 && willBeDeleted.find(bullet_object->first) == willBeDeleted.end()) {
+					if ((bullet_object->second->getPositionX() >= 1280					) &&
+						(willBeDeleted.find(bullet_object->first) == willBeDeleted.end())) {
 						//add the bullet's id to the vector
 						willBeDeleted.insert(bullet_object->first);
 					}
@@ -150,7 +143,7 @@ int main() {
 						Player->reducePlayerHp(bullet_object->second->getDamageValue());
 						
 						//add the bullet's id to the vector
-						if (willBeDeleted.count(bullet_object->first) == 0)
+						if (willBeDeleted.find(bullet_object->first) == willBeDeleted.end())
 							willBeDeleted.insert(bullet_object->first);
 
 						//game over
