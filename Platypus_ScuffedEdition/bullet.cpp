@@ -31,6 +31,7 @@ std::unordered_map<std::string, bullet*>* bullet::getBulletMap() {
 void bullet::deleteObject(std::string id) {
 	sprites_map.erase(id);
 	delete bullet_map[id];
+	bullet_map.erase(id);
 }
 
 void bullet::clearObject() {
