@@ -152,6 +152,7 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="anotherObject.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="messages.h" />
     <ClInclude Include="objects.h" />
     <ClInclude Include="player.h" />
   </ItemGroup>

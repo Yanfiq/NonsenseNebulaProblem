@@ -8,6 +8,7 @@
 #include "enemy.h"
 #include "objects.h"
 #include <chrono>
+#include "messages.h"
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close);
@@ -229,23 +230,21 @@ int main() {
 
 		//if transition is true
 		else {
-			sf::Text confirm;
-			confirm.setFont(font);
-			confirm.setCharacterSize(100);
-			confirm.setFillColor(sf::Color::Black);
-
+			sf::Text text;
+			sf::Font font;
+			font.loadFromFile("fonts/SAOUITT-Regular.ttf");
 			switch (level) {
 			case -1:
 			{
 				bullet::clearObject();
 				enemy::clearObject();
-				confirm.setString("YOU LOSE\nBETTER LUCK NEXT TIME\npress 'r' to restart"); break; 
+				text = lose(); break;
 			}
-			case 1:	confirm.setString("LEVEL 1\nDO YOU READY\npress 'c' to continue"); break;
-			case 2: confirm.setString("LEVEL 2\nDO YOU READY?\npress 'c' to continue"); break;
-			default:confirm.setString("IDK\nF U");
+			case 1: text = startLevel(1); break;
+			case 2: text = startLevel(2); break;
 			}
-			window.draw(confirm);
+			text.setFont(font);
+			window.draw(text);
 		}
 		window.display();
 		window.clear(sf::Color(255, 255, 255));
