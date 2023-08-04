@@ -3,7 +3,6 @@
 #include "SFML/Window.hpp"
 #include "SFML/Rect.hpp"
 #include <unordered_map>
-#include <vector>
 #include <stdbool.h>
 
 class player;
