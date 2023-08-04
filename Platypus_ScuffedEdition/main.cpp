@@ -25,9 +25,10 @@ int main() {
 	bulletEmptyText.setFont(font);
 	bulletEmptyText.setCharacterSize(100);
 	bulletEmptyText.setFillColor(sf::Color::Black);
-
-
-	bool gas = false; bool shoot = false; bool wait = false; int level = 0;
+ 
+	// usages
+	/*player's thruster |   player's fir   |    transition scene   | level counter  */
+	bool gas = false;    bool shoot = false; bool transition = false; int level = 0;
 	while (window.isOpen()) {
 		while (window.pollEvent(event)) {
 			switch (event.type) {
@@ -47,7 +48,7 @@ int main() {
 					}
 				}
 				if (event.key.code == sf::Keyboard::C && level != -1) {
-					wait = false;
+					transition = false;
 				}
 				if (event.key.code == sf::Keyboard::R && level == -1) {
 					level = 0;
@@ -55,7 +56,7 @@ int main() {
 					Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
 					Player->setPlayerHp(100);		Player->resetBulletCount();
 					object::unhideObject("player", Player->getSprite());
-					wait = false;
+					transition = false;
 				}
 				break;
 			case sf::Event::KeyReleased:
@@ -68,8 +69,8 @@ int main() {
 			}
 		}
 
-		//if wait is false
-		if (!wait) {
+		//if transition is false
+		if (!transition) {
 			if (gas == true)
 				Player->thrust();
 			if (shoot == true && Player->getBulletCount() <= 30)
@@ -88,7 +89,7 @@ int main() {
 					enemy* enemy_1 = new enemy("enemy_1", 600, 100, 60, 29, 0.0f); enemy_1->setVelocity(0.2, 0.1);
 					enemy* enemy_2 = new enemy("enemy_2", 600, 200, 60, 29, 0.0f); enemy_2->setVelocity(0.3, 0.1);
 					enemy* enemy_3 = new enemy("enemy_3", 600, 300, 60, 29, 0.0f); enemy_3->setVelocity(0.3, 0.2);
-					wait = true;
+					transition = true;
 					break;
 				}
 				case 2:
@@ -97,7 +98,7 @@ int main() {
 					enemy* enemy_2 = new enemy("enemy_2", 700, 100, 60, 29, 0.0f); enemy_2->setVelocity(0.3, 0.4);
 					enemy* enemy_3 = new enemy("enemy_3", 500, 300, 60, 29, 0.0f); enemy_3->setVelocity(0.1, 0.2);
 					enemy* enemy_4 = new enemy("enemy_4", 700, 300, 60, 29, 0.0f); enemy_4->setVelocity(0.4, 0.3);
-					wait = true;
+					transition = true;
 					break;
 				}
 				default:
@@ -155,7 +156,7 @@ int main() {
 						if (Player->getPlayerHp() <= 0) {
 							object::hideObject(Player->getId());
 							level = -1;
-							wait = true;
+							transition = true;
 							break;
 						}
 					}
@@ -226,6 +227,7 @@ int main() {
 			}
 		}
 
+		//if transition is true
 		else {
 			sf::Text confirm;
 			confirm.setFont(font);
