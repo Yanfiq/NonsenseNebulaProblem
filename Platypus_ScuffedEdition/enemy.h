@@ -6,6 +6,8 @@
 class enemy : public object {
 protected:
 	float hp = 100.0f;
+
+	static int bullet_count;
 	static std::unordered_map<std::string, enemy*> enemy_map;
 
 public:
