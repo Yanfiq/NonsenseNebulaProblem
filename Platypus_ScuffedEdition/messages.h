@@ -8,9 +8,9 @@ private:
 	static sf::Font font;
 
 public:
-	static sf::Text bulletEmpty();
-	static sf::Text lose();
-	static sf::Text startLevel(int level);
+	static sfe::RichText bulletEmpty();
+	static sfe::RichText lose();
+	static sfe::RichText startLevel(int level);
 
 	static sfe::RichText startMenuChoice(int choice);
 };

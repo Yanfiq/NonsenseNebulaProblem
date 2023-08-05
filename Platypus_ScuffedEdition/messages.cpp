@@ -2,37 +2,42 @@
 
 sf::Font text::font;
 
-sf::Text text::bulletEmpty() {
-	sf::Text text;
+sfe::RichText text::bulletEmpty() {
 	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
-	text.setFont(font);
-	text.setString("The bullet is empty\nPress X to reload the bullet");
-	text.setCharacterSize(80);
-	text.setFillColor(sf::Color::Black);
+
+	sfe::RichText text(font);
+
+	text << sf::Color::Black << "The bullet is empty\n"
+		<< sf::Color::Black << "Press 'X' to reload the bullet";
+
+	text.setCharacterSize(50);
+	text.setPosition(30, 560);
 
 	return text;
 }
 
-sf::Text text::lose() {
-	sf::Text text;
+sfe::RichText text::lose() {
 	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
-	text.setFont(font);
-	text.setString("YOU LOSE\nBETTER LUCK NEXT TIME\npress 'r' to restart");
-	text.setCharacterSize(80);
-	text.setFillColor(sf::Color::Black);
+
+	sfe::RichText text(font);
+
+	text << sf::Color::Black << "YOU LOSE\nBETTER LUCK NEXT TIME"
+		<< sf::Color::Black << "\nPress 'R' to continue";
+
+	text.setCharacterSize(60);
 
 	return text;
 }
 
-sf::Text text::startLevel(int level) {
-	sf::Text text;
+sfe::RichText text::startLevel(int level) {
 	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
-	text.setFont(font);
-	std::string _string = "LEVEL " + std::to_string(level) + '\n' + "DO YOU READY?\npress 'c' to continue";
-	text.setString(_string);
-	text.setCharacterSize(80);
-	text.setFillColor(sf::Color::Black);
 
+	sfe::RichText text(font);
+
+	text << sf::Color::Black << "LEVEL " << sf::Color::Blue << std::to_string(level)
+		<< sf::Color::Black << "\nPress 'C' to continue";
+
+	text.setCharacterSize(60);
 	return text;
 }
 
@@ -63,7 +68,7 @@ sfe::RichText text::startMenuChoice(int choice) {
 		break;
 	}
 	}
-	text.setCharacterSize(50);
+	text.setCharacterSize(100);
 	text.setPosition(100, 100);
 		
 	return text;
