@@ -147,6 +147,7 @@
     <ClCompile Include="messages.cpp" />
     <ClCompile Include="objects.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="RichText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="messages.h" />
     <ClInclude Include="objects.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="RichText.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

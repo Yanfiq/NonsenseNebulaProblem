@@ -36,6 +36,9 @@
     <ClCompile Include="messages.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RichText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="objects.h">
@@ -54,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="messages.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RichText.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

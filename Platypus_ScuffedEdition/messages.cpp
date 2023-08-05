@@ -35,3 +35,36 @@ sf::Text text::startLevel(int level) {
 
 	return text;
 }
+
+sfe::RichText text::startMenuChoice(int choice) {
+	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
+
+	sfe::RichText text(font);
+	switch (choice) {
+	case 0:
+	{
+		text << sf::Color::Blue << "START\n"
+			<< sf::Color::Black << "HELP\n"
+			<< sf::Color::Black << "EXIT";
+		break;
+	}
+	case 1:
+	{
+		text << sf::Color::Black << "START\n"
+			<< sf::Color::Blue << "HELP\n"
+			<< sf::Color::Black << "EXIT";
+		break;
+	}
+	case 2:
+	{
+		text << sf::Color::Black << "START\n"
+			<< sf::Color::Black << "HELP\n"
+			<< sf::Color::Blue << "EXIT";
+		break;
+	}
+	}
+	text.setCharacterSize(50);
+	text.setPosition(100, 100);
+		
+	return text;
+}

@@ -24,7 +24,7 @@ int main() {
 
 	// usages
 	/*player's thruster |   player's fir   |    transition scene   | level counter  */
-	bool gas = false;    bool shoot = false; int level = 0; int scene = play;
+	bool gas = false;    bool shoot = false; int level = 0; int scene = start; int choice = 0;
 	while (window.isOpen()) {
 		while (window.pollEvent(event)) {
 			switch (event.type) {
@@ -54,6 +54,19 @@ int main() {
 					object::unhideObject("player", Player->getSprite());
 					scene = play;
 				}
+				if (event.key.code == sf::Keyboard::Up) {
+					choice--;
+					if (choice < 0)
+						choice = 0;
+				}
+				if (event.key.code == sf::Keyboard::Down) {
+					choice++;
+					if (choice > 2)
+						choice = 2;
+				}
+				if (event.key.code == sf::Keyboard::Enter && choice == 0) {
+					scene = play;
+				}
 				break;
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Space) {
@@ -66,6 +79,12 @@ int main() {
 		}
 
 		switch (scene) {
+
+		case start:
+		{
+			window.draw(text::startMenuChoice(choice));
+			break;
+		}
 
 		case transition:
 		{
