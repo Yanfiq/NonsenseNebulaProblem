@@ -22,9 +22,7 @@ int main() {
 	//enumeration for scene changes
 	enum part { start, transition, play };
 
-	// usages
-	/*player's thruster |   player's fir   |    transition scene   | level counter  */
-	bool gas = false;    bool shoot = false; int level = 0; int scene = start; int choice = 0;
+	bool gas = false;    bool shoot = false; int level = 0; int scene = start; int choice = 0; bool generateEnemy = false;
 	while (window.isOpen()) {
 		while (window.pollEvent(event)) {
 			switch (event.type) {
@@ -44,7 +42,12 @@ int main() {
 					}
 				}
 				if (event.key.code == sf::Keyboard::C && level != -1) {
+					level++;
+					generateEnemy = true;
 					scene = play;
+					player* Player = player::getObjectPtr("player");
+					Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
+					Player->setPlayerHp(100);		Player->resetBulletCount();
 				}
 				if (event.key.code == sf::Keyboard::R && level == -1) {
 					level = 0;
@@ -64,8 +67,11 @@ int main() {
 					if (choice > 2)
 						choice = 2;
 				}
-				if (event.key.code == sf::Keyboard::Enter && choice == 0) {
-					scene = play;
+				if (event.key.code == sf::Keyboard::Enter) {
+					if(choice == 0)
+						scene = transition;
+					if (choice == 2)
+						window.close();
 				}
 				break;
 			case sf::Event::KeyReleased:
@@ -96,13 +102,12 @@ int main() {
 				window.draw(text::lose());
 				break;
 			}
-			case 1: window.draw(text::startLevel(1)); break;
-			case 2: window.draw(text::startLevel(2)); break;
+			case 0: window.draw(text::startLevel(1)); break;
+			case 1: window.draw(text::startLevel(2)); break;
 			}
 			break;
 		}
 
-		//main gameplay
 		case play:
 		{
 			if (gas == true)
@@ -114,16 +119,13 @@ int main() {
 			}
 
 			//level mechanics and enemy object creation
-			if (enemy::getEnemyMap()->empty() || level == -1) {
-				window.clear(sf::Color(255, 255, 255));
-				level++;
+			if (generateEnemy) {
 				switch (level) {
 				case 1:
 				{
 					enemy* enemy_1 = new enemy("enemy_1", 600, 100, 60, 29, 0.0f); enemy_1->setVelocity(0.2, 0.1);
 					enemy* enemy_2 = new enemy("enemy_2", 600, 200, 60, 29, 0.0f); enemy_2->setVelocity(0.3, 0.1);
 					enemy* enemy_3 = new enemy("enemy_3", 600, 300, 60, 29, 0.0f); enemy_3->setVelocity(0.3, 0.2);
-					scene = transition;
 					break;
 				}
 				case 2:
@@ -132,14 +134,14 @@ int main() {
 					enemy* enemy_2 = new enemy("enemy_2", 700, 100, 60, 29, 0.0f); enemy_2->setVelocity(0.3, 0.4);
 					enemy* enemy_3 = new enemy("enemy_3", 500, 300, 60, 29, 0.0f); enemy_3->setVelocity(0.1, 0.2);
 					enemy* enemy_4 = new enemy("enemy_4", 700, 300, 60, 29, 0.0f); enemy_4->setVelocity(0.4, 0.3);
-					scene = transition;
-					break;
-				}
-				default:
-				{
 					break;
 				}
 				}
+				generateEnemy = false;
+			}
+			if (enemy::getEnemyMap()->empty()) {
+				scene = transition;
+				break;
 			}
 
 			//collision detection and object removal

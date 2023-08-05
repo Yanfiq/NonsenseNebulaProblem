@@ -12,5 +12,6 @@ public:
 	static sfe::RichText lose();
 	static sfe::RichText startLevel(int level);
 
+
 	static sfe::RichText startMenuChoice(int choice);
 };
