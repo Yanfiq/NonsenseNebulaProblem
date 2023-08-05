@@ -41,6 +41,17 @@ sfe::RichText text::startLevel(int level) {
 	return text;
 }
 
+sfe::RichText text::score(float point) {
+	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
+
+	sfe::RichText text(font);
+
+	text << sf::Color::Black << "Score: " << sf::Color::Blue << std::to_string(point);
+
+	text.setCharacterSize(60);
+	return text;
+}
+
 sfe::RichText text::startMenuChoice(int choice) {
 	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
 

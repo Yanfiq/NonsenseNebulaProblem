@@ -22,7 +22,13 @@ int main() {
 	//enumeration for scene changes
 	enum part { start, transition, play };
 
-	bool gas = false;    bool shoot = false; int level = 0; int scene = start; int choice = 0; bool generateEnemy = false;
+	bool gas = false;
+	bool shoot = false;
+	int level = 0;
+	float currentPoint = 0;
+	int scene = start;
+	int choice = 0;
+	bool generateEnemy = false;
 	while (window.isOpen()) {
 		while (window.pollEvent(event)) {
 			switch (event.type) {
@@ -55,6 +61,7 @@ int main() {
 					Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
 					Player->setPlayerHp(100);		Player->resetBulletCount();
 					object::unhideObject("player", Player->getSprite());
+					currentPoint = 0;
 					scene = play;
 				}
 				if (event.key.code == sf::Keyboard::Up) {
@@ -154,9 +161,10 @@ int main() {
 					for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
 						if (object::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
 
-							//reduce the enemy HP
+							//reduce the enemy HP & adding point
 							float damage = bullet_object->second->getDamageValue();
 							enemy_object->second->reduceHp(damage);
+							currentPoint += damage;
 
 							//add the bullet's id to the vector
 							if (willBeDeleted.find(bullet_object->first) == willBeDeleted.end())
@@ -181,7 +189,9 @@ int main() {
 					if (object::isintersect(Player->getSprite(), bullet_object->second->getSprite())) {
 
 						//reduce player's HP
-						Player->reducePlayerHp(bullet_object->second->getDamageValue());
+						float damage = bullet_object->second->getDamageValue();
+						Player->reducePlayerHp(damage);
+						currentPoint -= damage;
 
 						//add the bullet's id to the vector
 						if (willBeDeleted.find(bullet_object->first) == willBeDeleted.end())
@@ -259,6 +269,7 @@ int main() {
 				sf::RectangleShape* sprite = it.second;
 				window.draw(*sprite);
 			}
+			window.draw(text::score(currentPoint));
 			break;
 		}
 		}

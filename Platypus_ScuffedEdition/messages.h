@@ -11,7 +11,7 @@ public:
 	static sfe::RichText bulletEmpty();
 	static sfe::RichText lose();
 	static sfe::RichText startLevel(int level);
-
+	static sfe::RichText score(float points);
 
 	static sfe::RichText startMenuChoice(int choice);
 };
