@@ -36,51 +36,64 @@ int main() {
 				window.close();
 				break;
 			case sf::Event::KeyPressed:
-				if (event.key.code == sf::Keyboard::Space) {
-					gas = true;
-				}
-				if (event.key.code == sf::Keyboard::LShift) {
-					shoot = true;
-				}
-				if (event.key.code == sf::Keyboard::X) {
-					if (Player->getBulletCount() >= 30) {
-						Player->resetBulletCount();
+				switch (scene) {
+				case start:
+				{
+					if (event.key.code == sf::Keyboard::Up) {
+						choice--;
+						if (choice < 0)
+							choice = 0;
 					}
+					if (event.key.code == sf::Keyboard::Down) {
+						choice++;
+						if (choice > 2)
+							choice = 2;
+					}
+					if (event.key.code == sf::Keyboard::Enter) {
+						if (choice == 0)
+							scene = transition;
+						if (choice == 2)
+							window.close();
+					}
+					break;
 				}
-				if (event.key.code == sf::Keyboard::C && level != -1) {
-					level++;
-					generateEnemy = true;
-					scene = play;
-					player* Player = player::getObjectPtr("player");
-					Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
-					Player->setPlayerHp(100);		Player->resetBulletCount();
+				case play:
+				{
+					if (event.key.code == sf::Keyboard::Space) {
+						gas = true;
+					}
+					if (event.key.code == sf::Keyboard::LShift) {
+						shoot = true;
+					}
+					if (event.key.code == sf::Keyboard::X) {
+						if (Player->getBulletCount() >= 30) {
+							Player->resetBulletCount();
+						}
+					}
+					break;
 				}
-				if (event.key.code == sf::Keyboard::R && level == -1) {
-					level = 0;
-					player* Player = player::getObjectPtr("player");
-					Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
-					Player->setPlayerHp(100);		Player->resetBulletCount();
-					object::unhideObject("player", Player->getSprite());
-					currentPoint = 0;
-					scene = play;
+				case transition:
+				{
+					if (event.key.code == sf::Keyboard::C && level != -1) {
+						level++;
+						generateEnemy = true;
+						scene = play;
+						Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
+						Player->setPlayerHp(100);		Player->resetBulletCount();
+					}
+					if (event.key.code == sf::Keyboard::R && level == -1) {
+						level = 0;
+						Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
+						Player->setPlayerHp(100);		Player->resetBulletCount();
+						object::unhideObject("player", Player->getSprite());
+						currentPoint = 0;
+						scene = play;
+					}
+					break;
 				}
-				if (event.key.code == sf::Keyboard::Up) {
-					choice--;
-					if (choice < 0)
-						choice = 0;
-				}
-				if (event.key.code == sf::Keyboard::Down) {
-					choice++;
-					if (choice > 2)
-						choice = 2;
-				}
-				if (event.key.code == sf::Keyboard::Enter) {
-					if(choice == 0)
-						scene = transition;
-					if (choice == 2)
-						window.close();
 				}
 				break;
+
 			case sf::Event::KeyReleased:
 				if (event.key.code == sf::Keyboard::Space) {
 					gas = false;
@@ -91,8 +104,8 @@ int main() {
 			}
 		}
 
+		//outside pollEvent
 		switch (scene) {
-
 		case start:
 		{
 			window.draw(text::startMenuChoice(choice));
@@ -260,6 +273,8 @@ int main() {
 							Enemy->setPosition(1280, Enemy->getPositionY());
 					}
 
+					//this shouldn't be in here, in this part, if the player and the enemy almost
+					//in the same y position, the enemy will shoot
 					player* Player = player::getObjectPtr("player");
 					if ((round(Enemy->getPositionY()) < round(Player->getPositionY()) + 5) &&
 						(round(Enemy->getPositionY()) > round(Player->getPositionY()) - 5)) {
