@@ -20,7 +20,7 @@ int main() {
 	Player->setPlayerHp(100);
  
 	//enumeration for scene changes
-	enum part { start, transition, play };
+	enum part { start, tutorial, transition, play };
 
 	bool gas = false;
 	bool shoot = false;
@@ -29,6 +29,7 @@ int main() {
 	int scene = start;
 	int choice = 0;
 	bool generateEnemy = false;
+	int stepTutorial = 1;
 	while (window.isOpen()) {
 		while (window.pollEvent(event)) {
 			switch (event.type) {
@@ -52,20 +53,28 @@ int main() {
 					if (event.key.code == sf::Keyboard::Enter) {
 						if (choice == 0)
 							scene = transition;
+						if (choice == 1)
+							scene = tutorial;
 						if (choice == 2)
 							window.close();
 					}
 					break;
 				}
+				case tutorial:
+				{
+					if (event.key.code == sf::Keyboard::Enter) {
+						stepTutorial++;
+					}
+				}
 				case play:
 				{
-					if (event.key.code == sf::Keyboard::Space) {
+					if (event.key.code == sf::Keyboard::Z) {
 						gas = true;
 					}
-					if (event.key.code == sf::Keyboard::LShift) {
+					if (event.key.code == sf::Keyboard::X) {
 						shoot = true;
 					}
-					if (event.key.code == sf::Keyboard::X) {
+					if (event.key.code == sf::Keyboard::C) {
 						if (Player->getBulletCount() >= 30) {
 							Player->resetBulletCount();
 						}
@@ -95,10 +104,10 @@ int main() {
 				break;
 
 			case sf::Event::KeyReleased:
-				if (event.key.code == sf::Keyboard::Space) {
+				if (event.key.code == sf::Keyboard::Z) {
 					gas = false;
 				}
-				if (event.key.code == sf::Keyboard::LShift) {
+				if (event.key.code == sf::Keyboard::X) {
 					shoot = false;
 				}
 			}
@@ -109,6 +118,41 @@ int main() {
 		case start:
 		{
 			window.draw(text::startMenuChoice(choice));
+			break;
+		}
+
+		case tutorial:
+		{
+			sf::RectangleShape rectangle;
+			rectangle.setSize(sf::Vector2f(960, 540));
+			rectangle.setPosition(100, 100);
+			sf::Texture tutorial;
+			tutorial.loadFromFile("images/keyboardNjirr.jpg");
+			rectangle.setTexture(&tutorial);
+			window.draw(rectangle);
+
+			sf::Text text;
+			sf::Font font; font.loadFromFile("fonts/Poppins-SemiBold.ttf");
+			text.setFont(font);
+			text.setFillColor(sf::Color::Black);
+			text.setCharacterSize(30);
+			switch (stepTutorial)
+			{
+			case 1:
+				text.setString("use the Z button to counter gravity\npress enter to continue");
+				break;
+			case 2:
+				text.setString("use the X button to fire the shot\npress enter to continue");
+				break;
+			case 3:
+				text.setString("use the C button to reload the bullet\npress enter to continue");
+				break;
+			case 4:
+				scene = start;
+				stepTutorial = 1;
+				break;
+			}
+			window.draw(text);
 			break;
 		}
 
