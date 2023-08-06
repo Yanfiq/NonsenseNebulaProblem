@@ -18,4 +18,5 @@ public:
 	static void deleteObject(std::string id);
 
 	static void clearObject();
+	static void updateNDrawAllObject(double dt, sf::RenderWindow& window);
 };
