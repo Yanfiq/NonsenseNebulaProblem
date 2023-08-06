@@ -83,7 +83,7 @@ int main() {
 				}
 				case transition:
 				{
-					if (event.key.code == sf::Keyboard::C && level != -1) {
+					if (event.key.code == sf::Keyboard::Enter && level != -1) {
 						level++;
 						generateEnemy = true;
 						scene = play;
@@ -104,12 +104,10 @@ int main() {
 				break;
 
 			case sf::Event::KeyReleased:
-				if (event.key.code == sf::Keyboard::Z) {
+				if (event.key.code == sf::Keyboard::Z)
 					gas = false;
-				}
-				if (event.key.code == sf::Keyboard::X) {
+				if (event.key.code == sf::Keyboard::X)
 					shoot = false;
-				}
 			}
 		}
 
@@ -184,6 +182,7 @@ int main() {
 
 			//level mechanics and enemy object creation
 			if (generateEnemy) {
+				bullet::clearObject();
 				switch (level) {
 				case 1:
 				{
@@ -198,10 +197,14 @@ int main() {
 					enemy* enemy_2 = new enemy("enemy_2", 700, 100, 60, 29, 0.0f); enemy_2->setVelocity(0.3, 0.4);
 					enemy* enemy_3 = new enemy("enemy_3", 500, 300, 60, 29, 0.0f); enemy_3->setVelocity(0.1, 0.2);
 					enemy* enemy_4 = new enemy("enemy_4", 700, 300, 60, 29, 0.0f); enemy_4->setVelocity(0.4, 0.3);
+					enemy* enemy_5 = new enemy("enemy_5", 600, 200, 60, 29, 0.0f); enemy_5->setVelocity(0.4, 0.5);
+					enemy* enemy_6 = new enemy("enemy_6", 600, 200, 60, 29, 0.0f); enemy_6->setVelocity(0.5, 0.2);
 					break;
 				}
 				}
+
 				generateEnemy = false;
+				break;
 			}
 			if (enemy::getEnemyMap()->empty()) {
 				scene = transition;
@@ -214,7 +217,7 @@ int main() {
 			std::set<std::string> willBeDeleted;
 			for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end(); bullet_object++) {
 				//bullets from the player
-				if (bullet_object->first.substr(7, 5) != "enemy") {
+				if (bullet_object->second->getVelocityX() > 0) {
 					for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
 						if (object::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
 
@@ -240,8 +243,8 @@ int main() {
 					}
 				}
 
-				////bullets from the enemy
-				else if (bullet_object->first.substr(7, 5) == "enemy") {
+				//bullets from the enemy
+				else if (bullet_object->second->getVelocityX() < 0) {
 					player* Player = player::getObjectPtr("player");
 					if (object::isintersect(Player->getSprite(), bullet_object->second->getSprite())) {
 
@@ -279,55 +282,21 @@ int main() {
 			}
 			willBeDeleted.clear();
 
-			//update & draw
-			std::unordered_map<std::string, sf::RectangleShape*>* spritesMap = object::getSpritesMap();
-			double dt = clock.restart().asSeconds();
-			dt *= 1500;
-			for (const auto& it : *spritesMap) {
-				if (it.first.substr(0, 6) == "player") {
-					player* Player = player::getObjectPtr(it.first);
-					Player->update(dt);
-					if (Player->getPositionY() >= 720 || Player->getPositionY() <= 0)
-						Player->setVelocity(Player->getVelocityX(), Player->getVelocityY() * -1);
-
-					if (Player->getPositionY() >= 720)
-						Player->setPosition(Player->getPositionX(), 720);
-					else if (Player->getPositionY() <= 0)
-						Player->setPosition(Player->getPositionX(), 0);
+			//enemy's attack algorithm
+			for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
+				enemy* Enemy = enemy_object->second;
+				if ((Enemy->getPositionY() < Player->getPositionY() + 5) &&
+					(Enemy->getPositionY() > Player->getPositionY() - 5)) {
+					Enemy->shoot();
 				}
-				else if (it.first.substr(0, 6) == "bullet") {
-					bullet* Bullet = bullet::getObjectPtr(it.first);
-					Bullet->update(dt);
-				}
-				else if (it.first.substr(0, 5) == "enemy") {
-					enemy* Enemy = enemy::getObjectPtr(it.first);
-					Enemy->update(dt);
-					if (Enemy->getPositionY() >= 720 || Enemy->getPositionY() <= 0) {
-						Enemy->setVelocity(Enemy->getVelocityX(), Enemy->getVelocityY() * -1);
-						if (Enemy->getPositionY() >= 720)
-							Enemy->setPosition(Enemy->getPositionX(), 720);
-						else if (Enemy->getPositionY() <= 0)
-							Enemy->setPosition(Enemy->getPositionX(), 0);
-					}
-					if (Enemy->getPositionX() >= 1280 || Enemy->getPositionX() <= 400) {
-						Enemy->setVelocity(Enemy->getVelocityX() * -1, Enemy->getVelocityY());
-						if (Enemy->getPositionX() <= 400)
-							Enemy->setPosition(400, Enemy->getPositionY());
-						else if (Enemy->getPositionX() >= 1280)
-							Enemy->setPosition(1280, Enemy->getPositionY());
-					}
-
-					//this shouldn't be in here, in this part, if the player and the enemy almost
-					//in the same y position, the enemy will shoot
-					player* Player = player::getObjectPtr("player");
-					if ((round(Enemy->getPositionY()) < round(Player->getPositionY()) + 5) &&
-						(round(Enemy->getPositionY()) > round(Player->getPositionY()) - 5)) {
-						Enemy->shoot();
-					}
-				}
-				sf::RectangleShape* sprite = it.second;
-				window.draw(*sprite);
 			}
+
+			//update & draw
+			double dt = clock.restart().asSeconds() * 1500;
+			player::updateNDrawAllObject(dt, window);
+			enemy::updateNDrawAllObject(dt, window);
+			bullet::updateNDrawAllObject(dt, window);
+
 			window.draw(text::score(currentPoint));
 			break;
 		}
