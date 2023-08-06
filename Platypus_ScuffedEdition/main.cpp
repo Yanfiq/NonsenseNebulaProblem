@@ -1,13 +1,13 @@
 #include <string>
 #include <iostream>
 #include <set>
-#include <cmath>
 #include <stdbool.h>
 #include "player.h"
 #include "bullet.h"
 #include "enemy.h"
 #include "objects.h"
 #include "messages.h"
+#include "func.h"
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close);
@@ -109,10 +109,17 @@ int main() {
 				break;
 
 			case sf::Event::KeyReleased:
-				if (event.key.code == sf::Keyboard::Z)
-					gas = false;
-				if (event.key.code == sf::Keyboard::X)
-					shoot = false;
+				switch (scene) {
+				case play:
+				{
+					if (event.key.code == sf::Keyboard::Z)
+						gas = false;
+					if (event.key.code == sf::Keyboard::X)
+						shoot = false;
+					break;
+				}
+				}
+				break;
 			}
 		}
 
@@ -176,19 +183,19 @@ int main() {
 				switch (level) {
 				case 1:
 				{
-					enemy* enemy_1 = new enemy("enemy_1", 600, 100, 60, 29, 0.0f); enemy_1->setVelocity(0.2, 0.1);
-					enemy* enemy_2 = new enemy("enemy_2", 600, 200, 60, 29, 0.0f); enemy_2->setVelocity(0.3, 0.1);
-					enemy* enemy_3 = new enemy("enemy_3", 600, 300, 60, 29, 0.0f); enemy_3->setVelocity(0.3, 0.2);
+					enemy* enemy_1 = new enemy("enemy_1", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_1->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
+					enemy* enemy_2 = new enemy("enemy_2", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_2->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
+					enemy* enemy_3 = new enemy("enemy_3", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_3->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
 					break;
 				}
 				case 2:
 				{
-					enemy* enemy_1 = new enemy("enemy_1", 500, 100, 60, 29, 0.0f); enemy_1->setVelocity(0.2, 0.1);
-					enemy* enemy_2 = new enemy("enemy_2", 700, 100, 60, 29, 0.0f); enemy_2->setVelocity(0.3, 0.4);
-					enemy* enemy_3 = new enemy("enemy_3", 500, 300, 60, 29, 0.0f); enemy_3->setVelocity(0.1, 0.2);
-					enemy* enemy_4 = new enemy("enemy_4", 700, 300, 60, 29, 0.0f); enemy_4->setVelocity(0.4, 0.3);
-					enemy* enemy_5 = new enemy("enemy_5", 600, 200, 60, 29, 0.0f); enemy_5->setVelocity(0.4, 0.5);
-					enemy* enemy_6 = new enemy("enemy_6", 600, 200, 60, 29, 0.0f); enemy_6->setVelocity(0.5, 0.2);
+					enemy* enemy_1 = new enemy("enemy_1", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_1->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
+					enemy* enemy_2 = new enemy("enemy_2", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_2->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
+					enemy* enemy_3 = new enemy("enemy_3", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_3->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
+					enemy* enemy_4 = new enemy("enemy_4", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_4->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
+					enemy* enemy_5 = new enemy("enemy_5", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_5->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
+					enemy* enemy_6 = new enemy("enemy_6", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_6->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
 					break;
 				}
 				}
