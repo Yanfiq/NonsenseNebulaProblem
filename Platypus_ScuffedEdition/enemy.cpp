@@ -50,3 +50,26 @@ void enemy::clearObject() {
 		it = enemy_map.erase(it);
 	}
 }
+
+void enemy::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
+	for (const auto& it : enemy_map) {
+		it.second->update(dt);
+
+		if (it.second->getPositionY() >= 720 || it.second->getPositionY() <= 0) {
+			it.second->setVelocity(it.second->getVelocityX(), it.second->getVelocityY() * -1);
+			if (it.second->getPositionY() >= 720)
+				it.second->setPosition(it.second->getPositionX(), 720);
+			else if (it.second->getPositionY() <= 0)
+				it.second->setPosition(it.second->getPositionX(), 0);
+		}
+		if (it.second->getPositionX() >= 1280 || it.second->getPositionX() <= 400) {
+			it.second->setVelocity(it.second->getVelocityX() * -1, it.second->getVelocityY());
+			if (it.second->getPositionX() <= 400)
+				it.second->setPosition(400, it.second->getPositionY());
+			else if (it.second->getPositionX() >= 1280)
+				it.second->setPosition(1280, it.second->getPositionY());
+		}
+		sf::RectangleShape* sprite = it.second->getSprite();
+		window.draw(*sprite);
+	}
+}
