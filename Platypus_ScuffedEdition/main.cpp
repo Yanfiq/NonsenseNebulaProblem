@@ -183,19 +183,20 @@ int main() {
 				switch (level) {
 				case 1:
 				{
-					enemy* enemy_1 = new enemy("enemy_1", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_1->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
-					enemy* enemy_2 = new enemy("enemy_2", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_2->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
-					enemy* enemy_3 = new enemy("enemy_3", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_3->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
+					for (int i = 1; i < getRandomInteger(1, 4); i++) {
+						std::string id = "enemy_" + std::to_string(i);
+						enemy* Enemy = new enemy(id, getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f);
+						Enemy->setVelocity(getRandomFloat(0.1, 0.3), getRandomFloat(0.1, 0.3));
+					}
 					break;
 				}
 				case 2:
 				{
-					enemy* enemy_1 = new enemy("enemy_1", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_1->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
-					enemy* enemy_2 = new enemy("enemy_2", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_2->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
-					enemy* enemy_3 = new enemy("enemy_3", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_3->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
-					enemy* enemy_4 = new enemy("enemy_4", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_4->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
-					enemy* enemy_5 = new enemy("enemy_5", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_5->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
-					enemy* enemy_6 = new enemy("enemy_6", getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f); enemy_6->setVelocity(getRandomFloat(0.0, 0.5), getRandomFloat(0.0, 0.5));
+					for (int i = 1; i < getRandomInteger(4, 8); i++) {
+						std::string id = "enemy_" + std::to_string(i);
+						enemy* Enemy = new enemy(id, getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f);
+						Enemy->setVelocity(getRandomFloat(0.2, 0.6), getRandomFloat(0.2, 0.6));
+					}
 					break;
 				}
 				}
