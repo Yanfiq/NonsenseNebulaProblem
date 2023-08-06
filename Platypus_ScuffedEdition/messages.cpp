@@ -48,6 +48,17 @@ sfe::RichText text::score(float point) {
 	return text;
 }
 
+sfe::RichText text::win() {
+	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
+	sfe::RichText text(font);
+
+	text << sf::Color::Black << "CONGRATULATION, YOU ARE THE WINNER\n"
+		<< sf::Color::Black << "Press 'R' to restart";
+
+	text.setCharacterSize(60);
+	return text;
+}
+
 sfe::RichText text::startMenuChoice(int choice) {
 	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
 	sfe::RichText text(font);

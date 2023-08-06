@@ -12,6 +12,7 @@ public:
 	static sfe::RichText lose();
 	static sfe::RichText startLevel(int level);
 	static sfe::RichText score(float points);
+	static sfe::RichText win();
 
 	static sfe::RichText startMenuChoice(int choice);
 

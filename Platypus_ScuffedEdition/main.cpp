@@ -95,7 +95,7 @@ int main() {
 						Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
 						Player->setPlayerHp(100);		Player->resetBulletCount();
 					}
-					if (event.key.code == sf::Keyboard::R && level == -1) {
+					if (event.key.code == sf::Keyboard::R && (level == -1 || level == 2)) {
 						level = 0;
 						Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
 						Player->setPlayerHp(100);		Player->resetBulletCount();
@@ -163,6 +163,7 @@ int main() {
 			}
 			case 0: window.draw(text::startLevel(1)); break;
 			case 1: window.draw(text::startLevel(2)); break;
+			case 2: window.draw(text::win()); break;
 			}
 			break;
 		}
@@ -186,7 +187,7 @@ int main() {
 					for (int i = 1; i < getRandomInteger(1, 4); i++) {
 						std::string id = "enemy_" + std::to_string(i);
 						enemy* Enemy = new enemy(id, getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f);
-						Enemy->setVelocity(getRandomFloat(0.1, 0.3), getRandomFloat(0.1, 0.3));
+						Enemy->setVelocity(getRandomFloat(-0.3, 0.3), getRandomFloat(0.1, 0.3));
 					}
 					break;
 				}
@@ -195,7 +196,7 @@ int main() {
 					for (int i = 1; i < getRandomInteger(4, 8); i++) {
 						std::string id = "enemy_" + std::to_string(i);
 						enemy* Enemy = new enemy(id, getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f);
-						Enemy->setVelocity(getRandomFloat(0.2, 0.6), getRandomFloat(0.2, 0.6));
+						Enemy->setVelocity(getRandomFloat(-0.6, 0.6), getRandomFloat(-0.6, 0.6));
 					}
 					break;
 				}
