@@ -14,4 +14,6 @@ public:
 	static sfe::RichText score(float points);
 
 	static sfe::RichText startMenuChoice(int choice);
+
+	static sfe::RichText tutorialStep(int step);
 };

@@ -15,21 +15,26 @@ int main() {
 	sf::Clock clock;
 	sf::Event event;
 
-	//player object creation
+	// player object creation
 	player* Player = new player("player", 100, 100, 60, 29, 0.0002f);
 	Player->setPlayerHp(100);
  
-	//enumeration for scene changes
+	// enumeration for scene changes
 	enum part { start, tutorial, transition, play };
 
-	bool gas = false;
-	bool shoot = false;
-	int level = 0;
-	float currentPoint = 0;
-	int scene = start;
-	int choice = 0;
-	bool generateEnemy = false;
-	int stepTutorial = 1;
+	// variables that'll be used inside the main game
+	bool gas = false;				// decides when the player object will reduce its velocityY value
+	bool shoot = false;				// decides when the player object will execute the shoot() function
+	int level = 0;					// as the name implies, to differentiate levels
+	float currentPoint = 0;			// as the name implies, to save the point calculation result
+	bool generateEnemy = false;		// decides whether to generate new enemies
+
+	// variables that'll be used in the start menu
+	int scene = start;				// decide what scene is being run
+	int choice = 0;					// variables that will later change the scene in the start menu
+	int stepTutorial = 1;			// saves the tutorial step that is being described
+
+	// main game loop
 	while (window.isOpen()) {
 		while (window.pollEvent(event)) {
 			switch (event.type) {
@@ -129,28 +134,13 @@ int main() {
 			rectangle.setTexture(&tutorial);
 			window.draw(rectangle);
 
-			sf::Text text;
-			sf::Font font; font.loadFromFile("fonts/Poppins-SemiBold.ttf");
-			text.setFont(font);
-			text.setFillColor(sf::Color::Black);
-			text.setCharacterSize(30);
-			switch (stepTutorial)
+			window.draw(text::tutorialStep(stepTutorial));
+
+			if (stepTutorial == 4)
 			{
-			case 1:
-				text.setString("use the Z button to counter gravity\npress enter to continue");
-				break;
-			case 2:
-				text.setString("use the X button to fire the shot\npress enter to continue");
-				break;
-			case 3:
-				text.setString("use the C button to reload the bullet\npress enter to continue");
-				break;
-			case 4:
 				scene = start;
 				stepTutorial = 1;
-				break;
 			}
-			window.draw(text);
 			break;
 		}
 

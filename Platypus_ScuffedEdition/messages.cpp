@@ -79,3 +79,31 @@ sfe::RichText text::startMenuChoice(int choice) {
 		
 	return text;
 }
+
+sfe::RichText text::tutorialStep(int step) {
+	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
+
+	sfe::RichText text(font);
+	switch (step)
+	{
+	case 1:
+		text << sf::Color::Blue << "Step 1\n"
+			<< sf::Color::Black << "use the Z button to counter gravity\n"
+			<< sf::Color::Black << "press enter to continue";
+		break;
+	case 2:
+		text << sf::Color::Blue << "Step 2\n"
+			<< sf::Color::Black << "use the X button to fire the shot\n"
+			<< sf::Color::Black << "press enter to continue";
+		break;
+	case 3:
+		text << sf::Color::Blue << "Step 3\n"
+			<< sf::Color::Black << "use the C button to reload the bullet\n"
+			<< sf::Color::Black << "press enter to continue";
+		break;
+	}
+
+	text.setCharacterSize(30);
+	text.setPosition(50, 50);
+	return text;
+}
