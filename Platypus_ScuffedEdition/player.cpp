@@ -48,3 +48,20 @@ void player::setPlayerHp(float _hp) {
 void player::reducePlayerHp(float damage) {
 	this->hp -= damage;
 }
+
+void player::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
+	for (const auto& it : player_map) {
+		it.second->update(dt);
+
+		if (it.second->getPositionY() >= 720 || it.second->getPositionY() <= 0)
+			it.second->setVelocity(it.second->getVelocityX(), it.second->getVelocityY() * -1);
+
+		if (it.second->getPositionY() >= 720)
+			it.second->setPosition(it.second->getPositionX(), 720);
+		else if (it.second->getPositionY() <= 0)
+			it.second->setPosition(it.second->getPositionX(), 0);
+
+		sf::RectangleShape* sprite = it.second->getSprite();
+		window.draw(*sprite);
+	}
+}

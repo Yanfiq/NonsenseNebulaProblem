@@ -19,4 +19,6 @@ public:
 	float getPlayerHp() const;
 	void setPlayerHp(float _hp);
 	void reducePlayerHp(float damage);
+
+	static void updateNDrawAllObject(double dt, sf::RenderWindow& window);
 };
