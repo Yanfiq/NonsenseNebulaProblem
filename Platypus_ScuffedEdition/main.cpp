@@ -95,7 +95,7 @@ int main() {
 						Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
 						Player->setPlayerHp(100);		Player->resetBulletCount();
 					}
-					if (event.key.code == sf::Keyboard::R && (level == -1 || level == 2)) {
+					if (event.key.code == sf::Keyboard::R && (level == -1 || level == 3)) {
 						level = 0; shoot = false; gas = false;
 						Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
 						Player->setPlayerHp(100);		Player->resetBulletCount();
@@ -163,7 +163,8 @@ int main() {
 			}
 			case 0: window.draw(text::startLevel(1)); break;
 			case 1: window.draw(text::startLevel(2)); break;
-			case 2: window.draw(text::win()); break;
+			case 2: window.draw(text::startLevel(3)); break;
+			case 3: window.draw(text::win()); break;
 			}
 			break;
 		}
@@ -193,18 +194,28 @@ int main() {
 				}
 				case 2:
 				{
-					for (int i = 1; i < getRandomInteger(4, 8); i++) {
+					for (int i = 1; i < getRandomInteger(4, 7); i++) {
 						std::string id = "enemy_" + std::to_string(i);
 						enemy* Enemy = new enemy(id, getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f);
 						Enemy->setVelocity(getRandomFloat(-0.6, 0.6), getRandomFloat(-0.6, 0.6));
 					}
 					break;
 				}
+				case 3:
+				{
+					for (int i = 1; i < getRandomInteger(7, 11); i++) {
+						std::string id = "enemy_" + std::to_string(i);
+						enemy* Enemy = new enemy(id, getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f);
+						Enemy->setVelocity(getRandomFloat(-0.9, 0.9), getRandomFloat(-0.9, 0.9));
+					}
+					break;
 				}
-
+				}
 				generateEnemy = false;
 				break;
 			}
+
+			//level up when the enemy is 0
 			if (enemy::getEnemyMap()->empty()) {
 				scene = transition;
 				break;
