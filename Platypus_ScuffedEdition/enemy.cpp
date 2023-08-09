@@ -1,28 +1,31 @@
 #include "enemy.h"
 
-std::unordered_map<std::string, enemy*> enemy::enemy_map;
-std::unordered_map<std::string, sf::RectangleShape*>* sprites_map_ptr_3 = object::getSpritesMap();
-int enemy::bullet_count = 0;
+std::unordered_map<int, enemy*> enemy::enemy_map;
+int enemy::bullet_count = 1;
 
-enemy::enemy(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity) : object(_object_id, _positionX, _positionY, _width, _height, _gravity) {
-	positionX = _positionX; positionY = _positionY; width = _width; height = _height; object_id = _object_id; gravity = _gravity;
+enemy::enemy(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY, float _width, float _height, float _gravity) : object(_positionX, _positionY, _velocityX, _velocityY, _width, _height, _gravity) {
+	positionX = _positionX; 
+	positionY = _positionY; 
+	velocityX = _velocityX;
+	velocityY = _velocityY;
+	width = _width; 
+	height = _height;
+	gravity = _gravity;
 	object_sprite.setSize(sf::Vector2f(width, height));
 	object_sprite.setFillColor(sf::Color(0, 0, 0, 255));
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
-	enemy_map[_object_id] = this;
-	(*sprites_map_ptr_3)[_object_id] = &object_sprite;
+	enemy_map[enemy_obj + _object_id] = this;
 }
 
-std::unordered_map<std::string, enemy*>* enemy::getEnemyMap() {
+std::unordered_map<int, enemy*>* enemy::getEnemyMap() {
 	return &enemy_map;
 }
 
-enemy* enemy::getObjectPtr(std::string id) {
+enemy* enemy::getObjectPtr(int id) {
 	return enemy_map[id];
 }
 
-void enemy::deleteObject(std::string id) {
-	sprites_map.erase(id);
+void enemy::deleteObject(int id) {
 	delete enemy_map[id];
 	enemy_map.erase(id);
 }
@@ -36,16 +39,14 @@ float enemy::getHp() {
 }
 
 void enemy::shoot() {
-	std::string bullet_id = "bullet_enemy_" + std::to_string(bullet_count++);
-	bullet* Bullet = new bullet(bullet_id, positionX, positionY, 20, 20, 0);
-	Bullet->setVelocity(-0.5, 0);
+	bullet* Bullet = new bullet(bullet_count++, positionX, positionY, -0.5f, 0.0f, 20, 20, 0);
 	Bullet->setDamageValue(20.0f);
-	(*sprites_map_ptr_3)[bullet_id] = Bullet->getSprite();
+	if (bullet_count == 99)
+		bullet_count = 0;
 }
 
 void enemy::clearObject() {
 	for (auto it = enemy_map.begin(); it != enemy_map.end();) {
-		sprites_map.erase(it->first);
 		delete it->second;
 		it = enemy_map.erase(it);
 	}

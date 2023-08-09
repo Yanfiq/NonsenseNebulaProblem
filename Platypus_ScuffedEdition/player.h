@@ -5,13 +5,13 @@
 
 class player : public object {
 protected:
-	static std::unordered_map<std::string, player*> player_map;
+	static std::unordered_map<int, player*> player_map;
 	int bullet_count = 1;
 	float hp = 100;
 
 public:
-	player(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity);
-	static player* getObjectPtr(std::string id);
+	player(float _positionX, float _positionY, float _velocityX, float _velocityY, float _width, float _height, float _gravity);
+	static player* getObjectPtr(int id);
 	void shoot();
 	void resetBulletCount();
 	int getBulletCount();

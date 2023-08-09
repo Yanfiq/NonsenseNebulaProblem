@@ -22,45 +22,45 @@ int getRandomInteger(int min, int max) {
     return dist(rng);
 }
 
-std::map<std::string, std::string> getCollisionData() {
+std::map<int, int> getCollisionData() {
 	//collision detection and object removal
-	std::unordered_map<std::string, bullet*>* bulletMap = bullet::getBulletMap();
-	std::unordered_map<std::string, enemy*>* enemyMap = enemy::getEnemyMap();
+	std::unordered_map<int, bullet*>* bulletMap = bullet::getBulletMap();
+	std::unordered_map<int, enemy*>* enemyMap = enemy::getEnemyMap();
 
 	//      something...collided with...something
-	std::map<std::string, std::string> collideObject;
+	std::map<int, int> collideObject;
 	for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end(); bullet_object++) {
 		//bullets from the player
-		if (bullet_object->second->getVelocityX() > 0) {
+		if (bullet_object->second != NULL && bullet_object->second->getVelocityX() > 0) {
 			for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
 
 				//collision happens between enemy and bullet
-				if (object::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
+				if (enemy_object->second != NULL && object::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
 					//add the bullet's id and enemy's id to the map
 					collideObject[enemy_object->first] = bullet_object->first;
 				}
 			}
 
 			//collision happens between bullet and the right border
-			if (bullet_object->second->getPositionX() >= 1280)
+			if (bullet_object->second->getPositionX() >= 1280) {
 				//add the bullet's id to the map
-				collideObject[bullet_object->first] = "border";
+				collideObject[bullet_object->first] = 0;
+			}
 		}
 
 		//bullets from the enemy
-		else if (bullet_object->second->getVelocityX() < 0) {
-			player* Player = player::getObjectPtr("player");
-
+		else if (bullet_object->second != NULL && bullet_object->second->getVelocityX() < 0) {
+			player* Player = player::getObjectPtr(101);
 			//collision happens between player and the bullet
 			if (object::isintersect(Player->getSprite(), bullet_object->second->getSprite())) {
 				//add the bullet's id and player's id to the map
-				collideObject[Player->getId()] = (bullet_object->first);
+				collideObject[101] = (bullet_object->first);
 			}
 
 			//collision happens between bullet and left border
 			if (bullet_object->second->getPositionX() <= 0) {
 				//add the bullet's id to the map
-				collideObject[bullet_object->first] = "border";
+				collideObject[bullet_object->first] = 0;
 			}
 		}
 	}

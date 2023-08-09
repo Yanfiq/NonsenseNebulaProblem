@@ -8,4 +8,4 @@
 
 float getRandomFloat(float min, float max);
 int getRandomInteger(int min, int max);
-std::map<std::string, std::string> getCollisionData();
+std::map<int, int> getCollisionData();

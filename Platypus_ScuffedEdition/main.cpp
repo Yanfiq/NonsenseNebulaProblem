@@ -16,7 +16,7 @@ int main() {
 	sf::Event event;
 
 	// player object creation
-	player* Player = new player("player", 100, 100, 60, 29, 0.0002f);
+	player* Player = new player(100, 100, 0, 0, 60, 29, 0.0002f);
 	Player->setPlayerHp(100);
  
 	// enumeration for scene changes
@@ -99,7 +99,6 @@ int main() {
 						level = 0; shoot = false; gas = false;
 						Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
 						Player->setPlayerHp(100);		Player->resetBulletCount();
-						object::unhideObject("player", Player->getSprite());
 						currentPoint = 0;
 						scene = play;
 					}
@@ -186,9 +185,7 @@ int main() {
 				case 1:
 				{
 					for (int i = 1; i < getRandomInteger(2, 4); i++) {
-						std::string id = "enemy_" + std::to_string(i);
-						enemy* Enemy = new enemy(id, getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f);
-						Enemy->setVelocity(getRandomFloat(-0.3, 0.3), getRandomFloat(0.1, 0.3));
+						enemy* Enemy = new enemy(i, getRandomInteger(400, 1280), getRandomInteger(0, 720), getRandomFloat(-0.3, 0.3), getRandomFloat(0.1, 0.3), 60, 29, 0.0f);
 					}
 					break;
 				}
@@ -196,8 +193,7 @@ int main() {
 				{
 					for (int i = 1; i < getRandomInteger(4, 7); i++) {
 						std::string id = "enemy_" + std::to_string(i);
-						enemy* Enemy = new enemy(id, getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f);
-						Enemy->setVelocity(getRandomFloat(-0.6, 0.6), getRandomFloat(-0.6, 0.6));
+						enemy* Enemy = new enemy(i, getRandomInteger(400, 1280), getRandomInteger(0, 720), getRandomFloat(-0.6, 0.6), getRandomFloat(-0.6, 0.6), 60, 29, 0.0f);
 					}
 					break;
 				}
@@ -205,8 +201,7 @@ int main() {
 				{
 					for (int i = 1; i < getRandomInteger(7, 11); i++) {
 						std::string id = "enemy_" + std::to_string(i);
-						enemy* Enemy = new enemy(id, getRandomInteger(400, 1280), getRandomInteger(0, 720), 60, 29, 0.0f);
-						Enemy->setVelocity(getRandomFloat(-0.9, 0.9), getRandomFloat(-0.9, 0.9));
+						enemy* Enemy = new enemy(i, getRandomInteger(400, 1280), getRandomInteger(0, 720), getRandomFloat(-0.9, 0.9), getRandomFloat(-0.9, 0.9), 60, 29, 0.0f);
 					}
 					break;
 				}
@@ -222,14 +217,21 @@ int main() {
 			}
 
 			//collision detection and object removal
-			std::map<std::string, std::string> objectCollide = getCollisionData();
+			std::map<int, int> objectCollide = getCollisionData();
 
+			enum objectType {
+				player_obj = 100,
+				playerBullet_obj = 200,
+				enemy_obj = 300,
+				enemyBullet_obj = 400
+			};
 			//object removal
 			for (const auto& it : objectCollide) {
-				if (it.first.substr(0, 6) == "bullet") {
+				if ((it.first - playerBullet_obj < 100 && it.first - playerBullet_obj > 0) || 
+					(it.first - enemyBullet_obj  < 100 && it.first - enemyBullet_obj > 0)) {
 					bullet::deleteObject(it.first);
 				}
-				else if (it.first.substr(0, 5) == "enemy"){
+				else if (it.first - enemy_obj < 100 && it.first - enemy_obj > 0){
 					enemy* Enemy = enemy::getObjectPtr(it.first);
 					bullet* Bullet = bullet::getObjectPtr(it.second);
 					Enemy->reduceHp(Bullet->getDamageValue());
@@ -238,7 +240,7 @@ int main() {
 						enemy::deleteObject(it.first);
 					bullet::deleteObject(it.second);
 				}
-				else if (it.first.substr(0, 6) == "player") {
+				else if (it.first - player_obj < 100 && it.first - player_obj > 0) {
 					player* Player = player::getObjectPtr(it.first);
 					bullet* Bullet = bullet::getObjectPtr(it.second);
 					Player->reducePlayerHp(Bullet->getDamageValue());
@@ -251,9 +253,10 @@ int main() {
 					bullet::deleteObject(it.second);
 				}
 			}
+			objectCollide.clear();
 
 			//enemy's attack algorithm
-			std::unordered_map<std::string, enemy*>* enemyMap = enemy::getEnemyMap();
+			std::unordered_map<int, enemy*>* enemyMap = enemy::getEnemyMap();
 			for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
 				enemy* Enemy = enemy_object->second;
 				if ((Enemy->getPositionY() < Player->getPositionY() + 5) &&

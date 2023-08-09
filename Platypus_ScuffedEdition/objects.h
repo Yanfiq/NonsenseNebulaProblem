@@ -17,12 +17,14 @@ protected:
 	float gravity = 0.0002f;
 	float maxY = 0.5f;
 	float minY = -0.5f;
-	std::string object_id;
 	sf::RectangleShape object_sprite;
-	static std::unordered_map<std::string, sf::RectangleShape*> sprites_map;
+	enum objectType{player_obj = 100, 
+					playerBullet_obj = 200, 
+					enemy_obj = 300, 
+					enemyBullet_obj = 400};
 
 public:
-	object(std::string _object_id, float _positionX, float _positionY, float _width, float _height, float _gravity);
+	object(float _positionX, float _positionY, float _velocityX, float _velocityY, float _width, float _height, float _gravity);
 	sf::RectangleShape* getSprite();
 	float getPositionX();
 	float getPositionY();
@@ -30,11 +32,6 @@ public:
 	float getVelocityY();
 	void setVelocity(float vx, float vy);
 	void setPosition(float px, float py);
-	void update(double time);
-	std::string getId();
-
-	static std::unordered_map<std::string, sf::RectangleShape*>* getSpritesMap();
+	void update(double time); 
 	static bool isintersect(sf::RectangleShape* shape_1, sf::RectangleShape* shape_2);
-	static void hideObject(std::string id);
-	static void unhideObject(std::string id, sf::RectangleShape* sprite);
 };
