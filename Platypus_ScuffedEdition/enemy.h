@@ -1,8 +1,6 @@
 #pragma once
 #include "objects.h"
 #include "bullet.h"
-#include <unordered_map>
-#include <iostream>
 
 class enemy : public object {
 protected:

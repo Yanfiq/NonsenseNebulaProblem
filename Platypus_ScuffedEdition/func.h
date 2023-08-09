@@ -1,10 +1,11 @@
 #pragma once
-#include <random>
-#include <ctime>
-#include <map>
 #include "bullet.h"
 #include "enemy.h"
 #include "player.h"
+
+#include <random>
+#include <ctime>
+#include <unordered_map>
 
 enum objectType {
 	player_obj = 100,
@@ -15,4 +16,4 @@ enum objectType {
 
 float getRandomFloat(float min, float max);
 int getRandomInteger(int min, int max);
-std::map<int, int> getCollisionData();
+std::unordered_map<int, int> getCollisionData();

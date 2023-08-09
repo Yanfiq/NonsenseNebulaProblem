@@ -1,7 +1,5 @@
 #pragma once
 #include "objects.h"
-#include <unordered_map>
-#include <iostream>
 
 class bullet : public object {
 protected:

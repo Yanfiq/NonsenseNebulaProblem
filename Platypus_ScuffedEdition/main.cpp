@@ -1,11 +1,8 @@
-#include <string>
-#include <iostream>
-#include <set>
 #include <stdbool.h>
+
 #include "player.h"
 #include "bullet.h"
 #include "enemy.h"
-#include "objects.h"
 #include "messages.h"
 #include "func.h"
 
@@ -235,7 +232,7 @@ int main() {
 			}
 
 			//collision detection and object removal
-			std::map<int, int> objectCollide = getCollisionData();
+			std::unordered_map<int, int> objectCollide = getCollisionData();
 
 			enum objectType {
 				player_obj = 100,

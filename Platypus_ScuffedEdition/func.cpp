@@ -23,13 +23,13 @@ int getRandomInteger(int min, int max) {
     return dist(rng);
 }
 
-std::map<int, int> getCollisionData() {
+std::unordered_map<int, int> getCollisionData() {
 	//collision detection and object removal
 	std::unordered_map<int, bullet*>* bulletMap = bullet::getBulletMap();
 	std::unordered_map<int, enemy*>* enemyMap = enemy::getEnemyMap();
 
 	//      something...collided with...something
-	std::map<int, int> collideObject;
+	std::unordered_map<int, int> collideObject;
 	for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end(); bullet_object++) {
 		//bullets from the player
 		if (bullet_object->second != NULL && bullet_object->second->getVelocityX() > 0) {

@@ -1,7 +1,6 @@
 #pragma once
 #include "objects.h"
 #include "bullet.h"
-#include <unordered_map>
 
 class player : public object {
 protected:
