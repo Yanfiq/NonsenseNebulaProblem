@@ -59,6 +59,17 @@ sfe::RichText text::win() {
 	return text;
 }
 
+sfe::RichText text::pauseText() {
+	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
+	sfe::RichText text(font);
+
+	text << sf::Color::Black << "PAUSED\n"
+		<< sf::Color::Black << "Press 'space' to back to the game";
+
+	text.setCharacterSize(60);
+	return text;
+}
+
 sfe::RichText text::startMenuChoice(int choice) {
 	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
 	sfe::RichText text(font);

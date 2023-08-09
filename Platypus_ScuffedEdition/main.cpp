@@ -20,7 +20,7 @@ int main() {
 	Player->setPlayerHp(100);
  
 	// enumeration for scene changes
-	enum part { start, tutorial, transition, play };
+	enum part { start, tutorial, transition, play, pause };
 
 	// variables that'll be used inside the main game
 	bool gas = false;				// decides when the player object will reduce its velocityY value
@@ -83,6 +83,17 @@ int main() {
 						if (Player->getBulletCount() >= 30) {
 							Player->resetBulletCount();
 						}
+					}
+					if (event.key.code == sf::Keyboard::Space) {
+						scene = pause;
+					}
+					break;
+				}
+				case pause:
+				{
+					if (event.key.code == sf::Keyboard::Space) {
+						scene = play;
+						clock.restart();
 					}
 					break;
 				}
@@ -165,6 +176,12 @@ int main() {
 			case 2: window.draw(text::startLevel(3)); break;
 			case 3: window.draw(text::win()); break;
 			}
+			break;
+		}
+
+		case pause:
+		{
+			window.draw(text::pauseText());
 			break;
 		}
 

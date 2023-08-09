@@ -1,5 +1,6 @@
 #include "func.h"
 
+
 float getRandomFloat(float min, float max) {
     // Seed the random number generator with the current time
     static std::mt19937 rng(static_cast<unsigned>(std::time(0)));
