@@ -123,6 +123,11 @@ sfe::RichText text::tutorialStep(int step) {
 			<< sf::Color::Black << "use the C button to reload the bullet\n"
 			<< sf::Color::Black << "press enter to continue";
 		break;
+	case 4:
+		text << sf::Color::Blue << "Step 4\n"
+			<< sf::Color::Black << "use the spacebar to pause the game\n"
+			<< sf::Color::Black << "press enter to continue";
+		break;
 	}
 
 	text.setCharacterSize(30);

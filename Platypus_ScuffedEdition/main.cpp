@@ -111,7 +111,7 @@ int main() {
 						Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
 						Player->setPlayerHp(100);		Player->resetBulletCount();
 						currentPoint = 0;
-						scene = play;
+						scene = start;
 					}
 					break;
 				}
@@ -153,7 +153,7 @@ int main() {
 
 			window.draw(text::tutorialStep(stepTutorial));
 
-			if (stepTutorial == 4)
+			if (stepTutorial == 5)
 			{
 				scene = start;
 				stepTutorial = 1;
@@ -198,6 +198,7 @@ int main() {
 			//level mechanics and enemy object creation
 			if (generateEnemy) {
 				bullet::clearObject();
+				clock.restart();
 				switch (level) {
 				case 1:
 				{
