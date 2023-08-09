@@ -61,6 +61,7 @@ std::unordered_map<int, player*>* player::getPlayerMap() {
 void player::deleteObject(int id) {
 	delete player_map[id];
 	player_map.erase(id);
+	std::cout << id << " deletion was successful\n";
 }
 
 void player::clearObject() {

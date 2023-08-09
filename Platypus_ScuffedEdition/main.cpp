@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <iostream>
 
 #include "player.h"
 #include "bullet.h"
@@ -118,7 +119,7 @@ int main() {
 						shoot_1 = true;
 					}
 					if (event.key.code == sf::Keyboard::C) {
-						if (player::getObjectPtr(player_obj + 1)->getBulletCount() >= 30) {
+						if (player::getObjectPtr(player_obj + 1)->getBulletCount() >= 60) {
 							player::getObjectPtr(player_obj + 1)->resetBulletCount();
 						}
 					}
@@ -130,7 +131,7 @@ int main() {
 						shoot_2 = true;
 					}
 					if (multi && event.key.code == sf::Keyboard::Slash) {
-						if (player::getObjectPtr(player_obj + 2)->getBulletCount() >= 30) {
+						if (player::getObjectPtr(player_obj + 2)->getBulletCount() >= 60) {
 							player::getObjectPtr(player_obj + 2)->resetBulletCount();
 						}
 					}
@@ -252,21 +253,23 @@ int main() {
 
 		case play:
 		{
-			player* player_1 = player::getObjectPtr(101);
-			if (gas_1)
-				player_1->thrust();
-			if (shoot_1 && player_1->getBulletCount() <= 30)
-				player_1->shoot();
-			if (player_1->getBulletCount() >= 30)
-				window.draw(text::bulletEmpty());
+			if (player::getObjectPtr(101) != NULL) {
+				player* player_1 = player::getObjectPtr(101);
+				if (gas_1)
+					player_1->thrust();
+				if (shoot_1 && player_1->getBulletCount() <= 60)
+					player_1->shoot();
+				if (player_1->getBulletCount() >= 60)
+					window.draw(text::bulletEmpty());
+			}
 
-			if (multi) {
+			if (multi && player::getObjectPtr(102) != NULL) {
 				player* player_2 = player::getObjectPtr(102);
 				if (gas_2)
 					player_2->thrust();
-				if (shoot_2 && player_2->getBulletCount() <= 30)
+				if (shoot_2 && player_2->getBulletCount() <= 60)
 					player_2->shoot();
-				if (player_2->getBulletCount() >= 30)
+				if (player_2->getBulletCount() >= 60)
 					window.draw(text::bulletEmpty());
 			}
 
@@ -333,8 +336,10 @@ int main() {
 					bullet* Bullet = bullet::getObjectPtr(it.second);
 					Player->reducePlayerHp(Bullet->getDamageValue());
 					currentPoint -= Bullet->getDamageValue();
-					if (Player->getPlayerHp() <= 0)
+					if (Player->getPlayerHp() <= 0) {
 						player::deleteObject(it.first);
+						std::cout << it.first << " get deleted\n";
+					}
 					bullet::deleteObject(it.second);
 				}
 			}
@@ -343,6 +348,7 @@ int main() {
 			if (player::getPlayerMap()->empty()) {
 				level = -1;
 				scene = transition;
+				break;
 			}
 
 			//enemy's attack algorithm
@@ -355,6 +361,7 @@ int main() {
 					if ((Enemy->getPositionY() < Player->getPositionY() + 5) &&
 						(Enemy->getPositionY() > Player->getPositionY() - 5)) {
 						Enemy->shoot();
+						std::cout << player_object->first << " will get shot by " << enemy_object->first << std::endl;
 					}
 				}
 			}
