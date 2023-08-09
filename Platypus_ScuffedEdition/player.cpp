@@ -22,7 +22,10 @@ player::player(float _positionX, float _positionY, float _velocityX, float _velo
 }
 
 player* player::getObjectPtr(int id) {
-	return player_map[id];
+	if (player_map.find(id) != player_map.end())
+		return player_map[id];
+	else
+		return NULL;
 }
 
 void player::shoot() {
@@ -61,7 +64,6 @@ std::unordered_map<int, player*>* player::getPlayerMap() {
 void player::deleteObject(int id) {
 	delete player_map[id];
 	player_map.erase(id);
-	std::cout << id << " deletion was successful\n";
 }
 
 void player::clearObject() {

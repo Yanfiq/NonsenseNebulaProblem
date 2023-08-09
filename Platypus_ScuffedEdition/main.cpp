@@ -263,7 +263,7 @@ int main() {
 					window.draw(text::bulletEmpty());
 			}
 
-			if (multi && player::getObjectPtr(102) != NULL) {
+			if (player::getObjectPtr(102) != NULL) {
 				player* player_2 = player::getObjectPtr(102);
 				if (gas_2)
 					player_2->thrust();
@@ -313,6 +313,21 @@ int main() {
 				break;
 			}
 
+			//enemy's attack algorithm
+			std::unordered_map<int, enemy*>* enemyMap = enemy::getEnemyMap();
+			std::unordered_map<int, player*>* playerMap = player::getPlayerMap();
+			for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
+				enemy* Enemy = enemy_object->second;
+				for (auto player_object = playerMap->begin(); player_object != playerMap->end(); player_object++) {
+					player* Player = player_object->second;
+					if ((Enemy->getPositionY() < Player->getPositionY() + 5) &&
+						(Enemy->getPositionY() > Player->getPositionY() - 5)) {
+						Enemy->shoot();
+						std::cout << player_object->first << " will get shot by " << enemy_object->first << std::endl;
+					}
+				}
+			}
+
 			//collision detection and object removal
 			std::unordered_map<int, int> objectCollide = getCollisionData();
 
@@ -349,21 +364,6 @@ int main() {
 				level = -1;
 				scene = transition;
 				break;
-			}
-
-			//enemy's attack algorithm
-			std::unordered_map<int, enemy*>* enemyMap = enemy::getEnemyMap();
-			std::unordered_map<int, player*>* playerMap = player::getPlayerMap();
-			for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
-				enemy* Enemy = enemy_object->second;
-				for (auto player_object = playerMap->begin(); player_object != playerMap->end(); player_object++) {
-					player* Player = player_object->second;
-					if ((Enemy->getPositionY() < Player->getPositionY() + 5) &&
-						(Enemy->getPositionY() > Player->getPositionY() - 5)) {
-						Enemy->shoot();
-						std::cout << player_object->first << " will get shot by " << enemy_object->first << std::endl;
-					}
-				}
 			}
 
 			//update & draw
