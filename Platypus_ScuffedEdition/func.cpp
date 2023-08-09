@@ -27,6 +27,7 @@ std::unordered_map<int, int> getCollisionData() {
 	//collision detection and object removal
 	std::unordered_map<int, bullet*>* bulletMap = bullet::getBulletMap();
 	std::unordered_map<int, enemy*>* enemyMap = enemy::getEnemyMap();
+	std::unordered_map<int, player*>* playerMap = player::getPlayerMap();
 
 	//      something...collided with...something
 	std::unordered_map<int, int> collideObject;
@@ -51,11 +52,12 @@ std::unordered_map<int, int> getCollisionData() {
 
 		//bullets from the enemy
 		else if (bullet_object->second != NULL && bullet_object->second->getVelocityX() < 0) {
-			player* Player = player::getObjectPtr(101);
-			//collision happens between player and the bullet
-			if (object::isintersect(Player->getSprite(), bullet_object->second->getSprite())) {
-				//add the bullet's id and player's id to the map
-				collideObject[101] = (bullet_object->first);
+			for (auto player_object = playerMap->begin(); player_object != playerMap->end(); player_object++){
+				//collision happens between player and the bullet
+				if (player_object->second != NULL && object::isintersect(player_object->second->getSprite(), bullet_object->second->getSprite())) {
+					//add the bullet's id and player's id to the map
+					collideObject[player_object->first] = (bullet_object->first);
+				}
 			}
 
 			//collision happens between bullet and left border

@@ -1,6 +1,8 @@
 #include "player.h"
 
 std::unordered_map<int, player*> player::player_map;
+int player::bullet_count = 1;
+
 
 player::player(float _positionX, float _positionY, float _velocityX, float _velocityY, float _width, float _height, float _gravity) : object(_positionX, _positionY, _velocityX, _velocityY, _width, _height, _gravity) {
 	positionX = _positionX;
@@ -13,7 +15,10 @@ player::player(float _positionX, float _positionY, float _velocityX, float _velo
 	object_sprite.setSize(sf::Vector2f(width, height));
 	object_sprite.setFillColor(sf::Color(0, 0, 0, 255));
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
-	player_map[player_obj + 1] = this;
+	static int num = 1;
+	player_map[player_obj + num++] = this;
+	if (num == 3)
+		num = 1;
 }
 
 player* player::getObjectPtr(int id) {
@@ -47,6 +52,22 @@ void player::setPlayerHp(float _hp) {
 
 void player::reducePlayerHp(float damage) {
 	this->hp -= damage;
+}
+
+std::unordered_map<int, player*>* player::getPlayerMap() {
+	return &player_map;
+}
+
+void player::deleteObject(int id) {
+	delete player_map[id];
+	player_map.erase(id);
+}
+
+void player::clearObject() {
+	for (auto it = player_map.begin(); it != player_map.end();) {
+		delete it->second;
+		it = player_map.erase(it);
+	}
 }
 
 void player::updateNDrawAllObject(double dt, sf::RenderWindow& window) {

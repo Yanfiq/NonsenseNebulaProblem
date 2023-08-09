@@ -102,6 +102,29 @@ sfe::RichText text::startMenuChoice(int choice) {
 	return text;
 }
 
+sfe::RichText text::singleMultiChoice(int choice) {
+	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
+	sfe::RichText text(font);
+	switch (choice) {
+	case 0:
+	{
+		text << sf::Color::Blue << "Singleplayer\n"
+			<< sf::Color::Black << "Multiplayer";
+		break;
+	}
+	case 1:
+	{
+		text << sf::Color::Black << "Singleplayer\n"
+			<< sf::Color::Blue << "Multiplayer";
+		break;
+	}
+	}
+	text.setCharacterSize(100);
+	text.setPosition(100, 100);
+
+	return text;
+}
+
 sfe::RichText text::tutorialStep(int step) {
 	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
 

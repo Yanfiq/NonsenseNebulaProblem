@@ -11,17 +11,15 @@ int main() {
 	window.setFramerateLimit(60);
 	sf::Clock clock;
 	sf::Event event;
-
-	// player object creation
-	player* Player = new player(100, 100, 0, 0, 60, 29, 0.0002f);
-	Player->setPlayerHp(100);
  
 	// enumeration for scene changes
-	enum part { start, tutorial, transition, play, pause };
+	enum part { start, tutorial, transition, singleMulti, play, pause };
 
 	// variables that'll be used inside the main game
-	bool gas = false;				// decides when the player object will reduce its velocityY value
-	bool shoot = false;				// decides when the player object will execute the shoot() function
+	bool gas_1 = false;				// decides when the player object will reduce its velocityY value
+	bool gas_2 = false;
+	bool shoot_1 = false;			// decides when the player object will execute the shoot() function
+	bool shoot_2 = false;
 	int level = 0;					// as the name implies, to differentiate levels
 	float currentPoint = 0;			// as the name implies, to save the point calculation result
 	bool generateEnemy = false;		// decides whether to generate new enemies
@@ -30,6 +28,15 @@ int main() {
 	int scene = start;				// decide what scene is being run
 	int choice = 0;					// variables that will later change the scene in the start menu
 	int stepTutorial = 1;			// saves the tutorial step that is being described
+
+	bool multi = false;
+
+	enum objectType {
+		player_obj = 100,
+		playerBullet_obj = 200,
+		enemy_obj = 300,
+		enemyBullet_obj = 400
+	};
 
 	// main game loop
 	while (window.isOpen()) {
@@ -53,12 +60,16 @@ int main() {
 							choice = 2;
 					}
 					if (event.key.code == sf::Keyboard::Enter) {
-						if (choice == 0)
-							scene = transition;
-						if (choice == 1)
+						if (choice == 0) {
+							scene = singleMulti;
+						}
+						if (choice == 1) {
 							scene = tutorial;
-						if (choice == 2)
+						}
+						if (choice == 2) {
 							window.close();
+						}
+						choice = 0;
 					}
 					break;
 				}
@@ -68,19 +79,63 @@ int main() {
 						stepTutorial++;
 					}
 				}
+				case singleMulti:
+				{
+					if (event.key.code == sf::Keyboard::Up) {
+						choice--;
+						if (choice < 0)
+							choice = 0;
+					}
+					if (event.key.code == sf::Keyboard::Down) {
+						choice++;
+						if (choice > 1)
+							choice = 1;
+					}
+					if (event.key.code == sf::Keyboard::Enter) {
+						if (choice == 0) {
+							player* Player = new player(100, 100, 0, 0, 60, 29, 0.0002f);
+							Player->setPlayerHp(100);
+						}
+						if (choice == 1) {
+							player* Player_1 = new player(100, 100, 0, 0, 60, 29, 0.0002f);
+							Player_1->setPlayerHp(100);
+
+							player* Player_2 = new player(100, 100, 0, 0, 60, 29, 0.0002f);
+							Player_2->setPlayerHp(100);
+
+							multi = true;
+						}
+						scene = transition;
+						choice = 0;
+					}
+				}
 				case play:
 				{
 					if (event.key.code == sf::Keyboard::Z) {
-						gas = true;
+						gas_1 = true;
 					}
 					if (event.key.code == sf::Keyboard::X) {
-						shoot = true;
+						shoot_1 = true;
 					}
 					if (event.key.code == sf::Keyboard::C) {
-						if (Player->getBulletCount() >= 30) {
-							Player->resetBulletCount();
+						if (player::getObjectPtr(player_obj + 1)->getBulletCount() >= 30) {
+							player::getObjectPtr(player_obj + 1)->resetBulletCount();
 						}
 					}
+
+					if (multi && event.key.code == sf::Keyboard::Comma) {
+						gas_2 = true;
+					}
+					if (multi && event.key.code == sf::Keyboard::Period) {
+						shoot_2 = true;
+					}
+					if (multi && event.key.code == sf::Keyboard::Slash) {
+						if (player::getObjectPtr(player_obj + 2)->getBulletCount() >= 30) {
+							player::getObjectPtr(player_obj + 2)->resetBulletCount();
+						}
+					}
+
+					
 					if (event.key.code == sf::Keyboard::Space) {
 						scene = pause;
 					}
@@ -98,15 +153,15 @@ int main() {
 				{
 					if (event.key.code == sf::Keyboard::Enter && level != -1) {
 						level++;
-						generateEnemy = true; shoot = false; gas = false;
+						generateEnemy = true; shoot_1 = false; shoot_2 = false; gas_1 = false; gas_2 = false;
 						scene = play;
-						Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
-						Player->setPlayerHp(100);		Player->resetBulletCount();
+						//Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
+						//Player->setPlayerHp(100);		Player->resetBulletCount();
 					}
 					if (event.key.code == sf::Keyboard::R && (level == -1 || level == 3)) {
-						level = 0; shoot = false; gas = false;
-						Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
-						Player->setPlayerHp(100);		Player->resetBulletCount();
+						level = 0; shoot_1 = false; shoot_2 = false; gas_1 = false; gas_2 = false;
+						//Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
+						//Player->setPlayerHp(100);		Player->resetBulletCount();
 						currentPoint = 0;
 						scene = start;
 					}
@@ -120,9 +175,16 @@ int main() {
 				case play:
 				{
 					if (event.key.code == sf::Keyboard::Z)
-						gas = false;
+						gas_1 = false;
 					if (event.key.code == sf::Keyboard::X)
-						shoot = false;
+						shoot_1 = false;
+
+					if (multi && event.key.code == sf::Keyboard::Comma) {
+						gas_2 = false;
+					}
+					if (multi && event.key.code == sf::Keyboard::Period) {
+						shoot_2 = false;
+					}
 					break;
 				}
 				}
@@ -158,6 +220,12 @@ int main() {
 			break;
 		}
 
+		case singleMulti:
+		{
+			window.draw(text::singleMultiChoice(choice));
+			break;
+		}
+
 		case transition:
 		{
 			switch (level) {
@@ -184,13 +252,24 @@ int main() {
 
 		case play:
 		{
-			if (gas == true)
-				Player->thrust();
-			if (shoot == true && Player->getBulletCount() <= 30)
-				Player->shoot();
-			if (Player->getBulletCount() >= 30) {
+			player* player_1 = player::getObjectPtr(101);
+			if (gas_1)
+				player_1->thrust();
+			if (shoot_1 && player_1->getBulletCount() <= 30)
+				player_1->shoot();
+			if (player_1->getBulletCount() >= 30)
 				window.draw(text::bulletEmpty());
+
+			if (multi) {
+				player* player_2 = player::getObjectPtr(102);
+				if (gas_2)
+					player_2->thrust();
+				if (shoot_2 && player_2->getBulletCount() <= 30)
+					player_2->shoot();
+				if (player_2->getBulletCount() >= 30)
+					window.draw(text::bulletEmpty());
 			}
+
 
 			//level mechanics and enemy object creation
 			if (generateEnemy) {
@@ -234,12 +313,6 @@ int main() {
 			//collision detection and object removal
 			std::unordered_map<int, int> objectCollide = getCollisionData();
 
-			enum objectType {
-				player_obj = 100,
-				playerBullet_obj = 200,
-				enemy_obj = 300,
-				enemyBullet_obj = 400
-			};
 			//object removal
 			for (const auto& it : objectCollide) {
 				if ((it.first - playerBullet_obj < 100 && it.first - playerBullet_obj > 0) || 
@@ -261,22 +334,28 @@ int main() {
 					Player->reducePlayerHp(Bullet->getDamageValue());
 					currentPoint -= Bullet->getDamageValue();
 					if (Player->getPlayerHp() <= 0)
-					{
-						level = -1;
-						scene = transition;
-					}
+						player::deleteObject(it.first);
 					bullet::deleteObject(it.second);
 				}
 			}
 			objectCollide.clear();
 
+			if (player::getPlayerMap()->empty()) {
+				level = -1;
+				scene = transition;
+			}
+
 			//enemy's attack algorithm
 			std::unordered_map<int, enemy*>* enemyMap = enemy::getEnemyMap();
+			std::unordered_map<int, player*>* playerMap = player::getPlayerMap();
 			for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
 				enemy* Enemy = enemy_object->second;
-				if ((Enemy->getPositionY() < Player->getPositionY() + 5) &&
-					(Enemy->getPositionY() > Player->getPositionY() - 5)) {
-					Enemy->shoot();
+				for (auto player_object = playerMap->begin(); player_object != playerMap->end(); player_object++) {
+					player* Player = player_object->second;
+					if ((Enemy->getPositionY() < Player->getPositionY() + 5) &&
+						(Enemy->getPositionY() > Player->getPositionY() - 5)) {
+						Enemy->shoot();
+					}
 				}
 			}
 

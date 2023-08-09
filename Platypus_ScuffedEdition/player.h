@@ -5,7 +5,7 @@
 class player : public object {
 protected:
 	static std::unordered_map<int, player*> player_map;
-	int bullet_count = 1;
+	static int bullet_count;
 	float hp = 100;
 
 public:
@@ -18,6 +18,9 @@ public:
 	float getPlayerHp() const;
 	void setPlayerHp(float _hp);
 	void reducePlayerHp(float damage);
-
+	
+	static void deleteObject(int id);
+	static void clearObject();
+	static std::unordered_map<int, player*>* getPlayerMap();
 	static void updateNDrawAllObject(double dt, sf::RenderWindow& window);
 };

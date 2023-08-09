@@ -15,6 +15,7 @@ public:
 	static sfe::RichText pauseText();
 
 	static sfe::RichText startMenuChoice(int choice);
+	static sfe::RichText singleMultiChoice(int choice);
 
 	static sfe::RichText tutorialStep(int step);
 };
