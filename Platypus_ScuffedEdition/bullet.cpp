@@ -22,7 +22,10 @@ bullet::bullet(int _object_id, float _positionX, float _positionY, float _veloci
 }
 
 bullet* bullet::getObjectPtr(int id) {
-	return bullet_map[id];
+	if (bullet_map.find(id) != bullet_map.end())
+		return bullet_map[id];
+	else
+		return NULL;
 }
 
 float bullet::getDamageValue() const {

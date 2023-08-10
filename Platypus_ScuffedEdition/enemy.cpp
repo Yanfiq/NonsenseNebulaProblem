@@ -22,7 +22,10 @@ std::unordered_map<int, enemy*>* enemy::getEnemyMap() {
 }
 
 enemy* enemy::getObjectPtr(int id) {
-	return enemy_map[id];
+	if (enemy_map.find(id) != enemy_map.end())
+		return enemy_map[id];
+	else
+		return NULL;
 }
 
 void enemy::deleteObject(int id) {
