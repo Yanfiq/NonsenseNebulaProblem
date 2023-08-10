@@ -1,16 +1,11 @@
 #include "objects.h"
 
-object::object(std::string textureDir, float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity) {
+object::object(float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity) {
 	positionX = _positionX; 
 	positionY = _positionY; 
 	velocityX = _velocityX;
 	velocityY = _velocityY;
 	gravity = _gravity;
-	texture.loadFromFile(textureDir);
-	object_sprite.setTexture(&texture);
-	object_sprite.setSize(sf::Vector2f(texture.getSize()));
-	object_sprite.setOrigin(sf::Vector2f(texture.getSize().x / 2, texture.getSize().y / 2));
-	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 }
 
 sf::RectangleShape* object::getSprite() {

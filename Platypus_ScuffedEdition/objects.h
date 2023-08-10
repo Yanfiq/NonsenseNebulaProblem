@@ -17,7 +17,6 @@ protected:
 	float gravity = 0.0002f;
 	float maxY = 0.5f;
 	float minY = -0.5f;
-	sf::Texture texture;
 	sf::RectangleShape object_sprite;
 	enum objectType{player_obj = 100, 
 					playerBullet_obj = 200, 
@@ -25,7 +24,7 @@ protected:
 					enemyBullet_obj = 400};
 
 public:
-	object(std::string textureDir, float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity);
+	object(float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity);
 	sf::RectangleShape* getSprite();
 	float getPositionX();
 	float getPositionY();

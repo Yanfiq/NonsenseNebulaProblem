@@ -2,9 +2,19 @@
 
 std::unordered_map<int, enemy*> enemy::enemy_map;
 int enemy::bullet_count = 1;
+sf::Texture enemy::texture;
 
-enemy::enemy(int _object_id, std::string textureDir, float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity) : object(textureDir, _positionX, _positionY, _velocityX, _velocityY, _gravity){
+enemy::enemy(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity) : object(_positionX, _positionY, _velocityX, _velocityY, _gravity){
+	object_sprite.setTexture(&texture);
+	object_sprite.setSize(sf::Vector2f(texture.getSize()));
+	object_sprite.setOrigin(sf::Vector2f(texture.getSize().x / 2, texture.getSize().y / 2));
+	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
+
 	enemy_map[enemy_obj + _object_id] = this;
+}
+
+void enemy::initializeTexture(std::string textureDir) {
+	texture.loadFromFile(textureDir);
 }
 
 std::unordered_map<int, enemy*>* enemy::getEnemyMap() {
@@ -32,7 +42,7 @@ float enemy::getHp() {
 }
 
 void enemy::shoot() {
-	bullet* Bullet = new bullet(bullet_count++, "images/bullet.png", positionX, positionY, -0.5f, 0.0f, 0);
+	bullet* Bullet = new bullet(bullet_count++, positionX, positionY, -0.5f, 0.0f, 0);
 	Bullet->setDamageValue(20.0f);
 	if (bullet_count == 99)
 		bullet_count = 0;

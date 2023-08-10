@@ -2,10 +2,20 @@
 
 std::unordered_map<int, player*> player::player_map;
 int player::allBullet = 1;
+sf::Texture player::texture;
 
 
-player::player(int _object_id, std::string textureDir, float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity) : object(textureDir, _positionX, _positionY, _velocityX, _velocityY, _gravity) {
+player::player(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity) : object(_positionX, _positionY, _velocityX, _velocityY, _gravity) {
+	object_sprite.setTexture(&texture);
+	object_sprite.setSize(sf::Vector2f(texture.getSize()));
+	object_sprite.setOrigin(sf::Vector2f(texture.getSize().x / 2, texture.getSize().y / 2));
+	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
+	
 	player_map[player_obj + _object_id] = this;
+}
+
+void player::initializeTexture(std::string textureDir) {
+	texture.loadFromFile(textureDir);
 }
 
 player* player::getObjectPtr(int id) {
@@ -16,7 +26,7 @@ player* player::getObjectPtr(int id) {
 }
 
 void player::shoot() {
-	bullet* Bullet = new bullet(allBullet++, "images/bullet.png", positionX, positionY, 0.5, 0, 0);
+	bullet* Bullet = new bullet(allBullet++, positionX, positionY, 0.5, 0, 0);
 	bulletFired++;
 	Bullet->setDamageValue(20.0f);
 }
