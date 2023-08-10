@@ -111,7 +111,7 @@ int main() {
 							player* Player_1 = new player(1, 100, 100, 0, 0, 0.0002f);
 							Player_1->setPlayerHp(100);
 
-							player* Player_2 = new player(2, 100, 100, 0, 0, 0.0002f);
+							player* Player_2 = new player(2, 100, 300, 0, 0, 0.0002f);
 							Player_2->setPlayerHp(100);
 						}
 						scene = transition;
@@ -206,6 +206,7 @@ int main() {
 		switch (scene) {
 		case start:
 		{
+			window.draw(text::gameTitle());
 			window.draw(text::startMenuChoice(choice));
 			break;
 		}
@@ -213,16 +214,16 @@ int main() {
 		case tutorial:
 		{
 			sf::RectangleShape rectangle;
-			rectangle.setSize(sf::Vector2f(960, 540));
-			rectangle.setPosition(100, 100);
+			rectangle.setPosition(100, 300);
 			sf::Texture tutorial;
-			tutorial.loadFromFile("images/keyboardNjirr.jpg");
+			tutorial.loadFromFile("images/keyboardKiri.jpg");
+			rectangle.setSize(sf::Vector2f(tutorial.getSize()));
 			rectangle.setTexture(&tutorial);
 			window.draw(rectangle);
 
 			window.draw(text::tutorialStep(stepTutorial));
 
-			if (stepTutorial == 5)
+			if (stepTutorial == 7)
 			{
 				scene = start;
 				stepTutorial = 1;
@@ -232,6 +233,7 @@ int main() {
 
 		case singleMulti:
 		{
+			window.draw(text::gameTitle());
 			window.draw(text::singleMultiChoice(choice));
 			break;
 		}

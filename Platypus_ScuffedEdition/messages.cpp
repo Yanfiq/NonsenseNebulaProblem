@@ -31,12 +31,24 @@ namespace text {
 		return text;
 	}
 
+	sfe::RichText gameTitle() {
+		sfe::RichText text(font);
+
+		text << sf::Color::White << "something is happening somewhere";
+
+		text.setPosition(sf::Vector2f(100, 100));
+		text.setCharacterSize(60);
+
+		return text;
+	}
+
 	sfe::RichText lose() {
 		sfe::RichText text(font);
 
 		text << sf::Color::White << "YOU LOSE\nBETTER LUCK NEXT TIME"
-			<< sf::Color::White << "\nPress 'R' to continue";
+			<< sf::Color::White << "\nPress 'R' to back to main menu";
 
+		text.setPosition(100, 100);
 		text.setCharacterSize(60);
 
 		return text;
@@ -48,7 +60,8 @@ namespace text {
 		text << sf::Color::White << "LEVEL " << sf::Color::Cyan << std::to_string(level)
 			<< sf::Color::White << "\nPress ENTER to continue";
 
-		text.setCharacterSize(60);
+		text.setCharacterSize(50);
+		text.setPosition(100, 100);
 		return text;
 	}
 
@@ -57,7 +70,8 @@ namespace text {
 
 		text << sf::Color::White << "Score: " << sf::Color::Cyan << std::to_string(point);
 
-		text.setCharacterSize(60);
+		text.setCharacterSize(50);
+		text.setPosition(30, 30);
 		return text;
 	}
 
@@ -65,9 +79,10 @@ namespace text {
 		sfe::RichText text(font);
 
 		text << sf::Color::White << "CONGRATULATION, YOU ARE THE WINNER\n"
-			<< sf::Color::White << "Press 'R' to restart";
+			<< sf::Color::White << "Press 'R' to back to main menu";
 
-		text.setCharacterSize(60);
+		text.setPosition(100, 100);
+		text.setCharacterSize(50);
 		return text;
 	}
 
@@ -77,7 +92,8 @@ namespace text {
 		text << sf::Color::White << "PAUSED\n"
 			<< sf::Color::White << "Press 'space' to back to the game";
 
-		text.setCharacterSize(60);
+		text.setPosition(100, 100);
+		text.setCharacterSize(50);
 		return text;
 	}
 
@@ -106,8 +122,8 @@ namespace text {
 			break;
 		}
 		}
-		text.setCharacterSize(100);
-		text.setPosition(100, 100);
+		text.setCharacterSize(60);
+		text.setPosition(100, 400);
 
 		return text;
 	}
@@ -117,19 +133,21 @@ namespace text {
 		switch (choice) {
 		case 0:
 		{
-			text << sf::Color::Cyan << "Singleplayer\n"
+			text << sf::Color::White << "Choose your gamemode: \n"
+				<< sf::Color::Cyan << "Singleplayer\n"
 				<< sf::Color::White << "Multiplayer";
 			break;
 		}
 		case 1:
 		{
-			text << sf::Color::White << "Singleplayer\n"
+			text << sf::Color::White << "Choose your gamemode: \n"
+				<< sf::Color::White << "Singleplayer\n"
 				<< sf::Color::Cyan << "Multiplayer";
 			break;
 		}
 		}
-		text.setCharacterSize(100);
-		text.setPosition(100, 100);
+		text.setCharacterSize(60);
+		text.setPosition(100, 400);
 
 		return text;
 	}
@@ -144,16 +162,31 @@ namespace text {
 				<< sf::Color::White << "press enter to continue";
 			break;
 		case 2:
+			text << sf::Color::Cyan << "Step 1\n"
+				<< sf::Color::White << "use the Z button to counter gravity			for the player_2, use ',' instead\n"
+				<< sf::Color::White << "press enter to continue                                  press enter to continue";
+			break;
+		case 3:
 			text << sf::Color::Cyan << "Step 2\n"
 				<< sf::Color::White << "use the X button to fire the shot\n"
 				<< sf::Color::White << "press enter to continue";
 			break;
-		case 3:
+		case 4:
+			text << sf::Color::Cyan << "Step 2\n"
+				<< sf::Color::White << "use the X button to fire the shot          for the player_2, use '.' instead\n"
+				<< sf::Color::White << "press enter to continue                                press enter to continue";
+			break;
+		case 5:
 			text << sf::Color::Cyan << "Step 3\n"
 				<< sf::Color::White << "use the C button to reload the bullet\n"
 				<< sf::Color::White << "press enter to continue";
 			break;
-		case 4:
+		case 6:
+			text << sf::Color::Cyan << "Step 3\n"
+				<< sf::Color::White << "use the C button to reload the bullet     for the player_2, use '/' instead\n"
+				<< sf::Color::White << "press enter to continue                               press enter to continue";
+			break;
+		case 7:
 			text << sf::Color::Cyan << "Step 4\n"
 				<< sf::Color::White << "use the spacebar to pause the game\n"
 				<< sf::Color::White << "press enter to continue";

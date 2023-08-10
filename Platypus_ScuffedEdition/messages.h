@@ -6,6 +6,7 @@ namespace text {
 	static sf::Font font;
 	void fontInitialization(std::string fontDir);
 
+	sfe::RichText gameTitle();
 	sfe::RichText bulletEmpty(int player);
 	sfe::RichText lose();
 	sfe::RichText startLevel(int level);
