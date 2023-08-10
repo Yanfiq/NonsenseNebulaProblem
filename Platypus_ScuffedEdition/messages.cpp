@@ -2,15 +2,28 @@
 
 sf::Font text::font;
 
-sfe::RichText text::bulletEmpty() {
+sfe::RichText text::bulletEmpty(int player) {
 	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
 	sfe::RichText text(font);
 
-	text << sf::Color::Black << "The bullet is empty\n"
-		<< sf::Color::Black << "Press 'C' to reload the bullet";
+	switch (player) {
+	case 1:
+	{
+		text << sf::Color::Black << "player_1's bullet is empty\n"
+			<< sf::Color::Black << "Press 'C' to reload the bullet";
+		text.setPosition(30, 560);
+		break;
+	}
+	case 2:
+	{
+		text << sf::Color::Black << "player_2's bullet is empty\n"
+			<< sf::Color::Black << "Press '/' to reload the bullet";
+		text.setPosition(700, 560);
+		break;
+	}
+	}
 
 	text.setCharacterSize(50);
-	text.setPosition(30, 560);
 
 	return text;
 }

@@ -2,17 +2,7 @@
 
 std::unordered_map<int, bullet*> bullet::bullet_map;
 
-bullet::bullet(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY, float _width, float _height, float _gravity) : object(_positionX, _positionY, _velocityX, _velocityY, _width, _height, _gravity) {
-	positionX = _positionX;
-	positionY = _positionY;
-	velocityX = _velocityX;
-	velocityY = _velocityY;
-	width = _width;
-	height = _height;
-	gravity = _gravity;
-	object_sprite.setSize(sf::Vector2f(width, height));
-	object_sprite.setFillColor(sf::Color::Black);
-	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
+bullet::bullet(int _object_id, std::string textureDir, float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity) : object(textureDir, _positionX, _positionY, _velocityX, _velocityY, _gravity) {
 	if (velocityX > 0.0f) {
 		bullet_map[playerBullet_obj + _object_id] = this;
 	}

@@ -7,7 +7,7 @@ private:
 	static sf::Font font;
 
 public:
-	static sfe::RichText bulletEmpty();
+	static sfe::RichText bulletEmpty(int player);
 	static sfe::RichText lose();
 	static sfe::RichText startLevel(int level);
 	static sfe::RichText score(float points);

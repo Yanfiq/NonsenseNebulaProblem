@@ -10,6 +10,12 @@
 int main() {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
 	window.setFramerateLimit(60);
+	sf::Texture backgroundTexture;
+	backgroundTexture.loadFromFile("images/nebula.jpg");
+	sf::RectangleShape background;
+	background.setSize(sf::Vector2f(1280, 720));
+	background.setTexture(&backgroundTexture);
+
 	sf::Clock clock;
 	sf::Event event;
  
@@ -93,14 +99,14 @@ int main() {
 					}
 					if (event.key.code == sf::Keyboard::Enter) {
 						if (choice == 0) {
-							player* Player = new player(1, 100, 100, 0, 0, 60, 29, 0.0002f);
+							player* Player = new player(1, "images/player.png", 100, 100, 0, 0, 0.0002f);
 							Player->setPlayerHp(100);
 						}
 						if (choice == 1) {
-							player* Player_1 = new player(1, 100, 100, 0, 0, 60, 29, 0.0002f);
+							player* Player_1 = new player(1, "images/player.png", 100, 100, 0, 0, 0.0002f);
 							Player_1->setPlayerHp(100);
 
-							player* Player_2 = new player(2, 100, 100, 0, 0, 60, 29, 0.0002f);
+							player* Player_2 = new player(2, "images/player.png", 100, 100, 0, 0, 0.0002f);
 							Player_2->setPlayerHp(100);
 						}
 						scene = transition;
@@ -245,12 +251,14 @@ int main() {
 
 		case pause:
 		{
+			window.draw(background);
 			window.draw(text::pauseText());
 			break;
 		}
 
 		case play:
 		{
+			window.draw(background);
 			if (player::getObjectPtr(101) != NULL) {
 				player* player_1 = player::getObjectPtr(101);
 				if (gas_1)
@@ -285,21 +293,21 @@ int main() {
 				case 1:
 				{
 					for (int i = 1; i < getRandomInteger(2, 4); i++) {
-						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.3, 0.3), getRandomFloat(0.1, 0.3), 60, 29, 0.0f);
+						enemy* Enemy = new enemy(i, "images/enemyA.png", getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.3, 0.3), getRandomFloat(0.1, 0.3), 0.0f);
 					}
 					break;
 				}
 				case 2:
 				{
 					for (int i = 1; i < getRandomInteger(4, 7); i++) {
-						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.6, 0.6), getRandomFloat(-0.6, 0.6), 60, 29, 0.0f);
+						enemy* Enemy = new enemy(i, "images/enemyA.png", getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.6, 0.6), getRandomFloat(-0.6, 0.6), 0.0f);
 					}
 					break;
 				}
 				case 3:
 				{
 					for (int i = 1; i < getRandomInteger(7, 11); i++) {
-						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.9, 0.9), getRandomFloat(-0.9, 0.9), 60, 29, 0.0f);
+						enemy* Enemy = new enemy(i, "images/enemyA.png", getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.9, 0.9), getRandomFloat(-0.9, 0.9), 0.0f);
 					}
 					break;
 				}

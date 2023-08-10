@@ -10,7 +10,7 @@ protected:
 	static std::unordered_map<int, enemy*> enemy_map;
 
 public:
-	enemy(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY, float _width, float _height, float _gravity);
+	enemy(int _object_id, std::string textureDir, float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity);
 
 	void reduceHp(float damage);
 	void shoot();

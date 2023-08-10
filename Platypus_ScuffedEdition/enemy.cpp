@@ -3,17 +3,7 @@
 std::unordered_map<int, enemy*> enemy::enemy_map;
 int enemy::bullet_count = 1;
 
-enemy::enemy(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY, float _width, float _height, float _gravity) : object(_positionX, _positionY, _velocityX, _velocityY, _width, _height, _gravity) {
-	positionX = _positionX; 
-	positionY = _positionY; 
-	velocityX = _velocityX;
-	velocityY = _velocityY;
-	width = _width; 
-	height = _height;
-	gravity = _gravity;
-	object_sprite.setSize(sf::Vector2f(width, height));
-	object_sprite.setFillColor(sf::Color(0, 0, 0, 255));
-	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
+enemy::enemy(int _object_id, std::string textureDir, float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity) : object(textureDir, _positionX, _positionY, _velocityX, _velocityY, _gravity){
 	enemy_map[enemy_obj + _object_id] = this;
 }
 
@@ -42,7 +32,7 @@ float enemy::getHp() {
 }
 
 void enemy::shoot() {
-	bullet* Bullet = new bullet(bullet_count++, positionX, positionY, -0.5f, 0.0f, 20, 20, 0);
+	bullet* Bullet = new bullet(bullet_count++, "images/bullet.png", positionX, positionY, -0.5f, 0.0f, 0);
 	Bullet->setDamageValue(20.0f);
 	if (bullet_count == 99)
 		bullet_count = 0;
