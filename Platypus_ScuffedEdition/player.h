@@ -5,7 +5,8 @@
 class player : public object {
 protected:
 	static std::unordered_map<int, player*> player_map;
-	static int bullet_count;
+	static int allBullet;
+	int bulletFired = 0;
 	float hp = 100;
 
 public:

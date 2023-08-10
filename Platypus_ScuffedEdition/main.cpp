@@ -116,7 +116,7 @@ int main() {
 						shoot_1 = true;
 					}
 					if (event.key.code == sf::Keyboard::C) {
-						if (player::getObjectPtr(player_obj + 1)->getBulletCount() >= 60) {
+						if (player::getObjectPtr(player_obj + 1)->getBulletCount() >= 30) {
 							player::getObjectPtr(player_obj + 1)->resetBulletCount();
 						}
 					}
@@ -128,7 +128,7 @@ int main() {
 						shoot_2 = true;
 					}
 					if (event.key.code == sf::Keyboard::Slash) {
-						if (player::getObjectPtr(player_obj + 2)->getBulletCount() >= 60) {
+						if (player::getObjectPtr(player_obj + 2)->getBulletCount() >= 30) {
 							player::getObjectPtr(player_obj + 2)->resetBulletCount();
 						}
 					}
@@ -255,22 +255,23 @@ int main() {
 				player* player_1 = player::getObjectPtr(101);
 				if (gas_1)
 					player_1->thrust();
-				if (shoot_1 && player_1->getBulletCount() <= 60)
+				if (shoot_1 && player_1->getBulletCount() <= 30)
 					player_1->shoot();
-				if (player_1->getBulletCount() >= 60)
-					window.draw(text::bulletEmpty());
+				if (player_1->getBulletCount() >= 30)
+					window.draw(text::bulletEmpty(1));
 			}
 
 			if (player::getObjectPtr(102) != NULL) {
 				player* player_2 = player::getObjectPtr(102);
 				if (gas_2)
 					player_2->thrust();
-				if (shoot_2 && player_2->getBulletCount() <= 60)
+				if (shoot_2 && player_2->getBulletCount() <= 30)
 					player_2->shoot();
-				if (player_2->getBulletCount() >= 60)
-					window.draw(text::bulletEmpty());
+				if (player_2->getBulletCount() >= 30)
+					window.draw(text::bulletEmpty(2));
 			}
 
+			//pause the game if the window lost its focus
 			if (!window.hasFocus()) {
 				scene = pause;
 			}
@@ -314,18 +315,18 @@ int main() {
 			}
 
 			//enemy's attack algorithm
-			//std::unordered_map<int, enemy*>* enemyMap = enemy::getEnemyMap();
-			//std::unordered_map<int, player*>* playerMap = player::getPlayerMap();
-			//for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
-			//	enemy* Enemy = enemy_object->second;
-			//	for (auto player_object = playerMap->begin(); player_object != playerMap->end(); player_object++) {
-			//		player* Player = player_object->second;
-			//		if ((Enemy->getPositionY() < Player->getPositionY() + 5) &&
-			//			(Enemy->getPositionY() > Player->getPositionY() - 5)) {
-			//			Enemy->shoot();
-			//		}
-			//	}
-			//}
+			std::unordered_map<int, enemy*>* enemyMap = enemy::getEnemyMap();
+			std::unordered_map<int, player*>* playerMap = player::getPlayerMap();
+			for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
+				enemy* Enemy = enemy_object->second;
+				for (auto player_object = playerMap->begin(); player_object != playerMap->end(); player_object++) {
+					player* Player = player_object->second;
+					if ((Enemy->getPositionY() < Player->getPositionY() + 5) &&
+						(Enemy->getPositionY() > Player->getPositionY() - 5)) {
+						Enemy->shoot();
+					}
+				}
+			}
 
 			//collision detection and object removal
 			currentPoint += processCollision();

@@ -1,7 +1,7 @@
 #include "player.h"
 
 std::unordered_map<int, player*> player::player_map;
-int player::bullet_count = 1;
+int player::allBullet = 1;
 
 
 player::player(int id, float _positionX, float _positionY, float _velocityX, float _velocityY, float _width, float _height, float _gravity) : object(_positionX, _positionY, _velocityX, _velocityY, _width, _height, _gravity) {
@@ -26,16 +26,18 @@ player* player::getObjectPtr(int id) {
 }
 
 void player::shoot() {
-	bullet* Bullet = new bullet(bullet_count++, positionX, positionY, 0.5, 0, 20, 20, 0);
+	bullet* Bullet = new bullet(allBullet++, positionX, positionY, 0.5, 0, 20, 20, 0);
+	bulletFired++;
 	Bullet->setDamageValue(20.0f);
 }
 
 void player::resetBulletCount() {
-	bullet_count = 1;
+	allBullet -= 30;
+	bulletFired = 0;
 }
 
 int player::getBulletCount() {
-	return bullet_count;
+	return bulletFired;
 }
 
 void player::thrust() {
