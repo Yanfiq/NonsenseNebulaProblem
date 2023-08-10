@@ -222,6 +222,8 @@ int main() {
 			window.draw(rectangle);
 
 			window.draw(text::tutorialStep(stepTutorial));
+			if (stepTutorial % 2 == 0)
+				window.draw(text::tutorialStep(stepTutorial - 1));
 
 			if (stepTutorial == 7)
 			{

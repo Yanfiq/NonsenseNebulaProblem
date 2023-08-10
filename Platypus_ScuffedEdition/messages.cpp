@@ -160,41 +160,44 @@ namespace text {
 			text << sf::Color::Cyan << "Step 1\n"
 				<< sf::Color::White << "use the Z button to counter gravity\n"
 				<< sf::Color::White << "press enter to continue";
+			text.setPosition(50, 50);
 			break;
 		case 2:
-			text << sf::Color::Cyan << "Step 1\n"
-				<< sf::Color::White << "use the Z button to counter gravity			for the player_2, use ',' instead\n"
-				<< sf::Color::White << "press enter to continue                                  press enter to continue";
+			text << sf::Color::White << "for the player_2, use ',' instead\n"
+				<< sf::Color::White << "press enter to continue";
+			text.setPosition(700, 100);
 			break;
 		case 3:
 			text << sf::Color::Cyan << "Step 2\n"
 				<< sf::Color::White << "use the X button to fire the shot\n"
 				<< sf::Color::White << "press enter to continue";
+			text.setPosition(50, 50);
 			break;
 		case 4:
-			text << sf::Color::Cyan << "Step 2\n"
-				<< sf::Color::White << "use the X button to fire the shot          for the player_2, use '.' instead\n"
-				<< sf::Color::White << "press enter to continue                                press enter to continue";
+			text << sf::Color::White << "for the player_2, use '.' instead\n"
+				<< sf::Color::White << "press enter to continue";
+			text.setPosition(700, 100);
 			break;
 		case 5:
 			text << sf::Color::Cyan << "Step 3\n"
 				<< sf::Color::White << "use the C button to reload the bullet\n"
 				<< sf::Color::White << "press enter to continue";
+			text.setPosition(50, 50);
 			break;
 		case 6:
-			text << sf::Color::Cyan << "Step 3\n"
-				<< sf::Color::White << "use the C button to reload the bullet     for the player_2, use '/' instead\n"
-				<< sf::Color::White << "press enter to continue                               press enter to continue";
+			text << sf::Color::White << "for the player_2, use '/' instead\n"
+				<< sf::Color::White << "press enter to continue";
+			text.setPosition(700, 100);
 			break;
 		case 7:
 			text << sf::Color::Cyan << "Step 4\n"
 				<< sf::Color::White << "use the spacebar to pause the game\n"
 				<< sf::Color::White << "press enter to continue";
+			text.setPosition(50, 50);
 			break;
 		}
 
 		text.setCharacterSize(30);
-		text.setPosition(50, 50);
 		return text;
 	}
 }
