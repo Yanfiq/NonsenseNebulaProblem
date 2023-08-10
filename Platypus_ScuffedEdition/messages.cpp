@@ -1,172 +1,167 @@
 #include "messages.h"
 
-sf::Font text::font;
-
-sfe::RichText text::bulletEmpty(int player) {
-	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
-	sfe::RichText text(font);
-
-	switch (player) {
-	case 1:
-	{
-		text << sf::Color::Black << "player_1's bullet is empty\n"
-			<< sf::Color::Black << "Press 'C' to reload the bullet";
-		text.setPosition(30, 560);
-		break;
-	}
-	case 2:
-	{
-		text << sf::Color::Black << "player_2's bullet is empty\n"
-			<< sf::Color::Black << "Press '/' to reload the bullet";
-		text.setPosition(700, 560);
-		break;
-	}
+namespace text {
+	void fontInitialization(std::string fontDir) {
+		font.loadFromFile(fontDir);
 	}
 
-	text.setCharacterSize(50);
+	sfe::RichText bulletEmpty(int player) {
+		font.loadFromFile("fonts/Poppins-SemiBold.ttf");
+		sfe::RichText text(font);
 
-	return text;
-}
+		switch (player) {
+		case 1:
+		{
+			text << sf::Color::White << "player_1's bullet is empty\n"
+				<< sf::Color::White << "Press 'C' to reload the bullet";
+			text.setPosition(30, 560);
+			break;
+		}
+		case 2:
+		{
+			text << sf::Color::White << "player_2's bullet is empty\n"
+				<< sf::Color::White << "Press '/' to reload the bullet";
+			text.setPosition(700, 560);
+			break;
+		}
+		}
 
-sfe::RichText text::lose() {
-	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
-	sfe::RichText text(font);
+		text.setCharacterSize(30);
 
-	text << sf::Color::Black << "YOU LOSE\nBETTER LUCK NEXT TIME"
-		<< sf::Color::Black << "\nPress 'R' to continue";
-
-	text.setCharacterSize(60);
-
-	return text;
-}
-
-sfe::RichText text::startLevel(int level) {
-	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
-	sfe::RichText text(font);
-
-	text << sf::Color::Black << "LEVEL " << sf::Color::Blue << std::to_string(level)
-		<< sf::Color::Black << "\nPress ENTER to continue";
-
-	text.setCharacterSize(60);
-	return text;
-}
-
-sfe::RichText text::score(float point) {
-	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
-	sfe::RichText text(font);
-
-	text << sf::Color::Black << "Score: " << sf::Color::Blue << std::to_string(point);
-
-	text.setCharacterSize(60);
-	return text;
-}
-
-sfe::RichText text::win() {
-	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
-	sfe::RichText text(font);
-
-	text << sf::Color::Black << "CONGRATULATION, YOU ARE THE WINNER\n"
-		<< sf::Color::Black << "Press 'R' to restart";
-
-	text.setCharacterSize(60);
-	return text;
-}
-
-sfe::RichText text::pauseText() {
-	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
-	sfe::RichText text(font);
-
-	text << sf::Color::Black << "PAUSED\n"
-		<< sf::Color::Black << "Press 'space' to back to the game";
-
-	text.setCharacterSize(60);
-	return text;
-}
-
-sfe::RichText text::startMenuChoice(int choice) {
-	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
-	sfe::RichText text(font);
-	switch (choice) {
-	case 0:
-	{
-		text << sf::Color::Blue << "START\n"
-			<< sf::Color::Black << "HELP\n"
-			<< sf::Color::Black << "EXIT";
-		break;
-	}
-	case 1:
-	{
-		text << sf::Color::Black << "START\n"
-			<< sf::Color::Blue << "HELP\n"
-			<< sf::Color::Black << "EXIT";
-		break;
-	}
-	case 2:
-	{
-		text << sf::Color::Black << "START\n"
-			<< sf::Color::Black << "HELP\n"
-			<< sf::Color::Blue << "EXIT";
-		break;
-	}
-	}
-	text.setCharacterSize(100);
-	text.setPosition(100, 100);
-		
-	return text;
-}
-
-sfe::RichText text::singleMultiChoice(int choice) {
-	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
-	sfe::RichText text(font);
-	switch (choice) {
-	case 0:
-	{
-		text << sf::Color::Blue << "Singleplayer\n"
-			<< sf::Color::Black << "Multiplayer";
-		break;
-	}
-	case 1:
-	{
-		text << sf::Color::Black << "Singleplayer\n"
-			<< sf::Color::Blue << "Multiplayer";
-		break;
-	}
-	}
-	text.setCharacterSize(100);
-	text.setPosition(100, 100);
-
-	return text;
-}
-
-sfe::RichText text::tutorialStep(int step) {
-	font.loadFromFile("fonts/Poppins-SemiBold.ttf");
-
-	sfe::RichText text(font);
-	switch (step)
-	{
-	case 1:
-		text << sf::Color::Blue << "Step 1\n"
-			<< sf::Color::Black << "use the Z button to counter gravity\n"
-			<< sf::Color::Black << "press enter to continue";
-		break;
-	case 2:
-		text << sf::Color::Blue << "Step 2\n"
-			<< sf::Color::Black << "use the X button to fire the shot\n"
-			<< sf::Color::Black << "press enter to continue";
-		break;
-	case 3:
-		text << sf::Color::Blue << "Step 3\n"
-			<< sf::Color::Black << "use the C button to reload the bullet\n"
-			<< sf::Color::Black << "press enter to continue";
-		break;
-	case 4:
-		text << sf::Color::Blue << "Step 4\n"
-			<< sf::Color::Black << "use the spacebar to pause the game\n"
-			<< sf::Color::Black << "press enter to continue";
-		break;
+		return text;
 	}
 
-	text.setCharacterSize(30);
-	text.setPosition(50, 50);
-	return text;
+	sfe::RichText lose() {
+		sfe::RichText text(font);
+
+		text << sf::Color::White << "YOU LOSE\nBETTER LUCK NEXT TIME"
+			<< sf::Color::White << "\nPress 'R' to continue";
+
+		text.setCharacterSize(60);
+
+		return text;
+	}
+
+	sfe::RichText startLevel(int level) {
+		sfe::RichText text(font);
+
+		text << sf::Color::White << "LEVEL " << sf::Color::Cyan << std::to_string(level)
+			<< sf::Color::White << "\nPress ENTER to continue";
+
+		text.setCharacterSize(60);
+		return text;
+	}
+
+	sfe::RichText score(float point) {
+		sfe::RichText text(font);
+
+		text << sf::Color::White << "Score: " << sf::Color::Cyan << std::to_string(point);
+
+		text.setCharacterSize(60);
+		return text;
+	}
+
+	sfe::RichText win() {
+		sfe::RichText text(font);
+
+		text << sf::Color::White << "CONGRATULATION, YOU ARE THE WINNER\n"
+			<< sf::Color::White << "Press 'R' to restart";
+
+		text.setCharacterSize(60);
+		return text;
+	}
+
+	sfe::RichText pauseText() {
+		sfe::RichText text(font);
+
+		text << sf::Color::White << "PAUSED\n"
+			<< sf::Color::White << "Press 'space' to back to the game";
+
+		text.setCharacterSize(60);
+		return text;
+	}
+
+	sfe::RichText startMenuChoice(int choice) {
+		sfe::RichText text(font);
+		switch (choice) {
+		case 0:
+		{
+			text << sf::Color::Cyan << "START\n"
+				<< sf::Color::White << "HELP\n"
+				<< sf::Color::White << "EXIT";
+			break;
+		}
+		case 1:
+		{
+			text << sf::Color::White << "START\n"
+				<< sf::Color::Cyan << "HELP\n"
+				<< sf::Color::White << "EXIT";
+			break;
+		}
+		case 2:
+		{
+			text << sf::Color::White << "START\n"
+				<< sf::Color::White << "HELP\n"
+				<< sf::Color::Cyan << "EXIT";
+			break;
+		}
+		}
+		text.setCharacterSize(100);
+		text.setPosition(100, 100);
+
+		return text;
+	}
+
+	sfe::RichText singleMultiChoice(int choice) {
+		sfe::RichText text(font);
+		switch (choice) {
+		case 0:
+		{
+			text << sf::Color::Cyan << "Singleplayer\n"
+				<< sf::Color::White << "Multiplayer";
+			break;
+		}
+		case 1:
+		{
+			text << sf::Color::White << "Singleplayer\n"
+				<< sf::Color::Cyan << "Multiplayer";
+			break;
+		}
+		}
+		text.setCharacterSize(100);
+		text.setPosition(100, 100);
+
+		return text;
+	}
+
+	sfe::RichText text::tutorialStep(int step) {
+		sfe::RichText text(font);
+		switch (step)
+		{
+		case 1:
+			text << sf::Color::Cyan << "Step 1\n"
+				<< sf::Color::White << "use the Z button to counter gravity\n"
+				<< sf::Color::White << "press enter to continue";
+			break;
+		case 2:
+			text << sf::Color::Cyan << "Step 2\n"
+				<< sf::Color::White << "use the X button to fire the shot\n"
+				<< sf::Color::White << "press enter to continue";
+			break;
+		case 3:
+			text << sf::Color::Cyan << "Step 3\n"
+				<< sf::Color::White << "use the C button to reload the bullet\n"
+				<< sf::Color::White << "press enter to continue";
+			break;
+		case 4:
+			text << sf::Color::Cyan << "Step 4\n"
+				<< sf::Color::White << "use the spacebar to pause the game\n"
+				<< sf::Color::White << "press enter to continue";
+			break;
+		}
+
+		text.setCharacterSize(30);
+		text.setPosition(50, 50);
+		return text;
+	}
 }

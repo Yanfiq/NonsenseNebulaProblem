@@ -22,6 +22,7 @@ int main() {
 	player::initializeTexture("images/player.png");
 	bullet::initializeTexture("images/bullet.png");
 	enemy::initializeTexture("images/enemy.png");
+	text::fontInitialization("fonts/Poppins-SemiBold.ttf");
  
 	// enumeration for scene changes
 	enum part { start, tutorial, transition, singleMulti, play, pause };
@@ -200,7 +201,7 @@ int main() {
 				break;
 			}
 		}
-
+		window.draw(background);
 		//outside pollEvent
 		switch (scene) {
 		case start:
@@ -255,14 +256,12 @@ int main() {
 
 		case pause:
 		{
-			window.draw(background);
 			window.draw(text::pauseText());
 			break;
 		}
 
 		case play:
 		{
-			window.draw(background);
 			if (player::getObjectPtr(101) != NULL) {
 				player* player_1 = player::getObjectPtr(101);
 				if (gas_1)
