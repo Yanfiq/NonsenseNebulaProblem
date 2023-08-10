@@ -4,7 +4,7 @@ std::unordered_map<int, player*> player::player_map;
 int player::bullet_count = 1;
 
 
-player::player(float _positionX, float _positionY, float _velocityX, float _velocityY, float _width, float _height, float _gravity) : object(_positionX, _positionY, _velocityX, _velocityY, _width, _height, _gravity) {
+player::player(int id, float _positionX, float _positionY, float _velocityX, float _velocityY, float _width, float _height, float _gravity) : object(_positionX, _positionY, _velocityX, _velocityY, _width, _height, _gravity) {
 	positionX = _positionX;
 	positionY = _positionY;
 	velocityX = _velocityX;
@@ -15,10 +15,7 @@ player::player(float _positionX, float _positionY, float _velocityX, float _velo
 	object_sprite.setSize(sf::Vector2f(width, height));
 	object_sprite.setFillColor(sf::Color(0, 0, 0, 255));
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
-	static int num = 1;
-	player_map[player_obj + num++] = this;
-	if (num == 3)
-		num = 1;
+	player_map[player_obj + id] = this;
 }
 
 player* player::getObjectPtr(int id) {

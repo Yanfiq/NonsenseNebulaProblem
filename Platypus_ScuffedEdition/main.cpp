@@ -15,6 +15,13 @@ int main() {
  
 	// enumeration for scene changes
 	enum part { start, tutorial, transition, singleMulti, play, pause };
+	// enumeration for objectType
+	enum objectType {
+		player_obj = 100,
+		playerBullet_obj = 200,
+		enemy_obj = 300,
+		enemyBullet_obj = 400
+	};
 
 	// variables that'll be used inside the main game
 	bool gas_1 = false;				// decides when the player object will reduce its velocityY value
@@ -29,15 +36,6 @@ int main() {
 	int scene = start;				// decide what scene is being run
 	int choice = 0;					// variables that will later change the scene in the start menu
 	int stepTutorial = 1;			// saves the tutorial step that is being described
-
-	bool multi = false;
-
-	enum objectType {
-		player_obj = 100,
-		playerBullet_obj = 200,
-		enemy_obj = 300,
-		enemyBullet_obj = 400
-	};
 
 	// main game loop
 	while (window.isOpen()) {
@@ -79,6 +77,7 @@ int main() {
 					if (event.key.code == sf::Keyboard::Enter) {
 						stepTutorial++;
 					}
+					break;
 				}
 				case singleMulti:
 				{
@@ -94,17 +93,15 @@ int main() {
 					}
 					if (event.key.code == sf::Keyboard::Enter) {
 						if (choice == 0) {
-							player* Player = new player(100, 100, 0, 0, 60, 29, 0.0002f);
+							player* Player = new player(1, 100, 100, 0, 0, 60, 29, 0.0002f);
 							Player->setPlayerHp(100);
 						}
 						if (choice == 1) {
-							player* Player_1 = new player(100, 100, 0, 0, 60, 29, 0.0002f);
+							player* Player_1 = new player(1, 100, 100, 0, 0, 60, 29, 0.0002f);
 							Player_1->setPlayerHp(100);
 
-							player* Player_2 = new player(100, 100, 0, 0, 60, 29, 0.0002f);
+							player* Player_2 = new player(2, 100, 100, 0, 0, 60, 29, 0.0002f);
 							Player_2->setPlayerHp(100);
-
-							multi = true;
 						}
 						scene = transition;
 						choice = 0;
@@ -124,13 +121,13 @@ int main() {
 						}
 					}
 
-					if (multi && event.key.code == sf::Keyboard::Comma) {
+					if (event.key.code == sf::Keyboard::Comma) {
 						gas_2 = true;
 					}
-					if (multi && event.key.code == sf::Keyboard::Period) {
+					if (event.key.code == sf::Keyboard::Period) {
 						shoot_2 = true;
 					}
-					if (multi && event.key.code == sf::Keyboard::Slash) {
+					if (event.key.code == sf::Keyboard::Slash) {
 						if (player::getObjectPtr(player_obj + 2)->getBulletCount() >= 60) {
 							player::getObjectPtr(player_obj + 2)->resetBulletCount();
 						}
@@ -175,15 +172,16 @@ int main() {
 				switch (scene) {
 				case play:
 				{
-					if (event.key.code == sf::Keyboard::Z)
+					if (event.key.code == sf::Keyboard::Z) {
 						gas_1 = false;
-					if (event.key.code == sf::Keyboard::X)
+					}
+					if (event.key.code == sf::Keyboard::X) {
 						shoot_1 = false;
-
-					if (multi && event.key.code == sf::Keyboard::Comma) {
+					}
+					if (event.key.code == sf::Keyboard::Comma) {
 						gas_2 = false;
 					}
-					if (multi && event.key.code == sf::Keyboard::Period) {
+					if (event.key.code == sf::Keyboard::Period) {
 						shoot_2 = false;
 					}
 					break;
@@ -281,24 +279,22 @@ int main() {
 				switch (level) {
 				case 1:
 				{
-					for (int i = 1; i < getRandomInteger(2, 4); i++) {
-						enemy* Enemy = new enemy(i, getRandomInteger(400, 1280), getRandomInteger(0, 720), getRandomFloat(-0.3, 0.3), getRandomFloat(0.1, 0.3), 60, 29, 0.0f);
+					for (int i = 1; i < getRandomFloat(2, 4); i++) {
+						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.3, 0.3), getRandomFloat(0.1, 0.3), 60, 29, 0.0f);
 					}
 					break;
 				}
 				case 2:
 				{
-					for (int i = 1; i < getRandomInteger(4, 7); i++) {
-						std::string id = "enemy_" + std::to_string(i);
-						enemy* Enemy = new enemy(i, getRandomInteger(400, 1280), getRandomInteger(0, 720), getRandomFloat(-0.6, 0.6), getRandomFloat(-0.6, 0.6), 60, 29, 0.0f);
+					for (int i = 1; i < getRandomFloat(4, 7); i++) {
+						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.6, 0.6), getRandomFloat(-0.6, 0.6), 60, 29, 0.0f);
 					}
 					break;
 				}
 				case 3:
 				{
-					for (int i = 1; i < getRandomInteger(7, 11); i++) {
-						std::string id = "enemy_" + std::to_string(i);
-						enemy* Enemy = new enemy(i, getRandomInteger(400, 1280), getRandomInteger(0, 720), getRandomFloat(-0.9, 0.9), getRandomFloat(-0.9, 0.9), 60, 29, 0.0f);
+					for (int i = 1; i < getRandomFloat(7, 11); i++) {
+						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.9, 0.9), getRandomFloat(-0.9, 0.9), 60, 29, 0.0f);
 					}
 					break;
 				}
@@ -323,42 +319,12 @@ int main() {
 					if ((Enemy->getPositionY() < Player->getPositionY() + 5) &&
 						(Enemy->getPositionY() > Player->getPositionY() - 5)) {
 						Enemy->shoot();
-						std::cout << player_object->first << " will get shot by " << enemy_object->first << std::endl;
 					}
 				}
 			}
 
 			//collision detection and object removal
-			std::unordered_map<int, int> objectCollide = getCollisionData();
-
-			//object removal
-			for (const auto& it : objectCollide) {
-				if ((it.first - playerBullet_obj < 100 && it.first - playerBullet_obj > 0) || 
-					(it.first - enemyBullet_obj  < 100 && it.first - enemyBullet_obj > 0)) {
-					bullet::deleteObject(it.first);
-				}
-				else if (it.first - enemy_obj < 100 && it.first - enemy_obj > 0){
-					enemy* Enemy = enemy::getObjectPtr(it.first);
-					bullet* Bullet = bullet::getObjectPtr(it.second);
-					Enemy->reduceHp(Bullet->getDamageValue());
-					currentPoint += Bullet->getDamageValue();
-					if (Enemy->getHp() <= 0)
-						enemy::deleteObject(it.first);
-					bullet::deleteObject(it.second);
-				}
-				else if (it.first - player_obj < 100 && it.first - player_obj > 0) {
-					player* Player = player::getObjectPtr(it.first);
-					bullet* Bullet = bullet::getObjectPtr(it.second);
-					Player->reducePlayerHp(Bullet->getDamageValue());
-					currentPoint -= Bullet->getDamageValue();
-					if (Player->getPlayerHp() <= 0) {
-						player::deleteObject(it.first);
-						std::cout << it.first << " get deleted\n";
-					}
-					bullet::deleteObject(it.second);
-				}
-			}
-			objectCollide.clear();
+			currentPoint += processCollision();
 
 			if (player::getPlayerMap()->empty()) {
 				level = -1;

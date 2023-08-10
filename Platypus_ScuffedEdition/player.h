@@ -1,6 +1,4 @@
 #pragma once
-#include <iostream>
-
 #include "objects.h"
 #include "bullet.h"
 
@@ -11,7 +9,7 @@ protected:
 	float hp = 100;
 
 public:
-	player(float _positionX, float _positionY, float _velocityX, float _velocityY, float _width, float _height, float _gravity);
+	player(int id, float _positionX, float _positionY, float _velocityX, float _velocityY, float _width, float _height, float _gravity);
 	static player* getObjectPtr(int id);
 	void shoot();
 	void resetBulletCount();

@@ -16,4 +16,4 @@ enum objectType {
 
 float getRandomFloat(float min, float max);
 int getRandomInteger(int min, int max);
-std::unordered_map<int, int> getCollisionData();
+int processCollision();

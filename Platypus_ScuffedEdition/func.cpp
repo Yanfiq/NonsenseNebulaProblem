@@ -23,17 +23,17 @@ int getRandomInteger(int min, int max) {
     return dist(rng);
 }
 
-std::unordered_map<int, int> getCollisionData() {
+int processCollision() {
 	//collision detection and object removal
 	std::unordered_map<int, bullet*>* bulletMap = bullet::getBulletMap();
 	std::unordered_map<int, enemy*>* enemyMap = enemy::getEnemyMap();
 	std::unordered_map<int, player*>* playerMap = player::getPlayerMap();
 
-	//      something...collided with...something
+	//  something...collided with...something
 	std::unordered_map<int, int> collideObject;
 	for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end(); bullet_object++) {
 		//bullets from the player
-		if (bullet_object->second != NULL && bullet_object->second->getVelocityX() > 0) {
+		if ((bullet_object->second != NULL) && (bullet_object->second->getVelocityX() > 0)) {
 			for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
 
 				//collision happens between enemy and bullet
@@ -67,5 +67,34 @@ std::unordered_map<int, int> getCollisionData() {
 			}
 		}
 	}
-	return collideObject;
+	
+	int points = 0;
+	for (const auto& it : collideObject) {
+		if ((it.first - playerBullet_obj < 100 && it.first - playerBullet_obj > 0) ||
+			(it.first - enemyBullet_obj < 100 && it.first - enemyBullet_obj > 0)) {
+			bullet::deleteObject(it.first);
+		}
+		else if ((bullet::getObjectPtr(it.second) != NULL) &&
+			(it.first - enemy_obj < 100 && it.first - enemy_obj > 0)) {
+			enemy* Enemy = enemy::getObjectPtr(it.first);
+			bullet* Bullet = bullet::getObjectPtr(it.second);
+			Enemy->reduceHp(Bullet->getDamageValue());
+			points += Bullet->getDamageValue();
+			if (Enemy->getHp() <= 0)
+				enemy::deleteObject(it.first);
+			bullet::deleteObject(it.second);
+		}
+		else if ((bullet::getObjectPtr(it.second) != NULL) &&
+			(it.first - player_obj < 100 && it.first - player_obj > 0)) {
+			player* Player = player::getObjectPtr(it.first);
+			bullet* Bullet = bullet::getObjectPtr(it.second);
+			Player->reducePlayerHp(Bullet->getDamageValue());
+			points -= Bullet->getDamageValue();
+			if (Player->getPlayerHp() <= 0) {
+				player::deleteObject(it.first);
+			}
+			bullet::deleteObject(it.second);
+		}
+	}
+	return points;
 }
