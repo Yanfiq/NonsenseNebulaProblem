@@ -1,11 +1,10 @@
 #include "objects.h"
 
-object::object(float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity) {
+object::object(float _positionX, float _positionY, float _velocityX, float _velocityY) {
 	positionX = _positionX; 
 	positionY = _positionY; 
 	velocityX = _velocityX;
 	velocityY = _velocityY;
-	gravity = _gravity;
 }
 
 sf::RectangleShape* object::getSprite() {
@@ -42,18 +41,6 @@ float object::getVelocityY() {
 void object::update(double time) {
 	positionX += velocityX * time;
 	positionY += velocityY * time;
-	if (velocityY <= maxY)
-	{
-		velocityY += gravity * time;
-	}
-	//if (velocityX > 0)
-	//	velocityX -= 0.002;
-	//if (velocityX < 0)
-	//	velocityX += 0.002;
-	//if (velocityY > 0)
-	//	velocityY -= 0.002;
-	//if (velocityY < 0)
-	//	velocityY += 0.002;
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 }
 
