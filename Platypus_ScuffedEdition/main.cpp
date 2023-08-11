@@ -46,7 +46,7 @@ int main() {
 	// variables that'll be used in the start menu
 	int scene = start;				// decide what scene is being run
 	int choice = 0;					// variables that will later change the scene in the start menu
-	int stepTutorial = 1;			// saves the tutorial step that is being described
+	int stepTutorial = 1;
 
 	// main game loop
 	while (window.isOpen()) {
@@ -85,8 +85,8 @@ int main() {
 				}
 				case tutorial:
 				{
-					if (event.key.code == sf::Keyboard::Enter) {
-						stepTutorial++;
+					if (event.key.code == sf::Keyboard::Enter && stepTutorial <= 9) {
+						stepTutorial += 2;
 					}
 					break;
 				}
@@ -225,14 +225,18 @@ int main() {
 
 		case tutorial:
 		{
-			window.draw(img::keybLeft());
-			window.draw(text::tutorialStep(stepTutorial));
-			if (stepTutorial % 2 == 0) {
+			if (stepTutorial < 9) {
+				window.draw(img::keybLeft());
 				window.draw(img::keybRight());
-				window.draw(text::tutorialStep(stepTutorial - 1));
+				window.draw(text::tutorialStep(stepTutorial));
+				window.draw(text::tutorialStep(stepTutorial + 1));
 			}
 
-			if (stepTutorial == 7)
+			if (stepTutorial == 9) {
+				window.draw(img::spacebar());
+				window.draw(text::tutorialStep(stepTutorial));
+			}
+			if (stepTutorial > 10)
 			{
 				scene = start;
 				stepTutorial = 1;

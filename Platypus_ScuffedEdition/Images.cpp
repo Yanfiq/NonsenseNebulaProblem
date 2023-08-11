@@ -3,8 +3,9 @@
 namespace img {
 	void initializeTexture() {
 		backgroundTexture.loadFromFile("images/nebula.jpg");
-		keyboardLeft.loadFromFile("images/leftKeyb.jpg");
-		keyboardRight.loadFromFile("images/rightKeyb.jpg");
+		keyboardLeft.loadFromFile("images/wasd.jpg");
+		keyboardRight.loadFromFile("images/updownleftright.jpg");
+		spacebarKey.loadFromFile("images/spacebar.jpg");
 	}
 
 	sf::RectangleShape background() {
@@ -27,6 +28,14 @@ namespace img {
 		shape.setPosition(700, 300);
 		shape.setSize(sf::Vector2f(keyboardRight.getSize()));
 		shape.setTexture(&keyboardRight);
+		return shape;
+	}
+
+	sf::RectangleShape spacebar() {
+		sf::RectangleShape shape;
+		shape.setPosition(390, 300);
+		shape.setSize(sf::Vector2f(spacebarKey.getSize()));
+		shape.setTexture(&spacebarKey);
 		return shape;
 	}
 }

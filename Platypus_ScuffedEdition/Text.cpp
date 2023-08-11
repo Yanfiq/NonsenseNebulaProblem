@@ -1,4 +1,4 @@
-#include "Text.h"
+﻿#include "Text.h"
 
 namespace text {
 	void fontInitialization(std::string fontDir) {
@@ -158,42 +158,53 @@ namespace text {
 		{
 		case 1:
 			text << sf::Color::Cyan << "Step 1\n"
-				<< sf::Color::White << "use the 'Z' button to counter gravity\n"
+				<< sf::Color::White << "use 'W' button to go up\n"
 				<< sf::Color::White << "press enter to continue";
 			text.setPosition(100, 100);
 			break;
 		case 2:
-			text << sf::Color::White << "for the player_2, use ',' instead\n"
+			text << sf::Color::White << "for the player_2, use 'Up' instead\n"
 				<< sf::Color::White << "press enter to continue";
 			text.setPosition(700, 150);
 			break;
 		case 3:
 			text << sf::Color::Cyan << "Step 2\n"
-				<< sf::Color::White << "use the 'X' button to fire the shot\n"
+				<< sf::Color::White << "use 'S' button to go down\n"
 				<< sf::Color::White << "press enter to continue";
 			text.setPosition(100, 100);
 			break;
 		case 4:
-			text << sf::Color::White << "for the player_2, use '.' instead\n"
+			text << sf::Color::White << "for the player_2, use 'Down' instead\n"
 				<< sf::Color::White << "press enter to continue";
 			text.setPosition(700, 150);
 			break;
 		case 5:
 			text << sf::Color::Cyan << "Step 3\n"
-				<< sf::Color::White << "use the 'C' button to reload the bullet\n"
+				<< sf::Color::White << "use 'D' button to fire the bullet\n"
 				<< sf::Color::White << "press enter to continue";
 			text.setPosition(100, 100);
 			break;
 		case 6:
-			text << sf::Color::White << "for the player_2, use '/' instead\n"
+			text << sf::Color::White << "for the player_2, use 'Right' instead\n"
 				<< sf::Color::White << "press enter to continue";
 			text.setPosition(700, 150);
 			break;
 		case 7:
 			text << sf::Color::Cyan << "Step 4\n"
-				<< sf::Color::White << "use the spacebar to pause the game\n"
+				<< sf::Color::White << "use 'A' button to reload the bullet\n"
 				<< sf::Color::White << "press enter to continue";
 			text.setPosition(100, 100);
+			break;
+		case 8:
+			text << sf::Color::White << "for the player_2, use 'Left' instead\n"
+				<< sf::Color::White << "press enter to continue";
+			text.setPosition(700, 150);
+			break;
+		case 9:
+			text << sf::Color::Cyan << "Step 5\n"
+				<< sf::Color::White << "use spacebar to pause the game\n"
+				<< sf::Color::White << "press enter to continue";
+			text.setPosition(400, 100);
 			break;
 		}
 
