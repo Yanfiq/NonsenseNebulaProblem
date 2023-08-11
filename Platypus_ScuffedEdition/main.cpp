@@ -33,8 +33,10 @@ int main() {
 	};
 
 	// variables that'll be used inside the main game
-	bool gas_1 = false;				// decides when the player object will reduce its velocityY value
-	bool gas_2 = false;
+	bool up_1 = false;				// decides when the player object will reduce its velocityY value
+	bool down_1 = false;
+	bool up_2 = false;
+	bool down_2 = false;
 	bool shoot_1 = false;			// decides when the player object will execute the shoot() function
 	bool shoot_2 = false;
 	int level = 0;					// as the name implies, to differentiate levels
@@ -102,14 +104,14 @@ int main() {
 					}
 					if (event.key.code == sf::Keyboard::Enter) {
 						if (choice == 0) {
-							player* Player = new player(1, 100, 100, 0, 0, 0.0002f);
+							player* Player = new player(1, 100, 100, 0, 0);
 							Player->setPlayerHp(100);
 						}
 						if (choice == 1) {
-							player* Player_1 = new player(1, 100, 100, 0, 0, 0.0002f);
+							player* Player_1 = new player(1, 100, 100, 0, 0);
 							Player_1->setPlayerHp(100);
 
-							player* Player_2 = new player(2, 100, 300, 0, 0, 0.0002f);
+							player* Player_2 = new player(2, 100, 300, 0, 0);
 							Player_2->setPlayerHp(100);
 						}
 						scene = transition;
@@ -118,25 +120,31 @@ int main() {
 				}
 				case play:
 				{
-					if (event.key.code == sf::Keyboard::Z) {
-						gas_1 = true;
+					if (event.key.code == sf::Keyboard::W) {
+						up_1 = true;
 					}
-					if (event.key.code == sf::Keyboard::X) {
+					if (event.key.code == sf::Keyboard::S) {
+						down_1 = true;
+					}
+					if (event.key.code == sf::Keyboard::D) {
 						shoot_1 = true;
 					}
-					if (event.key.code == sf::Keyboard::C) {
+					if (event.key.code == sf::Keyboard::A) {
 						if (player::getObjectPtr(player_obj + 1)->getBulletCount() >= 30) {
 							player::getObjectPtr(player_obj + 1)->resetBulletCount();
 						}
 					}
 
-					if (event.key.code == sf::Keyboard::Comma) {
-						gas_2 = true;
+					if (event.key.code == sf::Keyboard::Up) {
+						up_2 = true;
 					}
-					if (event.key.code == sf::Keyboard::Period) {
+					if (event.key.code == sf::Keyboard::Down) {
+						down_2 = true;
+					}
+					if (event.key.code == sf::Keyboard::Right) {
 						shoot_2 = true;
 					}
-					if (event.key.code == sf::Keyboard::Slash) {
+					if (event.key.code == sf::Keyboard::Left) {
 						if (player::getObjectPtr(player_obj + 2)->getBulletCount() >= 30) {
 							player::getObjectPtr(player_obj + 2)->resetBulletCount();
 						}
@@ -160,13 +168,13 @@ int main() {
 				{
 					if (event.key.code == sf::Keyboard::Enter && level != -1) {
 						level++;
-						generateEnemy = true; shoot_1 = false; shoot_2 = false; gas_1 = false; gas_2 = false;
+						generateEnemy = true; shoot_1 = false; shoot_2 = false; up_1 = false; up_2 = false; down_1 = false; down_2 = false;
 						scene = play;
 						//Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
 						//Player->setPlayerHp(100);		Player->resetBulletCount();
 					}
 					if (event.key.code == sf::Keyboard::R && (level == -1 || level == 3)) {
-						level = 0; shoot_1 = false; shoot_2 = false; gas_1 = false; gas_2 = false;
+						level = 0; shoot_1 = false; shoot_2 = false; up_1 = false; up_2 = false; down_1 = false; down_2 = false;
 						//Player->setPosition(100, 100);	Player->setVelocity(0.0f, 0.0f);
 						//Player->setPlayerHp(100);		Player->resetBulletCount();
 						currentPoint = 0;
@@ -181,16 +189,22 @@ int main() {
 				switch (scene) {
 				case play:
 				{
-					if (event.key.code == sf::Keyboard::Z) {
-						gas_1 = false;
+					if (event.key.code == sf::Keyboard::W) {
+						up_1 = false;
 					}
-					if (event.key.code == sf::Keyboard::X) {
+					if (event.key.code == sf::Keyboard::S) {
+						down_1 = false;
+					}
+					if (event.key.code == sf::Keyboard::D) {
 						shoot_1 = false;
 					}
-					if (event.key.code == sf::Keyboard::Comma) {
-						gas_2 = false;
+					if (event.key.code == sf::Keyboard::Up) {
+						up_2 = false;
 					}
-					if (event.key.code == sf::Keyboard::Period) {
+					if (event.key.code == sf::Keyboard::Down) {
+						down_2 = false;
+					}
+					if (event.key.code == sf::Keyboard::Right) {
 						shoot_2 = false;
 					}
 					break;
@@ -261,8 +275,10 @@ int main() {
 		{
 			if (player::getObjectPtr(101) != NULL) {
 				player* player_1 = player::getObjectPtr(101);
-				if (gas_1)
-					player_1->thrust();
+				if (up_1)
+					player_1->thrustUp();
+				if (down_1)
+					player_1->thrustDown();
 				if (shoot_1 && player_1->getBulletCount() <= 30)
 					player_1->shoot();
 				if (player_1->getBulletCount() >= 30)
@@ -271,8 +287,10 @@ int main() {
 
 			if (player::getObjectPtr(102) != NULL) {
 				player* player_2 = player::getObjectPtr(102);
-				if (gas_2)
-					player_2->thrust();
+				if (up_2)
+					player_2->thrustUp();
+				if (down_2)
+					player_2->thrustDown();
 				if (shoot_2 && player_2->getBulletCount() <= 30)
 					player_2->shoot();
 				if (player_2->getBulletCount() >= 30)
@@ -293,21 +311,21 @@ int main() {
 				case 1:
 				{
 					for (int i = 1; i < getRandomInteger(2, 4); i++) {
-						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.3, 0.3), getRandomFloat(0.1, 0.3), 0.0f);
+						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.3, 0.3), getRandomFloat(0.1, 0.3));
 					}
 					break;
 				}
 				case 2:
 				{
 					for (int i = 1; i < getRandomInteger(4, 7); i++) {
-						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.6, 0.6), getRandomFloat(-0.6, 0.6), 0.0f);
+						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.6, 0.6), getRandomFloat(-0.6, 0.6));
 					}
 					break;
 				}
 				case 3:
 				{
 					for (int i = 1; i < getRandomInteger(7, 11); i++) {
-						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.9, 0.9), getRandomFloat(-0.9, 0.9), 0.0f);
+						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.9, 0.9), getRandomFloat(-0.9, 0.9));
 					}
 					break;
 				}
