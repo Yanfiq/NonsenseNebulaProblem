@@ -12,16 +12,14 @@ namespace text {
 		switch (player) {
 		case 1:
 		{
-			text << sf::Color::White << "player_1's bullet is empty\n"
-				<< sf::Color::White << "Press 'C' to reload the bullet";
-			text.setPosition(30, 560);
+			text << sf::Color::White << "player_1's bullet is empty";
+			text.setPosition(30, 650);
 			break;
 		}
 		case 2:
 		{
-			text << sf::Color::White << "player_2's bullet is empty\n"
-				<< sf::Color::White << "Press '/' to reload the bullet";
-			text.setPosition(700, 560);
+			text << sf::Color::White << "player_2's bullet is empty";
+			text.setPosition(850, 650);
 			break;
 		}
 		}
@@ -46,10 +44,10 @@ namespace text {
 		sfe::RichText text(font);
 
 		text << sf::Color::White << "YOU LOSE\nBETTER LUCK NEXT TIME"
-			<< sf::Color::White << "\nPress 'R' to back to main menu";
+			<< sf::Color::White << "\n\n\n\n\n\n\nPress 'R' to back to main menu";
 
 		text.setPosition(100, 100);
-		text.setCharacterSize(60);
+		text.setCharacterSize(40);
 
 		return text;
 	}
@@ -57,10 +55,10 @@ namespace text {
 	sfe::RichText startLevel(int level) {
 		sfe::RichText text(font);
 
-		text << sf::Color::White << "LEVEL " << sf::Color::Cyan << std::to_string(level)
-			<< sf::Color::White << "\nPress ENTER to continue";
+		text << sf::Color::White << "LEVEL    " << sf::Color::Cyan << std::to_string(level)
+			<< sf::Color::White << "\n\n\n\n\n\n\n\nPress ENTER to continue";
 
-		text.setCharacterSize(50);
+		text.setCharacterSize(40);
 		text.setPosition(100, 100);
 		return text;
 	}
@@ -159,51 +157,47 @@ namespace text {
 		case 1:
 			text << sf::Color::Cyan << "Step 1\n"
 				<< sf::Color::White << "use 'W' button to go up\n"
-				<< sf::Color::White << "press enter to continue";
+				<< sf::Color::White << "\n\n\n\n\n\n\n\n\npress enter to continue";
 			text.setPosition(100, 100);
 			break;
 		case 2:
-			text << sf::Color::White << "for the player_2, use 'Up' instead\n"
-				<< sf::Color::White << "press enter to continue";
+			text << sf::Color::White << "for the player_2, use 'Up' instead\n";
 			text.setPosition(700, 150);
 			break;
 		case 3:
 			text << sf::Color::Cyan << "Step 2\n"
 				<< sf::Color::White << "use 'S' button to go down\n"
-				<< sf::Color::White << "press enter to continue";
+				<< sf::Color::White << "\n\n\n\n\n\n\n\n\npress enter to continue";
 			text.setPosition(100, 100);
 			break;
 		case 4:
-			text << sf::Color::White << "for the player_2, use 'Down' instead\n"
-				<< sf::Color::White << "press enter to continue";
+			text << sf::Color::White << "for the player_2, use 'Down' instead\n";
 			text.setPosition(700, 150);
 			break;
 		case 5:
 			text << sf::Color::Cyan << "Step 3\n"
 				<< sf::Color::White << "use 'D' button to fire the bullet\n"
-				<< sf::Color::White << "press enter to continue";
+				<< sf::Color::White << "\n\n\n\n\n\n\n\n\npress enter to continue";
 			text.setPosition(100, 100);
 			break;
 		case 6:
-			text << sf::Color::White << "for the player_2, use 'Right' instead\n"
-				<< sf::Color::White << "press enter to continue";
+			text << sf::Color::White << "for the player_2, use 'Right' instead\n";
 			text.setPosition(700, 150);
 			break;
 		case 7:
 			text << sf::Color::Cyan << "Step 4\n"
 				<< sf::Color::White << "use 'A' button to reload the bullet\n"
-				<< sf::Color::White << "press enter to continue";
+				<< sf::Color::White << "\n\n\n\n\n\n\n\n\npress enter to continue";
 			text.setPosition(100, 100);
 			break;
 		case 8:
-			text << sf::Color::White << "for the player_2, use 'Left' instead\n"
-				<< sf::Color::White << "press enter to continue";
+			text << sf::Color::White << "for the player_2, use 'Left' instead\n";
 			text.setPosition(700, 150);
 			break;
 		case 9:
 			text << sf::Color::Cyan << "Step 5\n"
 				<< sf::Color::White << "use spacebar to pause the game\n"
-				<< sf::Color::White << "press enter to continue";
+				<< sf::Color::White << "\n\n\n\n\n\n\n\n\npress enter to continue";
 			text.setPosition(400, 100);
 			break;
 		}
