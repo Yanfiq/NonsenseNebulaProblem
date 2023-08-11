@@ -11,15 +11,17 @@ protected:
 	float hp = 100;
 
 public:
-	player(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity);
+	player(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY);
 	static player* getObjectPtr(int id);
 	void shoot();
 	void resetBulletCount();
 	int getBulletCount();
-	void thrust();
+	void thrustUp();
+	void thrustDown();
 	float getPlayerHp() const;
 	void setPlayerHp(float _hp);
 	void reducePlayerHp(float damage);
+	void update(double time) override;
 	
 	static void deleteObject(int id);
 	static void clearObject();

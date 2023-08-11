@@ -5,7 +5,7 @@ int player::allBullet = 1;
 sf::Texture player::texture;
 
 
-player::player(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity) : object(_positionX, _positionY, _velocityX, _velocityY, _gravity) {
+player::player(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY) {
 	object_sprite.setTexture(&texture);
 	object_sprite.setSize(sf::Vector2f(texture.getSize()));
 	object_sprite.setOrigin(sf::Vector2f(texture.getSize().x / 2, texture.getSize().y / 2));
@@ -26,7 +26,7 @@ player* player::getObjectPtr(int id) {
 }
 
 void player::shoot() {
-	bullet* Bullet = new bullet(allBullet++, positionX, positionY, 0.5, 0, 0);
+	bullet* Bullet = new bullet(allBullet++, positionX, positionY, 0.5, 0);
 	bulletFired++;
 	Bullet->setDamageValue(20.0f);
 }
@@ -40,8 +40,12 @@ int player::getBulletCount() {
 	return bulletFired;
 }
 
-void player::thrust() {
+void player::thrustUp() {
 	setVelocity(getVelocityX(), getVelocityY() - 0.03f);
+}
+
+void player::thrustDown() {
+	setVelocity(getVelocityX(), getVelocityY() + 0.03f);
 }
 
 float player::getPlayerHp() const {
@@ -70,6 +74,15 @@ void player::clearObject() {
 		delete it->second;
 		it = player_map.erase(it);
 	}
+}
+
+void player::update(double time) {
+	positionY += velocityY * time;
+	if (velocityY > 0)
+		velocityY -= 0.002;
+	if (velocityY < 0)
+		velocityY += 0.002;
+	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 }
 
 void player::updateNDrawAllObject(double dt, sf::RenderWindow& window) {

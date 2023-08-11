@@ -8,7 +8,7 @@ protected:
 	static sf::Texture texture;
 
 public:
-	bullet(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity);
+	bullet(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY);
 
 	float getDamageValue() const;
 	void setDamageValue(float _damage);

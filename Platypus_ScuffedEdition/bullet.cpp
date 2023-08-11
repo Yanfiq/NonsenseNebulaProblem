@@ -3,7 +3,7 @@
 std::unordered_map<int, bullet*> bullet::bullet_map;
 sf::Texture bullet::texture;
 
-bullet::bullet(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY, float _gravity) : object(_positionX, _positionY, _velocityX, _velocityY, _gravity) {
+bullet::bullet(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY) {
 	object_sprite.setTexture(&texture);
 	object_sprite.setSize(sf::Vector2f(texture.getSize()));
 	object_sprite.setOrigin(sf::Vector2f(texture.getSize().x / 2, texture.getSize().y / 2));
