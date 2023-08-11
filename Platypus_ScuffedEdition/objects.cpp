@@ -46,6 +46,14 @@ void object::update(double time) {
 	{
 		velocityY += gravity * time;
 	}
+	//if (velocityX > 0)
+	//	velocityX -= 0.002;
+	//if (velocityX < 0)
+	//	velocityX += 0.002;
+	//if (velocityY > 0)
+	//	velocityY -= 0.002;
+	//if (velocityY < 0)
+	//	velocityY += 0.002;
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 }
 

@@ -4,25 +4,23 @@
 #include "player.h"
 #include "bullet.h"
 #include "enemy.h"
-#include "messages.h"
+#include "Text.h"
 #include "func.h"
+#include "Images.h"
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
 	window.setFramerateLimit(60);
-	sf::Texture backgroundTexture;
-	backgroundTexture.loadFromFile("images/nebula.jpg");
-	sf::RectangleShape background;
-	background.setSize(sf::Vector2f(1280, 720));
-	background.setTexture(&backgroundTexture);
 
 	sf::Clock clock;
 	sf::Event event;
 
+	//texture initialization
 	player::initializeTexture("images/player.png");
 	bullet::initializeTexture("images/bullet.png");
 	enemy::initializeTexture("images/enemy.png");
 	text::fontInitialization("fonts/Poppins-SemiBold.ttf");
+	img::initializeTexture();
  
 	// enumeration for scene changes
 	enum part { start, tutorial, transition, singleMulti, play, pause };
@@ -201,7 +199,7 @@ int main() {
 				break;
 			}
 		}
-		window.draw(background);
+		window.draw(img::background());
 		//outside pollEvent
 		switch (scene) {
 		case start:
@@ -213,17 +211,12 @@ int main() {
 
 		case tutorial:
 		{
-			sf::RectangleShape rectangle;
-			rectangle.setPosition(100, 300);
-			sf::Texture tutorial;
-			tutorial.loadFromFile("images/keyboardKiri.jpg");
-			rectangle.setSize(sf::Vector2f(tutorial.getSize()));
-			rectangle.setTexture(&tutorial);
-			window.draw(rectangle);
-
+			window.draw(img::keybLeft());
 			window.draw(text::tutorialStep(stepTutorial));
-			if (stepTutorial % 2 == 0)
+			if (stepTutorial % 2 == 0) {
+				window.draw(img::keybRight());
 				window.draw(text::tutorialStep(stepTutorial - 1));
+			}
 
 			if (stepTutorial == 7)
 			{

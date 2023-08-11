@@ -144,8 +144,9 @@
     <ClCompile Include="anotherObject.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="func.cpp" />
+    <ClCompile Include="Images.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="messages.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="objects.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="RichText.cpp" />
@@ -155,7 +156,8 @@
     <ClInclude Include="anotherObject.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="func.h" />
-    <ClInclude Include="messages.h" />
+    <ClInclude Include="Images.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="objects.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="RichText.hpp" />
