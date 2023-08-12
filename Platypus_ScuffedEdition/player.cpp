@@ -25,10 +25,11 @@ player* player::getObjectPtr(int id) {
 		return NULL;
 }
 
-void player::shoot() {
+void player::shoot(int &sfxVol) {
 	bullet* Bullet = new bullet(allBullet++, positionX, positionY, 0.5, 0);
 	bulletFired++;
 	Bullet->setDamageValue(20.0f);
+	sounds::playShootSound(sfxVol);
 }
 
 void player::resetBulletCount() {

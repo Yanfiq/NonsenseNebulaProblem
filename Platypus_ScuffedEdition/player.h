@@ -1,6 +1,7 @@
 #pragma once
 #include "objects.h"
 #include "bullet.h"
+#include "sound.h"
 
 class player : public object {
 protected:
@@ -13,7 +14,7 @@ protected:
 public:
 	player(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY);
 	static player* getObjectPtr(int id);
-	void shoot();
+	void shoot(int &sfxVol);
 	void resetBulletCount();
 	int getBulletCount();
 	void thrustUp();

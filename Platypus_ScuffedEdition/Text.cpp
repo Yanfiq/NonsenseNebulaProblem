@@ -156,8 +156,8 @@ namespace text {
 		case 0:
 		{
 			text << sf::Color::White << "Settings: \n"
-				<< sf::Color::Cyan << "< Music Volume : " << std::to_string(bgmVol) << " >"
-				<< sf::Color::White <<"\n< SFX Volume   : " << std::to_string(sfxVol) << " >"
+				<< sf::Color::Cyan << "Music Volume : < " << std::to_string(bgmVol) << " >"
+				<< sf::Color::White <<"\nSFX Volume   : < " << std::to_string(sfxVol) << " >"
 				<< sf::Color::White << "\nTutorial"
 				<< sf::Color::White << "\nCredit";
 			break;
@@ -165,8 +165,8 @@ namespace text {
 		case 1:
 		{
 			text << sf::Color::White << "Settings: \n"
-				<< sf::Color::White << "< Music Volume : " << std::to_string(bgmVol) << " >"
-				<< sf::Color::Cyan << "\n< SFX Volume   : " << std::to_string(sfxVol) << " >"
+				<< sf::Color::White << "Music Volume : < " << std::to_string(bgmVol) << " >"
+				<< sf::Color::Cyan << "\nSFX Volume   : < " << std::to_string(sfxVol) << " >"
 				<< sf::Color::White << "\nTutorial"
 				<< sf::Color::White << "\nCredit";
 			break;
@@ -174,8 +174,8 @@ namespace text {
 		case 2:
 		{
 			text << sf::Color::White << "Settings: \n"
-				<< sf::Color::White << "< Music Volume : " << std::to_string(bgmVol) << " >"
-				<< sf::Color::White << "\n< SFX Volume   : " << std::to_string(sfxVol) << " >"
+				<< sf::Color::White << "Music Volume : < " << std::to_string(bgmVol) << " >"
+				<< sf::Color::White << "\nSFX Volume   : < " << std::to_string(sfxVol) << " >"
 				<< sf::Color::Cyan << "\nTutorial"
 				<< sf::Color::White << "\nCredit";
 			break;
@@ -183,8 +183,8 @@ namespace text {
 		case 3:
 		{
 			text << sf::Color::White << "Settings: \n"
-				<< sf::Color::White << "< Music Volume : " << std::to_string(bgmVol) << " >"
-				<< sf::Color::White << "\n< SFX Volume   : " << std::to_string(sfxVol) << " >"
+				<< sf::Color::White << "Music Volume : < " << std::to_string(bgmVol) << " >"
+				<< sf::Color::White << "\nSFX Volume   : < " << std::to_string(sfxVol) << " >"
 				<< sf::Color::White << "\nTutorial"
 				<< sf::Color::Cyan << "\nCredit";
 			break;

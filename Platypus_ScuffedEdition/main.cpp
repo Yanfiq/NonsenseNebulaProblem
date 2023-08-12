@@ -18,7 +18,7 @@ int main() {
 	sf::Music bgmusic;
 	bgmusic.openFromFile("audio/Boooring.ogg");
 	bgmusic.play();
-
+	
 
 	//texture initialization
 	player::initializeTexture("images/player.png");
@@ -26,6 +26,7 @@ int main() {
 	enemy::initializeTexture("images/enemy.png");
 	text::fontInitialization("fonts/Poppins-SemiBold.ttf");
 	img::initializeTexture();
+	sounds::loadSound();
  
 	// enumeration for scene changes
 	enum part { start, settings , tutorial, transition, singleMulti, play, pause };
@@ -59,6 +60,7 @@ int main() {
 	// main game loop
 	while (window.isOpen()) {
 		bgmusic.setVolume(bgmVolume);
+		sounds::checkAndDeleteSound();
 		while (window.pollEvent(event)) {
 			switch (event.type) {
 			case sf::Event::Closed:
@@ -121,6 +123,7 @@ int main() {
 							sfxVolume -= 10;
 							if (sfxVolume < 0)
 								sfxVolume = 0;
+							sounds::playShootSound(sfxVolume);
 						}
 					}
 					if (event.key.code == sf::Keyboard::Right) {
@@ -133,6 +136,7 @@ int main() {
 							sfxVolume += 10;
 							if (sfxVolume > 100)
 								sfxVolume = 100;
+							sounds::playShootSound(sfxVolume);
 						}
 					}
 					if (event.key.code == sf::Keyboard::Escape) {
@@ -269,6 +273,7 @@ int main() {
 			}
 		}
 		window.draw(img::background());
+
 		//outside pollEvent
 		switch (scene) {
 		case start:
@@ -345,7 +350,7 @@ int main() {
 				if (down_1)
 					player_1->thrustDown();
 				if (shoot_1 && player_1->getBulletCount() <= 30)
-					player_1->shoot();
+					player_1->shoot(sfxVolume);
 				if (player_1->getBulletCount() >= 30)
 					window.draw(text::bulletEmpty(1));
 			}
@@ -357,7 +362,7 @@ int main() {
 				if (down_2)
 					player_2->thrustDown();
 				if (shoot_2 && player_2->getBulletCount() <= 30)
-					player_2->shoot();
+					player_2->shoot(sfxVolume);
 				if (player_2->getBulletCount() >= 30)
 					window.draw(text::bulletEmpty(2));
 			}

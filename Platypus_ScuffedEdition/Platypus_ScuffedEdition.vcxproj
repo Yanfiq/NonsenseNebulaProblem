@@ -147,6 +147,7 @@
     <ClCompile Include="func.cpp" />
     <ClCompile Include="Images.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="sound.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="objects.cpp" />
     <ClCompile Include="player.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="func.h" />
     <ClInclude Include="Images.h" />
+    <ClInclude Include="sound.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="objects.h" />
     <ClInclude Include="player.h" />
