@@ -101,21 +101,21 @@ namespace text {
 		case 0:
 		{
 			text << sf::Color::Cyan << "START\n"
-				<< sf::Color::White << "HELP\n"
+				<< sf::Color::White << "SETTINGS\n"
 				<< sf::Color::White << "EXIT";
 			break;
 		}
 		case 1:
 		{
 			text << sf::Color::White << "START\n"
-				<< sf::Color::Cyan << "HELP\n"
+				<< sf::Color::Cyan << "SETTINGS\n"
 				<< sf::Color::White << "EXIT";
 			break;
 		}
 		case 2:
 		{
 			text << sf::Color::White << "START\n"
-				<< sf::Color::White << "HELP\n"
+				<< sf::Color::White << "SETTINGS\n"
 				<< sf::Color::Cyan << "EXIT";
 			break;
 		}
@@ -146,6 +146,52 @@ namespace text {
 		}
 		text.setCharacterSize(60);
 		text.setPosition(100, 400);
+
+		return text;
+	}
+
+	sfe::RichText settingsChoice(int choice, int bgmVol, int sfxVol) {
+		sfe::RichText text(font);
+		switch (choice) {
+		case 0:
+		{
+			text << sf::Color::White << "Settings: \n"
+				<< sf::Color::Cyan << "< Music Volume : " << std::to_string(bgmVol) << " >"
+				<< sf::Color::White <<"\n< SFX Volume   : " << std::to_string(sfxVol) << " >"
+				<< sf::Color::White << "\nTutorial"
+				<< sf::Color::White << "\nCredit";
+			break;
+		}
+		case 1:
+		{
+			text << sf::Color::White << "Settings: \n"
+				<< sf::Color::White << "< Music Volume : " << std::to_string(bgmVol) << " >"
+				<< sf::Color::Cyan << "\n< SFX Volume   : " << std::to_string(sfxVol) << " >"
+				<< sf::Color::White << "\nTutorial"
+				<< sf::Color::White << "\nCredit";
+			break;
+		}
+		case 2:
+		{
+			text << sf::Color::White << "Settings: \n"
+				<< sf::Color::White << "< Music Volume : " << std::to_string(bgmVol) << " >"
+				<< sf::Color::White << "\n< SFX Volume   : " << std::to_string(sfxVol) << " >"
+				<< sf::Color::Cyan << "\nTutorial"
+				<< sf::Color::White << "\nCredit";
+			break;
+		}
+		case 3:
+		{
+			text << sf::Color::White << "Settings: \n"
+				<< sf::Color::White << "< Music Volume : " << std::to_string(bgmVol) << " >"
+				<< sf::Color::White << "\n< SFX Volume   : " << std::to_string(sfxVol) << " >"
+				<< sf::Color::White << "\nTutorial"
+				<< sf::Color::Cyan << "\nCredit";
+			break;
+		}
+		}
+		text.setCharacterSize(50);
+		text.setPosition(100, 300);
 
 		return text;
 	}

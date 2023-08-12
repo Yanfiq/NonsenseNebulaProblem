@@ -15,5 +15,6 @@ namespace text {
 	sfe::RichText pauseText();
 	sfe::RichText startMenuChoice(int choice);
 	sfe::RichText singleMultiChoice(int choice);
+	sfe::RichText settingsChoice(int choice, int bgmVol, int sfxVol);
 	sfe::RichText tutorialStep(int step);
 };

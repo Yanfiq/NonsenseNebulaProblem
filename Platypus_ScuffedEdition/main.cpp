@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <iostream>
+#include "SFML/Audio.hpp"
 
 #include "player.h"
 #include "bullet.h"
@@ -14,6 +15,10 @@ int main() {
 
 	sf::Clock clock;
 	sf::Event event;
+	sf::Music bgmusic;
+	bgmusic.openFromFile("audio/Boooring.ogg");
+	bgmusic.play();
+
 
 	//texture initialization
 	player::initializeTexture("images/player.png");
@@ -23,7 +28,7 @@ int main() {
 	img::initializeTexture();
  
 	// enumeration for scene changes
-	enum part { start, tutorial, transition, singleMulti, play, pause };
+	enum part { start, settings , tutorial, transition, singleMulti, play, pause };
 	// enumeration for objectType
 	enum objectType {
 		player_obj = 100,
@@ -48,8 +53,12 @@ int main() {
 	int choice = 0;					// variables that will later change the scene in the start menu
 	int stepTutorial = 1;
 
+	int bgmVolume = 50;
+	int sfxVolume = 50;
+
 	// main game loop
 	while (window.isOpen()) {
+		bgmusic.setVolume(bgmVolume);
 		while (window.pollEvent(event)) {
 			switch (event.type) {
 			case sf::Event::Closed:
@@ -74,7 +83,7 @@ int main() {
 							scene = singleMulti;
 						}
 						if (choice == 1) {
-							scene = tutorial;
+							scene = settings;
 						}
 						if (choice == 2) {
 							window.close();
@@ -87,6 +96,52 @@ int main() {
 				{
 					if (event.key.code == sf::Keyboard::Enter && stepTutorial <= 9) {
 						stepTutorial += 2;
+					}
+					break;
+				}
+				case settings:
+				{
+					if (event.key.code == sf::Keyboard::Down) {
+						choice++;
+						if (choice > 3)
+							choice = 3;
+					}
+					if (event.key.code == sf::Keyboard::Up) {
+						choice--;
+						if (choice < 0)
+							choice = 0;
+					}
+					if (event.key.code == sf::Keyboard::Left) {
+						if (choice == 0) {
+							bgmVolume -= 10;
+							if (bgmVolume < 0)
+								bgmVolume = 0;
+						}
+						if (choice == 1) {
+							sfxVolume -= 10;
+							if (sfxVolume < 0)
+								sfxVolume = 0;
+						}
+					}
+					if (event.key.code == sf::Keyboard::Right) {
+						if (choice == 0) {
+							bgmVolume += 10;
+							if (bgmVolume > 100)
+								bgmVolume = 100;
+						}
+						if (choice == 1) {
+							sfxVolume += 10;
+							if (sfxVolume > 100)
+								sfxVolume = 100;
+						}
+					}
+					if (event.key.code == sf::Keyboard::Escape) {
+						scene = start;
+						choice = 0;
+					}
+					if (event.key.code == sf::Keyboard::Enter) {
+						if (choice == 2)
+							scene = tutorial;
 					}
 					break;
 				}
@@ -238,9 +293,15 @@ int main() {
 			}
 			if (stepTutorial > 10)
 			{
-				scene = start;
+				scene = settings;
 				stepTutorial = 1;
 			}
+			break;
+		}
+
+		case settings:
+		{
+			window.draw(text::settingsChoice(choice, bgmVolume, sfxVolume));
 			break;
 		}
 
