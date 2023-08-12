@@ -13,13 +13,14 @@ void sounds::playShootSound(int volume) {
 	sound->setBuffer(shootSound);
 	sound->setVolume(volume);
 	sound->play();
+	soundPlayed.push_back(sound);
 }
 
 void sounds::checkAndDeleteSound() {
 	for (auto it = soundPlayed.begin(); it != soundPlayed.end();) {
 		sf::Sound* sound = *it;
 		if (sound->getStatus() == sf::SoundSource::Status::Stopped) {
-			delete* it;
+			delete *it;
 			it = soundPlayed.erase(it);
 		}
 		else {

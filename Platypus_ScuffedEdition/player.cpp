@@ -38,7 +38,8 @@ void player::resetBulletCount() {
 }
 
 int player::getBulletCount() {
-	return bulletFired;
+	if(this != NULL)
+		return bulletFired;
 }
 
 void player::thrustUp() {

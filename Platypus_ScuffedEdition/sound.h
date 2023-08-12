@@ -2,6 +2,7 @@
 
 #include "SFML/Audio.hpp"
 #include <vector>
+#include <iostream>
 
 class sounds {
 private:
