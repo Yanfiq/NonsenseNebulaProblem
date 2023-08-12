@@ -41,11 +41,12 @@ float enemy::getHp() {
 	return hp;
 }
 
-void enemy::shoot() {
+void enemy::shoot(int& sfxVol) {
 	bullet* Bullet = new bullet(bullet_count++, positionX, positionY, -0.5f, 0.0f);
 	Bullet->setDamageValue(20.0f);
 	if (bullet_count == 99)
 		bullet_count = 0;
+	sounds::playShootSound(sfxVol);
 }
 
 void enemy::clearObject() {

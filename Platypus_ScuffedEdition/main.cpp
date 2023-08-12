@@ -419,7 +419,7 @@ int main() {
 					player* Player = player_object->second;
 					if ((Enemy->getPositionY() < Player->getPositionY() + 5) &&
 						(Enemy->getPositionY() > Player->getPositionY() - 5)) {
-						Enemy->shoot();
+						Enemy->shoot(sfxVolume);
 					}
 				}
 			}

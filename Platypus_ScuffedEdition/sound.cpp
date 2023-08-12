@@ -5,7 +5,7 @@ sf::SoundBuffer sounds::boomSound;
 std::vector<sf::Sound*> sounds::soundPlayed;
 
 void sounds::loadSound() {
-	shootSound.loadFromFile("audio/shoot.ogg");
+	shootSound.loadFromFile("audio/shoot_2.ogg");
 }
 
 void sounds::playShootSound(int volume) {

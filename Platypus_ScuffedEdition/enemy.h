@@ -1,6 +1,7 @@
 #pragma once
 #include "objects.h"
 #include "bullet.h"
+#include "sound.h"
 
 class enemy : public object {
 protected:
@@ -13,7 +14,7 @@ public:
 	enemy(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY);
 
 	void reduceHp(float damage);
-	void shoot();
+	void shoot(int& sfxVol);
 	float getHp();
 
 	static std::unordered_map<int, enemy*>* getEnemyMap();
