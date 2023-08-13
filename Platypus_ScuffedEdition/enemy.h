@@ -2,6 +2,7 @@
 #include "objects.h"
 #include "bullet.h"
 #include "sound.h"
+#define MAX_HEALTH 100
 
 class enemy : public object {
 protected:
@@ -16,6 +17,7 @@ public:
 	void reduceHp(float damage);
 	void shoot(int& sfxVol);
 	float getHp();
+	void drawHpBar(sf::RenderWindow& window, float position_x, float position_y, float width, float height);
 
 	static std::unordered_map<int, enemy*>* getEnemyMap();
 	static enemy* getObjectPtr(int id);

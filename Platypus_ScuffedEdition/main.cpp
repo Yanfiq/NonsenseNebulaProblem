@@ -165,14 +165,11 @@ int main() {
 					if (event.key.code == sf::Keyboard::Enter) {
 						if (choice == 0) {
 							player* Player = new player(1, 100, 100, 0, 0);
-							Player->setPlayerHp(100);
 						}
 						if (choice == 1) {
 							player* Player_1 = new player(1, 100, 100, 0, 0);
-							Player_1->setPlayerHp(100);
 
 							player* Player_2 = new player(2, 100, 300, 0, 0);
-							Player_2->setPlayerHp(100);
 						}
 						scene = transition;
 						choice = 0;
@@ -346,7 +343,6 @@ int main() {
 		{
 			if (player::getObjectPtr(101) != NULL) {
 				player* player_1 = player::getObjectPtr(101);
-				player_1->drawHpBar(window, player_1->getPositionX() - player_1->getWidth() / 2, player_1->getPositionY() - player_1->getHeight() / 2 - 20, player_1->getWidth(), 10);
 				if (up_1)
 					player_1->thrustUp();
 				if (down_1)
@@ -359,7 +355,6 @@ int main() {
 
 			if (player::getObjectPtr(102) != NULL) {
 				player* player_2 = player::getObjectPtr(102);
-				player_2->drawHpBar(window, player_2->getPositionX() - player_2->getWidth() / 2, player_2->getPositionY() - player_2->getHeight() / 2 - 20, player_2->getWidth(), 10);
 				if (up_2)
 					player_2->thrustUp();
 				if (down_2)

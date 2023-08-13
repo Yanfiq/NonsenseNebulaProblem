@@ -2,6 +2,7 @@
 #include "objects.h"
 #include "bullet.h"
 #include "sound.h"
+#define MAX_HEALTH 200
 
 class player : public object {
 protected:
@@ -9,7 +10,7 @@ protected:
 	static int allBullet;
 	static sf::Texture texture;
 	int bulletFired = 0;
-	float hp = 100;
+	float hp = MAX_HEALTH;
 
 public:
 	player(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY);

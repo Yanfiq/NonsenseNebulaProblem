@@ -41,6 +41,26 @@ float enemy::getHp() {
 	return hp;
 }
 
+void enemy::drawHpBar(sf::RenderWindow& window, float position_x, float position_y, float width, float height) {
+	sf::RectangleShape rectangle;
+	rectangle.setOutlineColor(sf::Color::White);
+	rectangle.setOutlineThickness(2);
+	rectangle.setFillColor(sf::Color::Transparent);
+	rectangle.setPosition(sf::Vector2f(position_x, position_y));
+	rectangle.setSize(sf::Vector2f(width, height));
+
+	sf::RectangleShape hp_bar;
+	hp_bar.setPosition(sf::Vector2f(position_x, position_y));
+	hp_bar.setSize(sf::Vector2f(((this->hp / MAX_HEALTH) * width), height));
+	if (this->hp >= MAX_HEALTH/2)
+		hp_bar.setFillColor(sf::Color::Green);
+	else
+		hp_bar.setFillColor(sf::Color::Red);
+
+	window.draw(rectangle);
+	window.draw(hp_bar);
+}
+
 void enemy::shoot(int& sfxVol) {
 	bullet* Bullet = new bullet(bullet_count++, positionX, positionY, -0.5f, 0.0f);
 	Bullet->setDamageValue(20.0f);
@@ -59,6 +79,7 @@ void enemy::clearObject() {
 void enemy::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 	for (const auto& it : enemy_map) {
 		it.second->update(dt);
+		it.second->drawHpBar(window, it.second->getPositionX() - it.second->getWidth() / 2, it.second->getPositionY() - it.second->getHeight() / 2 - 20, it.second->getWidth(), 10);
 
 		if (it.second->getPositionY() >= 720 || it.second->getPositionY() <= 0) {
 			it.second->setVelocity(it.second->getVelocityX(), it.second->getVelocityY() * -1);

@@ -66,13 +66,14 @@ void player::drawHpBar(sf::RenderWindow& window, float position_x, float positio
 	rectangle.setOutlineColor(sf::Color::White); 
 	rectangle.setOutlineThickness(2);
 	rectangle.setFillColor(sf::Color::Transparent);
-	rectangle.setPosition(sf::Vector2f(position_x, position_y));
 	rectangle.setSize(sf::Vector2f(width, height));
+	rectangle.setOrigin(sf::Vector2f(width / 2, height / 2));
+	rectangle.setPosition(positionX, position_y);
 
 	sf::RectangleShape hp_bar;
-	hp_bar.setPosition(sf::Vector2f(position_x, position_y));
-	hp_bar.setSize(sf::Vector2f(((this->hp / 100) * width), height));
-	if(this->hp >= 50)
+	hp_bar.setPosition(sf::Vector2f(rectangle.getPosition().x - rectangle.getOrigin().x, rectangle.getPosition().y - rectangle.getOrigin().y));
+	hp_bar.setSize(sf::Vector2f(((this->hp / MAX_HEALTH) * width), height));
+	if(this->hp >= MAX_HEALTH / 2)
 		hp_bar.setFillColor(sf::Color::Green);
 	else
 		hp_bar.setFillColor(sf::Color::Red);
@@ -108,6 +109,7 @@ void player::update(double time) {
 
 void player::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 	for (const auto& it : player_map) {
+		it.second->drawHpBar(window, it.second->getPositionX(), it.second->getPositionY() - it.second->getHeight() / 2 - 20, it.second->getWidth(), 10);
 		it.second->update(dt);
 
 		if (it.second->getPositionY() >= 720) {
