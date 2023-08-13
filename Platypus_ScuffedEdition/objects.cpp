@@ -38,6 +38,14 @@ float object::getVelocityY() {
 	return velocityY;
 }
 
+float object::getWidth() {
+	return object_sprite.getSize().x;
+}
+
+float object::getHeight() {
+	return object_sprite.getSize().y;
+}
+
 void object::update(double time) {
 	positionX += velocityX * time;
 	positionY += velocityY * time;

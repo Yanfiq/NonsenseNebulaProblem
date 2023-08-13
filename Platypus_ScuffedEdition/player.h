@@ -23,6 +23,7 @@ public:
 	void setPlayerHp(float _hp);
 	void reducePlayerHp(float damage);
 	void update(double time) override;
+	void drawHpBar(sf::RenderWindow& window, float position_x, float position_y, float width, float height);
 	
 	static void deleteObject(int id);
 	static void clearObject();

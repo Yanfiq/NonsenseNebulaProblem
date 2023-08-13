@@ -77,7 +77,7 @@ namespace text {
 		sfe::RichText text(font);
 
 		text << sf::Color::White << "CONGRATULATION, YOU ARE THE WINNER\n"
-			<< sf::Color::White << "Press 'R' to back to main menu";
+			<< sf::Color::White << "\n\n\n\n\nPress 'R' to back to main menu";
 
 		text.setPosition(100, 100);
 		text.setCharacterSize(50);
@@ -156,8 +156,8 @@ namespace text {
 		case 0:
 		{
 			text << sf::Color::White << "Settings: \n"
-				<< sf::Color::Cyan << "Music Volume : < " << std::to_string(bgmVol) << " >"
-				<< sf::Color::White <<"\nSFX Volume   : < " << std::to_string(sfxVol) << " >"
+				<< sf::Color::Cyan << "Music Volume\t: < " << std::to_string(bgmVol) << "% >"
+				<< sf::Color::White <<"\nSFX Volume\t\t: < " << std::to_string(sfxVol) << "% >"
 				<< sf::Color::White << "\nTutorial"
 				<< sf::Color::White << "\nCredit";
 			break;
@@ -165,8 +165,8 @@ namespace text {
 		case 1:
 		{
 			text << sf::Color::White << "Settings: \n"
-				<< sf::Color::White << "Music Volume : < " << std::to_string(bgmVol) << " >"
-				<< sf::Color::Cyan << "\nSFX Volume   : < " << std::to_string(sfxVol) << " >"
+				<< sf::Color::White << "Music Volume\t: < " << std::to_string(bgmVol) << "% >"
+				<< sf::Color::Cyan << "\nSFX Volume\t\t: < " << std::to_string(sfxVol) << "% >"
 				<< sf::Color::White << "\nTutorial"
 				<< sf::Color::White << "\nCredit";
 			break;
@@ -174,8 +174,8 @@ namespace text {
 		case 2:
 		{
 			text << sf::Color::White << "Settings: \n"
-				<< sf::Color::White << "Music Volume : < " << std::to_string(bgmVol) << " >"
-				<< sf::Color::White << "\nSFX Volume   : < " << std::to_string(sfxVol) << " >"
+				<< sf::Color::White << "Music Volume\t: < " << std::to_string(bgmVol) << "% >"
+				<< sf::Color::White << "\nSFX Volume\t\t: < " << std::to_string(sfxVol) << "% >"
 				<< sf::Color::Cyan << "\nTutorial"
 				<< sf::Color::White << "\nCredit";
 			break;
@@ -183,8 +183,8 @@ namespace text {
 		case 3:
 		{
 			text << sf::Color::White << "Settings: \n"
-				<< sf::Color::White << "Music Volume : < " << std::to_string(bgmVol) << " >"
-				<< sf::Color::White << "\nSFX Volume   : < " << std::to_string(sfxVol) << " >"
+				<< sf::Color::White << "Music Volume\t: < " << std::to_string(bgmVol) << "% >"
+				<< sf::Color::White << "\nSFX Volume\t\t: < " << std::to_string(sfxVol) << "% >"
 				<< sf::Color::White << "\nTutorial"
 				<< sf::Color::Cyan << "\nCredit";
 			break;

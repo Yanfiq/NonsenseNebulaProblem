@@ -159,6 +159,7 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="func.h" />
     <ClInclude Include="Images.h" />
+    <ClInclude Include="particleSystem.hpp" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="objects.h" />

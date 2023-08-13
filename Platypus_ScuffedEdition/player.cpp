@@ -19,10 +19,9 @@ void player::initializeTexture(std::string textureDir) {
 }
 
 player* player::getObjectPtr(int id) {
-	if (player_map.find(id) != player_map.end())
-		return player_map[id];
-	else
+	if (player_map.find(id) == player_map.end())
 		return NULL;
+	return player_map[id];
 }
 
 void player::shoot(int &sfxVol) {
@@ -60,6 +59,26 @@ void player::setPlayerHp(float _hp) {
 
 void player::reducePlayerHp(float damage) {
 	this->hp -= damage;
+}
+
+void player::drawHpBar(sf::RenderWindow& window, float position_x, float position_y, float width, float height) {
+	sf::RectangleShape rectangle;
+	rectangle.setOutlineColor(sf::Color::White); 
+	rectangle.setOutlineThickness(2);
+	rectangle.setFillColor(sf::Color::Transparent);
+	rectangle.setPosition(sf::Vector2f(position_x, position_y));
+	rectangle.setSize(sf::Vector2f(width, height));
+
+	sf::RectangleShape hp_bar;
+	hp_bar.setPosition(sf::Vector2f(position_x, position_y));
+	hp_bar.setSize(sf::Vector2f(((this->hp / 100) * width), height));
+	if(this->hp >= 50)
+		hp_bar.setFillColor(sf::Color::Green);
+	else
+		hp_bar.setFillColor(sf::Color::Red);
+
+	window.draw(rectangle);
+	window.draw(hp_bar);
 }
 
 std::unordered_map<int, player*>* player::getPlayerMap() {

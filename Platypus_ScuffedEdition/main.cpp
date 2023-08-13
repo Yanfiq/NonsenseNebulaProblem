@@ -18,6 +18,7 @@ int main() {
 	sf::Music bgmusic;
 	bgmusic.openFromFile("audio/Boooring.ogg");
 	bgmusic.play();
+	bgmusic.setLoop(true);
 	
 
 	//texture initialization
@@ -115,12 +116,12 @@ int main() {
 					}
 					if (event.key.code == sf::Keyboard::Left) {
 						if (choice == 0) {
-							bgmVolume -= 10;
+							bgmVolume -= 5;
 							if (bgmVolume < 0)
 								bgmVolume = 0;
 						}
 						if (choice == 1) {
-							sfxVolume -= 10;
+							sfxVolume -= 5;
 							if (sfxVolume < 0)
 								sfxVolume = 0;
 							sounds::playShootSound(sfxVolume);
@@ -128,12 +129,12 @@ int main() {
 					}
 					if (event.key.code == sf::Keyboard::Right) {
 						if (choice == 0) {
-							bgmVolume += 10;
+							bgmVolume += 5;
 							if (bgmVolume > 100)
 								bgmVolume = 100;
 						}
 						if (choice == 1) {
-							sfxVolume += 10;
+							sfxVolume += 5;
 							if (sfxVolume > 100)
 								sfxVolume = 100;
 							sounds::playShootSound(sfxVolume);
@@ -291,7 +292,6 @@ int main() {
 				window.draw(text::tutorialStep(stepTutorial));
 				window.draw(text::tutorialStep(stepTutorial + 1));
 			}
-
 			if (stepTutorial == 9) {
 				window.draw(img::spacebar());
 				window.draw(text::tutorialStep(stepTutorial));
@@ -306,6 +306,7 @@ int main() {
 
 		case settings:
 		{
+			window.draw(text::gameTitle());
 			window.draw(text::settingsChoice(choice, bgmVolume, sfxVolume));
 			break;
 		}
@@ -345,6 +346,7 @@ int main() {
 		{
 			if (player::getObjectPtr(101) != NULL) {
 				player* player_1 = player::getObjectPtr(101);
+				player_1->drawHpBar(window, player_1->getPositionX() - player_1->getWidth() / 2, player_1->getPositionY() - player_1->getHeight() / 2 - 20, player_1->getWidth(), 10);
 				if (up_1)
 					player_1->thrustUp();
 				if (down_1)
@@ -357,6 +359,7 @@ int main() {
 
 			if (player::getObjectPtr(102) != NULL) {
 				player* player_2 = player::getObjectPtr(102);
+				player_2->drawHpBar(window, player_2->getPositionX() - player_2->getWidth() / 2, player_2->getPositionY() - player_2->getHeight() / 2 - 20, player_2->getWidth(), 10);
 				if (up_2)
 					player_2->thrustUp();
 				if (down_2)
@@ -427,6 +430,7 @@ int main() {
 			//collision detection and object removal
 			currentPoint += processCollision();
 
+			//lose
 			if (player::getPlayerMap()->empty()) {
 				level = -1;
 				scene = transition;

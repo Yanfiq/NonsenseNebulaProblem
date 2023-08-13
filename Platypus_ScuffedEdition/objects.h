@@ -25,6 +25,8 @@ public:
 	float getPositionY();
 	float getVelocityX();
 	float getVelocityY();
+	float getWidth();
+	float getHeight();
 	void setVelocity(float vx, float vy);
 	void setPosition(float px, float py);
 	virtual void update(double time); 
