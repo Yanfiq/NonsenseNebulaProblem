@@ -120,7 +120,6 @@ void player::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 			it.second->setPosition(it.second->getPositionX(), 0);
 			it.second->setVelocity(it.second->getVelocityX(), it.second->getVelocityY() * -1 - 0.05);
 		}
-
 		sf::RectangleShape* sprite = it.second->getSprite();
 		window.draw(*sprite);
 	}

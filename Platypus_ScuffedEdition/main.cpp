@@ -98,7 +98,7 @@ int main() {
 				case tutorial:
 				{
 					if (event.key.code == sf::Keyboard::Enter && stepTutorial <= 9) {
-						stepTutorial += 2;
+						stepTutorial ++;
 					}
 					break;
 				}
@@ -276,66 +276,61 @@ int main() {
 		switch (scene) {
 		case start:
 		{
-			window.draw(text::gameTitle());
-			window.draw(text::startMenuChoice(choice));
+			text::displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
+			text::displayChoice(window, choice, scene, bgmVolume, sfxVolume);
 			break;
 		}
 
 		case tutorial:
 		{
-			if (stepTutorial < 9) {
-				window.draw(img::keybLeft());
-				window.draw(img::keybRight());
-				window.draw(text::tutorialStep(stepTutorial));
-				window.draw(text::tutorialStep(stepTutorial + 1));
-			}
-			if (stepTutorial == 9) {
-				window.draw(img::spacebar());
-				window.draw(text::tutorialStep(stepTutorial));
-			}
-			if (stepTutorial > 10)
+			text::displayTutorial(window, stepTutorial);
+			if (stepTutorial > 5)
 			{
 				scene = settings;
 				stepTutorial = 1;
 			}
+			text::displayText(window, "Press ENTER to continue", 30, sf::Color::White, 100, 600);
 			break;
 		}
 
 		case settings:
 		{
-			window.draw(text::gameTitle());
-			window.draw(text::settingsChoice(choice, bgmVolume, sfxVolume));
+			text::displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
+			text::displayChoice(window, choice, scene, bgmVolume, sfxVolume);
 			break;
 		}
 
 		case singleMulti:
 		{
-			window.draw(text::gameTitle());
-			window.draw(text::singleMultiChoice(choice));
+			text::displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
+			text::displayChoice(window, choice, scene, bgmVolume, sfxVolume);
 			break;
 		}
 
 		case transition:
 		{
-			switch (level) {
-			case -1:
-			{
-				bullet::clearObject();
-				enemy::clearObject();
-				window.draw(text::lose());
+			bullet::clearObject();
+			enemy::clearObject();
+			if(level == -1){ //lOSE
+				text::displayText(window, "YOU LOSE :(\nBETTER LUCK NEXT TIME", 40, sf::Color::White, 100, 100);
+				text::displayText(window, "Press 'R' to back to main menu", 40, sf::Color::White, 100, 600);
 				break;
 			}
-			case 0: window.draw(text::startLevel(1)); break;
-			case 1: window.draw(text::startLevel(2)); break;
-			case 2: window.draw(text::startLevel(3)); break;
-			case 3: window.draw(text::win()); break;
+			else if (level > 3) { //WIN
+				text::displayText(window, "CONGRATULATION :)\nYOU'RE THE WINNER", 40, sf::Color::White, 100, 100);
+				text::displayText(window, "Press 'R' to back to main menu", 40, sf::Color::White, 100, 600);
+			}
+			else { //NEXT LEVEL
+				text::displayText(window, "LEVEL " + std::to_string(level + 1), 40, sf::Color::Cyan, 100, 100);
+				text::displayText(window, "Press ENTER to continue", 30, sf::Color::White, 100, 600);
 			}
 			break;
 		}
 
 		case pause:
 		{
-			window.draw(text::pauseText());
+			text::displayText(window, "PAUSE", 40, sf::Color::White, 100, 100);
+			text::displayText(window, "Press 'space' to back to the game", 40, sf::Color::White, 100, 600);
 			break;
 		}
 
@@ -350,7 +345,7 @@ int main() {
 				if (shoot_1 && player_1->getBulletCount() <= 30)
 					player_1->shoot(sfxVolume);
 				if (player_1->getBulletCount() >= 30)
-					window.draw(text::bulletEmpty(1));
+					text::displayText(window, "player_1's bullet is empty", 30, sf::Color::White, 30, 650);
 			}
 
 			if (player::getObjectPtr(102) != NULL) {
@@ -362,7 +357,7 @@ int main() {
 				if (shoot_2 && player_2->getBulletCount() <= 30)
 					player_2->shoot(sfxVolume);
 				if (player_2->getBulletCount() >= 30)
-					window.draw(text::bulletEmpty(2));
+					text::displayText(window, "player_2's bullet is empty", 30, sf::Color::White, 850, 650);
 			}
 
 			//pause the game if the window lost its focus
@@ -424,6 +419,7 @@ int main() {
 
 			//collision detection and object removal
 			currentPoint += processCollision();
+			text::displayText(window, "Score : " + std::to_string(currentPoint), 40, sf::Color::White, 30, 30);
 
 			//lose
 			if (player::getPlayerMap()->empty()) {
@@ -437,8 +433,6 @@ int main() {
 			player::updateNDrawAllObject(dt, window);
 			enemy::updateNDrawAllObject(dt, window);
 			bullet::updateNDrawAllObject(dt, window);
-
-			window.draw(text::score(currentPoint));
 			break;
 		}
 		}

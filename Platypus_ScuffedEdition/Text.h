@@ -1,20 +1,17 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "RichText.hpp"
+#include "Images.h"
 
-namespace text {
+class text {
+private:
 	static sf::Font font;
-	void fontInitialization(std::string fontDir);
+	enum part { start, settings, tutorial, transition, singleMulti, play, pause };
 
-	sfe::RichText gameTitle();
-	sfe::RichText bulletEmpty(int player);
-	sfe::RichText lose();
-	sfe::RichText startLevel(int level);
-	sfe::RichText score(float points);
-	sfe::RichText win();
-	sfe::RichText pauseText();
-	sfe::RichText startMenuChoice(int choice);
-	sfe::RichText singleMultiChoice(int choice);
-	sfe::RichText settingsChoice(int choice, int bgmVol, int sfxVol);
-	sfe::RichText tutorialStep(int step);
+public:
+	static void fontInitialization(std::string fontDir);
+
+	static void displayText(sf::RenderWindow& window, std::string text, int size, sf::Color color, float position_x, float position_y);
+	static void displayChoice(sf::RenderWindow& window, int choice, int scene, int bgmVol, int sfxVol);
+	static void displayTutorial(sf::RenderWindow& window, int step);
 };
