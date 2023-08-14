@@ -44,8 +44,8 @@ void text::displayTutorial(sf::RenderWindow& window, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Up' instead\n";
 		text_2.setPosition(700, 150);
 
-		window.draw(img::keybLeft());
-		window.draw(img::keybRight());
+		img::displayImage(window, img::texture::keyboardLeft, 100, 300);
+		img::displayImage(window, img::texture::keyboardRight, 700, 300);
 		break;
 	case 2:
 		text_1 << sf::Color::Cyan << "Step 2\n"
@@ -55,8 +55,8 @@ void text::displayTutorial(sf::RenderWindow& window, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Down' instead\n";
 		text_2.setPosition(700, 150);
 
-		window.draw(img::keybLeft());
-		window.draw(img::keybRight());
+		img::displayImage(window, img::texture::keyboardLeft, 100, 300);
+		img::displayImage(window, img::texture::keyboardRight, 700, 300);
 		break;
 	case 3:
 		text_1 << sf::Color::Cyan << "Step 3\n"
@@ -66,8 +66,8 @@ void text::displayTutorial(sf::RenderWindow& window, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Right' instead\n";
 		text_2.setPosition(700, 150);
 
-		window.draw(img::keybLeft());
-		window.draw(img::keybRight());
+		img::displayImage(window, img::texture::keyboardLeft, 100, 300);
+		img::displayImage(window, img::texture::keyboardRight, 700, 300);
 		break;
 	case 4:
 		text_1 << sf::Color::Cyan << "Step 4\n"
@@ -77,15 +77,15 @@ void text::displayTutorial(sf::RenderWindow& window, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Left' instead\n";
 		text_2.setPosition(700, 150);
 
-		window.draw(img::keybLeft());
-		window.draw(img::keybRight());
+		img::displayImage(window, img::texture::keyboardLeft, 100, 300);
+		img::displayImage(window, img::texture::keyboardRight, 700, 300);
 		break;
 	case 5:
 		text_1 << sf::Color::Cyan << "Step 5\n"
 			<< sf::Color::White << "use spacebar to pause the game\n";
 		text_1.setPosition(400, 100);
 
-		window.draw(img::spacebar());
+		img::displayImage(window, img::texture::spacebarKey, 380, 300);
 		break;
 	}
 
@@ -101,7 +101,7 @@ sfe::RichText text::displayCredit(float position_x, float position_y) {
 
 	text << sf::Color::Cyan << "CREDITS\n\n"
 		<< sf::Color::Cyan << sf::Text::Underlined << "Game Design\n"
-		<< sf::Color::White << sf::Text::Regular << "A Game by Muhammad Ryan Fikri Fakhrezi\n\n"
+		<< sf::Color::White << sf::Text::Regular << "Muhammad Ryan Fikri Fakhrezi\n\n"
 		<< sf::Color::Cyan << sf::Text::Underlined << "Special thanks: \n"
 		<< sf::Color::Cyan << sf::Text::Underlined << "Music: \n"
 		<< sf::Color::White << sf::Text::Regular << "Boooring! [Instrumental]\n"
@@ -116,7 +116,7 @@ sfe::RichText text::displayCredit(float position_x, float position_y) {
 		<< sf::Color::White << sf::Text::Regular << "https://www.pngwing.com/en/free-png-bxslp\n\n"
 		<< sf::Color::White << sf::Text::Regular << "Enemy's texture from pngwing.com\n"
 		<< sf::Color::White << sf::Text::Regular << "https://www.pngwing.com/en/free-png-ykqrx\n\n"
-		<< sf::Color::White << sf::Text::Regular << "Bullet's texture by Gintasdx\n"
+		<< sf::Color::White << sf::Text::Regular << "Bullet's texture by GintasDX\n"
 		<< sf::Color::White << sf::Text::Regular << "https://www.deviantart.com/gintasdx\n\n";
 
 	return text;

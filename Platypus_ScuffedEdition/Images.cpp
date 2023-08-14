@@ -1,41 +1,23 @@
 #include "Images.h"
 
 namespace img {
+	sf::Texture texture::background;
+	sf::Texture texture::keyboardLeft;
+	sf::Texture texture::keyboardRight;
+	sf::Texture texture::spacebarKey;
+
 	void initializeTexture() {
-		backgroundTexture.loadFromFile("images/nebula.jpg");
-		keyboardLeft.loadFromFile("images/wasd.jpg");
-		keyboardRight.loadFromFile("images/updownleftright.jpg");
-		spacebarKey.loadFromFile("images/spacebar.jpg");
+		texture::background.loadFromFile("images/nebula.jpg");
+		texture::keyboardLeft.loadFromFile("images/wasd.jpg");
+		texture::keyboardRight.loadFromFile("images/updownleftright.jpg");
+		texture::spacebarKey.loadFromFile("images/spacebar.jpg");
 	}
 
-	sf::RectangleShape background() {
+	void displayImage(sf::RenderWindow& window, sf::Texture texture, float position_x, float position_y) {
 		sf::RectangleShape shape;
-		shape.setSize(sf::Vector2f(backgroundTexture.getSize()));
-		shape.setTexture(&backgroundTexture);
-		return shape;
-	}
-
-	sf::RectangleShape keybLeft() {
-		sf::RectangleShape shape;
-		shape.setPosition(100, 300);
-		shape.setSize(sf::Vector2f(keyboardLeft.getSize()));
-		shape.setTexture(&keyboardLeft);
-		return shape;
-	}
-
-	sf::RectangleShape keybRight() {
-		sf::RectangleShape shape;
-		shape.setPosition(700, 300);
-		shape.setSize(sf::Vector2f(keyboardRight.getSize()));
-		shape.setTexture(&keyboardRight);
-		return shape;
-	}
-
-	sf::RectangleShape spacebar() {
-		sf::RectangleShape shape;
-		shape.setPosition(390, 300);
-		shape.setSize(sf::Vector2f(spacebarKey.getSize()));
-		shape.setTexture(&spacebarKey);
-		return shape;
+		shape.setSize(sf::Vector2f(texture.getSize()));
+		shape.setTexture(&texture);
+		shape.setPosition(position_x, position_y);
+		window.draw(shape);
 	}
 }

@@ -2,14 +2,17 @@
 #include "SFML/Graphics.hpp"
 
 namespace img {
-	static sf::Texture backgroundTexture;
-	static sf::Texture keyboardLeft;
-	static sf::Texture keyboardRight;
-	static sf::Texture spacebarKey;
+	struct texture {
+		static sf::Texture background;
+		static sf::Texture keyboardLeft;
+		static sf::Texture keyboardRight;
+		static sf::Texture spacebarKey;
+	};
 
 	void initializeTexture();
-	sf::RectangleShape background();
-	sf::RectangleShape keybLeft();
-	sf::RectangleShape keybRight();
-	sf::RectangleShape spacebar();
+	void displayImage(sf::RenderWindow& window, sf::Texture texture, float position_x, float position_y);
+	//sf::RectangleShape background();
+	//sf::RectangleShape keybLeft();
+	//sf::RectangleShape keybRight();
+	//sf::RectangleShape spacebar();
 }

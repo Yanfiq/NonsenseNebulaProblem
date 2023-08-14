@@ -62,8 +62,9 @@ void player::reducePlayerHp(float damage) {
 }
 
 void player::healPlayer(float addHp) {
-	if(this->hp < MAX_HEALTH)
-		this->hp += addHp;
+	this->hp += addHp;
+	if (this->hp > MAX_HEALTH)
+		this->hp = MAX_HEALTH;
 }
 
 void player::drawHpBar(sf::RenderWindow& window, float position_x, float position_y, float width, float height) {

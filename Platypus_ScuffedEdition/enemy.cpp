@@ -52,8 +52,8 @@ void enemy::drawHpBar(sf::RenderWindow& window, float position_x, float position
 
 	sf::RectangleShape hp_bar;
 	hp_bar.setPosition(sf::Vector2f(rectangle.getPosition().x - rectangle.getOrigin().x, rectangle.getPosition().y - rectangle.getOrigin().y));
-	hp_bar.setSize(sf::Vector2f(((this->hp / MAX_HEALTH) * width), height));
-	if (this->hp >= MAX_HEALTH / 2)
+	hp_bar.setSize(sf::Vector2f(((this->hp / MAX_HEALTH_ENEMY) * width), height));
+	if (this->hp >= MAX_HEALTH_ENEMY / 2)
 		hp_bar.setFillColor(sf::Color::Green);
 	else
 		hp_bar.setFillColor(sf::Color::Red);

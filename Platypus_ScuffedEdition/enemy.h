@@ -2,7 +2,7 @@
 #include "objects.h"
 #include "bullet.h"
 #include "sound.h"
-#define MAX_HEALTH 100
+#define MAX_HEALTH_ENEMY 100
 
 class enemy : public object {
 protected:

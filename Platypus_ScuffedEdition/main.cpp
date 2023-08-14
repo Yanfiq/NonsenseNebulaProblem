@@ -48,7 +48,7 @@ int main() {
 	bool shoot_1 = false;			// decides when the player object will execute the shoot() function
 	bool shoot_2 = false;
 	int level = 0;					// as the name implies, to differentiate levels
-	float currentPoint = 0;			// as the name implies, to save the point calculation result
+	int currentPoint = 0;			// as the name implies, to save the point calculation result
 	bool generateEnemy = false;		// decides whether to generate new enemies
 
 	// variables that'll be used in the start menu
@@ -56,6 +56,7 @@ int main() {
 	int choice = 0;					// variables that will later change the scene in the start menu
 	int stepTutorial = 1;
 
+	//volumes
 	int bgmVolume = 50;
 	int sfxVolume = 50;
 
@@ -166,17 +167,14 @@ int main() {
 							choice = 1;
 					}
 					if (event.key.code == sf::Keyboard::Enter) {
-						if (choice == 0) {
-							player* Player = new player(1, 100, 100, 0, 0);
-						}
+						player* Player_1 = new player(1, 100, 100, 0, 0);
 						if (choice == 1) {
-							player* Player_1 = new player(1, 100, 100, 0, 0);
-
 							player* Player_2 = new player(2, 100, 300, 0, 0);
 						}
 						scene = transition;
 						choice = 0;
 					}
+					break;
 				}
 				case play:
 				{
@@ -273,7 +271,7 @@ int main() {
 				break;
 			}
 		}
-		window.draw(img::background());
+		img::displayImage(window, img::texture::background, 0, 0);
 
 		//outside pollEvent
 		switch (scene) {
@@ -336,11 +334,12 @@ int main() {
 			enemy::clearObject();
 			if(level == -1){ //lOSE
 				text::displayText(window, "YOU LOSE :(\nBETTER LUCK NEXT TIME", 40, sf::Color::White, 100, 100);
+				text::displayText(window, "Your last score is " + std::to_string(currentPoint), 40, sf::Color::White, 100, 200);
 				text::displayText(window, "Press 'R' to back to main menu", 40, sf::Color::White, 100, 600);
-				break;
 			}
-			else if (level > 3) { //WIN
+			else if (level > 2) { //WIN
 				text::displayText(window, "CONGRATULATION :)\nYOU'RE THE WINNER", 40, sf::Color::White, 100, 100);
+				text::displayText(window, "Your final score is " + std::to_string(currentPoint), 40, sf::Color::White, 100, 200);
 				text::displayText(window, "Press 'R' to back to main menu", 40, sf::Color::White, 100, 600);
 			}
 			else { //NEXT LEVEL
