@@ -14,6 +14,7 @@ int main() {
 	window.setFramerateLimit(60);
 
 	sf::Clock clock;
+	sf::Clock clock_2;
 	sf::Event event;
 	sf::Music bgmusic;
 	bgmusic.openFromFile("audio/Boooring.ogg");
@@ -343,6 +344,7 @@ int main() {
 
 		case play:
 		{
+			//FIRST PLAYER
 			if (player::getObjectPtr(101) != NULL) {
 				player* player_1 = player::getObjectPtr(101);
 				if (up_1)
@@ -353,8 +355,13 @@ int main() {
 					player_1->shoot(sfxVolume);
 				if (player_1->getBulletCount() >= 30)
 					text::displayText(window, "player_1's bullet is empty", 30, sf::Color::White, 30, 650);
-			}
 
+				if (clock_2.getElapsedTime().asSeconds() >= 5) {
+					player_1->healPlayer(20);
+				}
+			}
+			
+			//SECOND PLAYER
 			if (player::getObjectPtr(102) != NULL) {
 				player* player_2 = player::getObjectPtr(102);
 				if (up_2)
@@ -365,7 +372,14 @@ int main() {
 					player_2->shoot(sfxVolume);
 				if (player_2->getBulletCount() >= 30)
 					text::displayText(window, "player_2's bullet is empty", 30, sf::Color::White, 850, 650);
+
+				if (clock_2.getElapsedTime().asSeconds() >= 5) {
+					player_2->healPlayer(20);
+				}
 			}
+
+			if (clock_2.getElapsedTime().asSeconds() >= 5)
+				clock_2.restart();
 
 			//pause the game if the window lost its focus
 			if (!window.hasFocus()) {
@@ -380,7 +394,7 @@ int main() {
 				switch (level) {
 				case 1:
 				{
-					for (int i = 1; i < getRandomInteger(2, 4); i++) {
+					for (int i = 1; i < 2; i++) {
 						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.3, 0.3), getRandomFloat(0.1, 0.3));
 					}
 					break;

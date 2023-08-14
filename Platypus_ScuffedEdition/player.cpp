@@ -61,6 +61,11 @@ void player::reducePlayerHp(float damage) {
 	this->hp -= damage;
 }
 
+void player::healPlayer(float addHp) {
+	if(this->hp < MAX_HEALTH)
+		this->hp += addHp;
+}
+
 void player::drawHpBar(sf::RenderWindow& window, float position_x, float position_y, float width, float height) {
 	sf::RectangleShape rectangle;
 	rectangle.setOutlineColor(sf::Color::White); 
