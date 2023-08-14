@@ -12,6 +12,6 @@ public:
 	static void fontInitialization(std::string fontDir);
 
 	static void displayText(sf::RenderWindow& window, std::string text, int size, sf::Color color, float position_x, float position_y);
-	static void displayChoice(sf::RenderWindow& window, int choice, int scene, int bgmVol, int sfxVol);
+	static void displayMultipleChoice(sf::RenderWindow& window, std::vector<std::string> choices, int choice, int size, sf::Color chosen, sf::Color notChosen, float position_x, float position_y);
 	static void displayTutorial(sf::RenderWindow& window, int step);
 };

@@ -16,47 +16,17 @@ void text::displayText(sf::RenderWindow& window, std::string text, int size, sf:
 	window.draw(Text);
 }
 
-void text::displayChoice(sf::RenderWindow& window, int choice, int scene, int bgmVol, int sfxVol) {
+void text::displayMultipleChoice(sf::RenderWindow& window, std::vector<std::string> choices, int choice, int size, sf::Color chosen, sf::Color notChosen, float position_x, float position_y) {
 	sfe::RichText text(font);
-	std::vector<std::string> startMenu_choices = { "START\n", "SETTINGS\n", "EXIT" };
-	std::vector<std::string> setting_choices = { "BGM Volume : " + std::to_string(bgmVol) + '\n',
-												 "SFX Volume : " + std::to_string(sfxVol) + '\n',
-												 "Tutorial\n",
-												 "Credit" };
-	std::vector<std::string> singlemulti_choices = { "Singleplayer\n", "Multiplayer" };
-	if (scene == start) {
-		for (size_t i = 0; i < startMenu_choices.size(); i++) {
-			if (i == choice)
-				text << sf::Color::Cyan << startMenu_choices[i];
-			else
-				text << sf::Color::White << startMenu_choices[i];
-		}
-		text.setCharacterSize(60);
-		text.setPosition(100, 400);
-	}
-	if (scene == settings) {
-		text << sf::Color::White << "Settings: \n";
-		for (size_t i = 0; i < setting_choices.size(); i++) {
-			if (i == choice)
-				text << sf::Color::Cyan << setting_choices[i];
-			else
-				text << sf::Color::White << setting_choices[i];
-		}
-		text.setCharacterSize(50);
-		text.setPosition(100, 300);
-	}
-	if (scene == singleMulti) {
-		text << sf::Color::White << "Gamemode: \n";
-		for (size_t i = 0; i < singlemulti_choices.size(); i++) {
-			if (i == choice)
-				text << sf::Color::Cyan << singlemulti_choices[i];
-			else
-				text << sf::Color::White << singlemulti_choices[i];
-		}
-		text.setCharacterSize(60);
-		text.setPosition(100, 400);
+	for (size_t i = 0; i < choices.size(); i++) {
+		if (i == choice)
+			text << chosen << choices[i] << '\n';
+		else
+			text << notChosen << choices[i] << '\n';
 	}
 
+	text.setCharacterSize(size);
+	text.setPosition(position_x, position_y);
 	window.draw(text);
 }
 
