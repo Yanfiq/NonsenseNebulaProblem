@@ -357,7 +357,7 @@ int main() {
 					text::displayText(window, "player_1's bullet is empty", 30, sf::Color::White, 30, 650);
 
 				if (clock_2.getElapsedTime().asSeconds() >= 5) {
-					player_1->healPlayer(20);
+					player_1->healPlayer(getRandomFloat(10, 20));
 				}
 			}
 			
@@ -374,7 +374,7 @@ int main() {
 					text::displayText(window, "player_2's bullet is empty", 30, sf::Color::White, 850, 650);
 
 				if (clock_2.getElapsedTime().asSeconds() >= 5) {
-					player_2->healPlayer(20);
+					player_2->healPlayer(getRandomFloat(10, 20));
 				}
 			}
 
