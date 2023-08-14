@@ -276,8 +276,9 @@ int main() {
 		switch (scene) {
 		case start:
 		{
+			std::vector<std::string> choices = { "START", "SETTINGS", "EXIT" };
 			text::displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
-			text::displayChoice(window, choice, scene, bgmVolume, sfxVolume);
+			text::displayMultipleChoice(window, choices, choice, 50, sf::Color::Cyan, sf::Color::White, 100, 450);
 			break;
 		}
 
@@ -295,15 +296,21 @@ int main() {
 
 		case settings:
 		{
+			std::vector<std::string> choices = { "BGM Volume : <" + std::to_string(bgmVolume) + "%>",
+												 "SFX Volume : <" + std::to_string(sfxVolume) + "%>",
+												 "Tutorial",
+												 "Credit"};
 			text::displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
-			text::displayChoice(window, choice, scene, bgmVolume, sfxVolume);
+			text::displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, 400);
 			break;
 		}
 
 		case singleMulti:
 		{
+			std::vector<std::string> choices = { "Singleplayer", "Multiplayer" };
 			text::displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
-			text::displayChoice(window, choice, scene, bgmVolume, sfxVolume);
+			text::displayText(window, "Choose your gamemode: ", 40, sf::Color::White, 100, 460);
+			text::displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, 520);
 			break;
 		}
 
