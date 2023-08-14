@@ -31,7 +31,7 @@ int main() {
 	sounds::loadSound();
  
 	// enumeration for scene changes
-	enum part { start, settings , tutorial, transition, singleMulti, play, pause };
+	enum part { start, settings , tutorial, credits, transition, singleMulti, play, pause };
 	// enumeration for objectType
 	enum objectType {
 		player_obj = 100,
@@ -148,6 +148,8 @@ int main() {
 					if (event.key.code == sf::Keyboard::Enter) {
 						if (choice == 2)
 							scene = tutorial;
+						if (choice == 3)
+							scene = credits;
 					}
 					break;
 				}
@@ -306,6 +308,19 @@ int main() {
 			break;
 		}
 
+		case credits:
+		{
+			static float positionY = 720;
+			sfe::RichText text = text::displayCredit(100, positionY);
+			window.draw(text);
+			positionY -= 2;
+			if (positionY < (- 1200)) {
+				scene = settings;
+				positionY = 800;
+			}
+			break;
+		}
+
 		case singleMulti:
 		{
 			std::vector<std::string> choices = { "Singleplayer", "Multiplayer" };
@@ -424,6 +439,13 @@ int main() {
 				break;
 			}
 
+			//lose when the player is 0
+			if (player::getPlayerMap()->empty()) {
+				level = -1;
+				scene = transition;
+				break;
+			}
+
 			//enemy's attack algorithm
 			std::unordered_map<int, enemy*>* enemyMap = enemy::getEnemyMap();
 			std::unordered_map<int, player*>* playerMap = player::getPlayerMap();
@@ -441,13 +463,6 @@ int main() {
 			//collision detection and object removal
 			currentPoint += processCollision();
 			text::displayText(window, "Score : " + std::to_string(currentPoint), 40, sf::Color::White, 30, 30);
-
-			//lose
-			if (player::getPlayerMap()->empty()) {
-				level = -1;
-				scene = transition;
-				break;
-			}
 
 			//update & draw
 			double dt = clock.restart().asSeconds() * 1500;

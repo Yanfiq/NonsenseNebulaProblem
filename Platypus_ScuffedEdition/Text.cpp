@@ -93,3 +93,31 @@ void text::displayTutorial(sf::RenderWindow& window, int step) {
 	window.draw(text_1);
 	window.draw(text_2);
 }
+
+sfe::RichText text::displayCredit(float position_x, float position_y) {
+	sfe::RichText text(font);
+	text.setCharacterSize(30);
+	text.setPosition(position_x, position_y);
+
+	text << sf::Color::Cyan << "CREDITS\n\n"
+		<< sf::Color::Cyan << sf::Text::Underlined << "Game Design\n"
+		<< sf::Color::White << sf::Text::Regular << "A Game by Muhammad Ryan Fikri Fakhrezi\n\n"
+		<< sf::Color::Cyan << sf::Text::Underlined << "Special thanks: \n"
+		<< sf::Color::Cyan << sf::Text::Underlined << "Music: \n"
+		<< sf::Color::White << sf::Text::Regular << "Boooring! [Instrumental]\n"
+		<< sf::Color::White << sf::Text::Regular << "By Assertive Fluttershy\n\n"
+		<< sf::Color::Cyan << sf::Text::Underlined << "Font: \n"
+		<< sf::Color::White << sf::Text::Regular << "Poppins\n"
+		<< sf::Color::White << sf::Text::Regular << "Designed by Indian Type Foundry, Jonny Pinhorn\n\n"
+		<< sf::Color::Cyan << sf::Text::Underlined << "Art: \n"
+		<< sf::Color::White << sf::Text::Regular << "Nebula background by Starkiteckt\n"
+		<< sf::Color::White << sf::Text::Regular << "https://www.deviantart.com/starkiteckt\n\n"
+		<< sf::Color::White << sf::Text::Regular << "Player's texture from pngwing.com\n"
+		<< sf::Color::White << sf::Text::Regular << "https://www.pngwing.com/en/free-png-bxslp\n\n"
+		<< sf::Color::White << sf::Text::Regular << "Enemy's texture from pngwing.com\n"
+		<< sf::Color::White << sf::Text::Regular << "https://www.pngwing.com/en/free-png-ykqrx\n\n"
+		<< sf::Color::White << sf::Text::Regular << "Bullet's texture by Gintasdx\n"
+		<< sf::Color::White << sf::Text::Regular << "https://www.deviantart.com/gintasdx\n\n";
+
+	return text;
+}
