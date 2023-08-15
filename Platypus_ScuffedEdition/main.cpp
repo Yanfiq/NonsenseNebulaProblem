@@ -21,12 +21,11 @@ int main() {
 	bgmusic.play();
 	bgmusic.setLoop(true);
 	
-
 	//texture initialization
 	player::initializeTexture("images/player.png");
 	bullet::initializeTexture("images/bullet.png");
 	enemy::initializeTexture("images/enemy.png");
-	text::fontInitialization("fonts/Poppins-SemiBold.ttf");
+	textRenderer TextRenderer("fonts/Poppins-SemiBold.ttf");
 	img::initializeTexture();
 	sounds::loadSound();
  
@@ -51,14 +50,16 @@ int main() {
 	int currentPoint = 0;			// as the name implies, to save the point calculation result
 	bool generateEnemy = false;		// decides whether to generate new enemies
 
-	// variables that'll be used in the start menu
+	// variables that'll be used on multiple choices scene
 	int scene = start;				// decide what scene is being run
 	int choice = 0;					// variables that will later change the scene in the start menu
+
+	// only for tutorial scene
 	int stepTutorial = 1;
 
 	//volumes
-	int bgmVolume = 50;
-	int sfxVolume = 50;
+	int bgmVolume = 100;
+	int sfxVolume = 100;
 
 	// main game loop
 	while (window.isOpen()) {
@@ -216,9 +217,30 @@ int main() {
 				}
 				case pause:
 				{
-					if (event.key.code == sf::Keyboard::Space) {
-						scene = play;
-						clock.restart();
+					if (event.key.code == sf::Keyboard::Up) {
+						choice--;
+						if (choice < 0)
+							choice = 0;
+					}
+					if (event.key.code == sf::Keyboard::Down) {
+						choice++;
+						if (choice > 1)
+							choice = 1;
+					}
+					if (event.key.code == sf::Keyboard::Enter) {
+						if (choice == 0) {
+							scene = play;
+							clock.restart();
+						}
+						else if (choice == 1) {
+							scene = start;
+							level = 0;
+							currentPoint = 0;
+							choice = 0;
+							enemy::clearObject();
+							bullet::clearObject();
+							player::clearObject();
+						}
 					}
 					break;
 				}
@@ -278,20 +300,20 @@ int main() {
 		case start:
 		{
 			std::vector<std::string> choices = { "START", "SETTINGS", "EXIT" };
-			text::displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
-			text::displayMultipleChoice(window, choices, choice, 50, sf::Color::Cyan, sf::Color::White, 100, 450);
+			TextRenderer.displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
+			TextRenderer.displayMultipleChoice(window, choices, choice, 50, sf::Color::Cyan, sf::Color::White, 100, 450);
 			break;
 		}
 
 		case tutorial:
 		{
-			text::displayTutorial(window, stepTutorial);
+			displayTutorial(window, TextRenderer.getFont(), stepTutorial);
 			if (stepTutorial > 5)
 			{
 				scene = settings;
 				stepTutorial = 1;
 			}
-			text::displayText(window, "Press ENTER to continue", 30, sf::Color::White, 100, 600);
+			TextRenderer.displayText(window, "Press ENTER to continue", 30, sf::Color::White, 100, 600);
 			break;
 		}
 
@@ -301,15 +323,15 @@ int main() {
 												 "SFX Volume : <" + std::to_string(sfxVolume) + "%>",
 												 "Tutorial",
 												 "Credit"};
-			text::displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
-			text::displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, 400);
+			TextRenderer.displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
+			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, 400);
 			break;
 		}
 
 		case credits:
 		{
 			static float positionY = 720;
-			sfe::RichText text = text::displayCredit(100, positionY);
+			sfe::RichText text = displayCredit(TextRenderer.getFont(), 100, positionY);
 			window.draw(text);
 			positionY -= 2;
 			if (positionY < (- 1200)) {
@@ -322,9 +344,9 @@ int main() {
 		case singleMulti:
 		{
 			std::vector<std::string> choices = { "Singleplayer", "Multiplayer" };
-			text::displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
-			text::displayText(window, "Choose your gamemode: ", 40, sf::Color::White, 100, 460);
-			text::displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, 520);
+			TextRenderer.displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
+			TextRenderer.displayText(window, "Choose your gamemode: ", 40, sf::Color::White, 100, 460);
+			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, 520);
 			break;
 		}
 
@@ -333,26 +355,29 @@ int main() {
 			bullet::clearObject();
 			enemy::clearObject();
 			if(level == -1){ //lOSE
-				text::displayText(window, "YOU LOSE :(\nBETTER LUCK NEXT TIME", 40, sf::Color::White, 100, 100);
-				text::displayText(window, "Your last score is " + std::to_string(currentPoint), 40, sf::Color::White, 100, 200);
-				text::displayText(window, "Press 'R' to back to main menu", 40, sf::Color::White, 100, 600);
+				TextRenderer.displayText(window, "YOU LOSE :(\nBETTER LUCK NEXT TIME", 40, sf::Color::White, 100, 100);
+				TextRenderer.displayText(window, "Your last score is " + std::to_string(currentPoint), 40, sf::Color::White, 100, 200);
+				TextRenderer.displayText(window, "Press 'R' to back to main menu", 40, sf::Color::White, 100, 600);
 			}
 			else if (level > 2) { //WIN
-				text::displayText(window, "CONGRATULATION :)\nYOU'RE THE WINNER", 40, sf::Color::White, 100, 100);
-				text::displayText(window, "Your final score is " + std::to_string(currentPoint), 40, sf::Color::White, 100, 200);
-				text::displayText(window, "Press 'R' to back to main menu", 40, sf::Color::White, 100, 600);
+				TextRenderer.displayText(window, "CONGRATULATION :)\nYOU'RE THE WINNER", 40, sf::Color::White, 100, 100);
+				TextRenderer.displayText(window, "Your final score is " + std::to_string(currentPoint), 40, sf::Color::White, 100, 200);
+				TextRenderer.displayText(window, "Press 'R' to back to main menu", 40, sf::Color::White, 100, 600);
 			}
 			else { //NEXT LEVEL
-				text::displayText(window, "LEVEL " + std::to_string(level + 1), 40, sf::Color::Cyan, 100, 100);
-				text::displayText(window, "Press ENTER to continue", 30, sf::Color::White, 100, 600);
+				TextRenderer.displayText(window, "LEVEL " + std::to_string(level + 1), 40, sf::Color::Cyan, 100, 100);
+				TextRenderer.displayText(window, "Press ENTER to continue", 30, sf::Color::White, 100, 600);
 			}
 			break;
 		}
 
 		case pause:
 		{
-			text::displayText(window, "PAUSE", 40, sf::Color::White, 100, 100);
-			text::displayText(window, "Press 'space' to back to the game", 40, sf::Color::White, 100, 600);
+			TextRenderer.displayText(window, "PAUSE", 40, sf::Color::White, 100, 100);
+
+			std::vector<std::string> choices = { "Resume", "Rage quit" };
+			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, 520);
+			//TextRenderer.displayText(window, "Press 'space' to back to the game", 40, sf::Color::White, 100, 600);
 			break;
 		}
 
@@ -368,7 +393,7 @@ int main() {
 				if (shoot_1 && player_1->getBulletCount() <= 30)
 					player_1->shoot(sfxVolume);
 				if (player_1->getBulletCount() >= 30)
-					text::displayText(window, "player_1's bullet is empty", 30, sf::Color::White, 30, 650);
+					TextRenderer.displayText(window, "player_1's bullet is empty", 30, sf::Color::White, 30, 650);
 
 				if (clock_2.getElapsedTime().asSeconds() >= 5) {
 					player_1->healPlayer(getRandomFloat(10, 20));
@@ -385,7 +410,7 @@ int main() {
 				if (shoot_2 && player_2->getBulletCount() <= 30)
 					player_2->shoot(sfxVolume);
 				if (player_2->getBulletCount() >= 30)
-					text::displayText(window, "player_2's bullet is empty", 30, sf::Color::White, 850, 650);
+					TextRenderer.displayText(window, "player_2's bullet is empty", 30, sf::Color::White, 850, 650);
 
 				if (clock_2.getElapsedTime().asSeconds() >= 5) {
 					player_2->healPlayer(getRandomFloat(10, 20));
@@ -408,7 +433,7 @@ int main() {
 				switch (level) {
 				case 1:
 				{
-					for (int i = 1; i < 2; i++) {
+					for (int i = 1; i < getRandomInteger(2, 3); i++) {
 						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.3, 0.3), getRandomFloat(0.1, 0.3));
 					}
 					break;
@@ -461,7 +486,7 @@ int main() {
 
 			//collision detection and object removal
 			currentPoint += processCollision();
-			text::displayText(window, "Score : " + std::to_string(currentPoint), 40, sf::Color::White, 30, 30);
+			TextRenderer.displayText(window, "Score : " + std::to_string(currentPoint), 40, sf::Color::White, 30, 30);
 
 			//update & draw
 			double dt = clock.restart().asSeconds() * 1500;
