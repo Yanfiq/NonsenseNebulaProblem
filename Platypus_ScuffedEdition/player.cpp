@@ -29,10 +29,11 @@ void player::shoot(int &sfxVol) {
 	bulletFired++;
 	Bullet->setDamageValue(20.0f);
 	sounds::playShootSound(sfxVol);
+	if (allBullet == 99)
+		allBullet = 0;
 }
 
 void player::resetBulletCount() {
-	allBullet -= 30;
 	bulletFired = 0;
 }
 
@@ -128,5 +129,18 @@ void player::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 		}
 		sf::RectangleShape* sprite = it.second->getSprite();
 		window.draw(*sprite);
+
+		std::string string = "player " + std::to_string(it.first - 100);
+		sf::Text text;
+		text.setString(string);
+		text.setFillColor(sf::Color::White);
+		text.setCharacterSize(20);
+		text.setFont(*text::getFont());
+		
+		sf::FloatRect rc = text.getLocalBounds();
+		text.setOrigin(rc.width / 2, 0);
+		text.setPosition(it.second->getPositionX(), it.second->getPositionY() + it.second->getSprite()->getOrigin().y);
+
+		window.draw(text);
 	}
 }
