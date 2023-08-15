@@ -16,4 +16,8 @@ enum objectType {
 
 float getRandomFloat(float min, float max);
 int getRandomInteger(int min, int max);
+
+
 int processCollision();
+void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step);
+sfe::RichText displayCredit(sf::Font* font, float position_x, float position_y);
