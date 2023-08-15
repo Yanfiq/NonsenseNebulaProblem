@@ -3,7 +3,7 @@
 std::unordered_map<int, player*> player::player_map;
 int player::allBullet = 1;
 sf::Texture player::texture;
-
+textRenderer player::TextRenderer("fonts/Poppins-SemiBold.ttf");
 
 player::player(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY) {
 	object_sprite.setTexture(&texture);
@@ -131,16 +131,8 @@ void player::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 		window.draw(*sprite);
 
 		std::string string = "player " + std::to_string(it.first - 100);
-		sf::Text text;
-		text.setString(string);
-		text.setFillColor(sf::Color::White);
-		text.setCharacterSize(20);
-		text.setFont(*text::getFont());
-		
-		sf::FloatRect rc = text.getLocalBounds();
-		text.setOrigin(rc.width / 2, 0);
-		text.setPosition(it.second->getPositionX(), it.second->getPositionY() + it.second->getSprite()->getOrigin().y);
-
-		window.draw(text);
+		float x = it.second->getPositionX() - it.second->getSprite()->getOrigin().x;
+		float y = it.second->getPositionY() + it.second->getSprite()->getOrigin().y;
+		TextRenderer.displayText(window, string, 20, sf::Color::White, x, y);
 	}
 }
