@@ -10,8 +10,12 @@ namespace img {
 	void initializeTexture() {
 		texture::background.loadFromFile("images/nebula.jpg");
 		texture::keyboardLeft.loadFromFile("images/wasd.jpg");
-		texture::keyboardRight.loadFromFile("images/updownleftright.jpg");
+		texture::keyboardRight.loadFromFile("images/arrows.jpg");
 		texture::spacebarKey.loadFromFile("images/spacebar.jpg");
+		//std::string path = "images";
+		//for (const auto& entry : std::filesystem::directory_iterator(path)) {
+		//	std::cout << entry.path().filename() << std::endl;
+		//}
 	}
 
 	void displayImage(sf::RenderWindow& window, sf::Texture texture, float position_x, float position_y) {

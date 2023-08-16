@@ -119,8 +119,8 @@ void player::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 		it.second->drawHpBar(window, it.second->getPositionX(), it.second->getPositionY() - it.second->getHeight() / 2 - 20, it.second->getWidth(), 10);
 		it.second->update(dt);
 
-		if (it.second->getPositionY() >= 720) {
-			it.second->setPosition(it.second->getPositionX(), 720);
+		if (it.second->getPositionY() >= window.getSize().y) {
+			it.second->setPosition(it.second->getPositionX(), window.getSize().y);
 			it.second->setVelocity(it.second->getVelocityX(), it.second->getVelocityY() * -1 + 0.05);
 		}
 		else if (it.second->getPositionY() <= 0) {

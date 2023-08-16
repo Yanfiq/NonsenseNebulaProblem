@@ -14,6 +14,9 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
 	window.setFramerateLimit(60);
 
+	sf::View view(sf::FloatRect(0.f, 0.f, 1280.f, 720.f));
+	window.setView(view);
+
 	sf::Clock clock;
 	sf::Clock clock_2;
 	sf::Event event;
@@ -72,6 +75,12 @@ int main() {
 			case sf::Event::Closed:
 				window.close();
 				break;
+			case sf::Event::Resized:
+			{
+				sf::FloatRect visibleArea(0.f, 0.f, event.size.width, event.size.height);
+				window.setView(sf::View(visibleArea));
+				break;
+			}
 			case sf::Event::KeyPressed:
 				switch (scene) {
 				case start:

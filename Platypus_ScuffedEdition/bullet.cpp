@@ -53,9 +53,17 @@ void bullet::clearObject() {
 }
 
 void bullet::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
-	for (const auto& it : bullet_map) {
-		it.second->update(dt);
-		sf::RectangleShape* sprite = it.second->getSprite();
+	for (auto it = bullet_map.begin(); it != bullet_map.end();) {
+		it->second->update(dt);
+		sf::RectangleShape* sprite = it->second->getSprite();
 		window.draw(*sprite);
+
+		if (it->second->getPositionX() < 0 || it->second->getPositionX() > window.getSize().x){
+			delete it->second;
+			it = bullet_map.erase(it);
+		}
+		else {
+			it++;
+		}
 	}
 }

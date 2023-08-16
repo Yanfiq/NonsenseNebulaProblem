@@ -42,12 +42,6 @@ int processCollision() {
 					collideObject[enemy_object->first] = bullet_object->first;
 				}
 			}
-
-			//collision happens between bullet and the right border
-			if (bullet_object->second->getPositionX() >= 1280) {
-				//add the bullet's id to the map
-				collideObject[bullet_object->first] = 0;
-			}
 		}
 
 		//bullets from the enemy
@@ -59,22 +53,12 @@ int processCollision() {
 					collideObject[player_object->first] = (bullet_object->first);
 				}
 			}
-
-			//collision happens between bullet and left border
-			if (bullet_object->second->getPositionX() <= 0) {
-				//add the bullet's id to the map
-				collideObject[bullet_object->first] = 0;
-			}
 		}
 	}
 	
 	int points = 0;
 	for (const auto& it : collideObject) {
-		if ((it.first - playerBullet_obj < 100 && it.first - playerBullet_obj > 0) ||
-			(it.first - enemyBullet_obj < 100 && it.first - enemyBullet_obj > 0)) {
-			bullet::deleteObject(it.first);
-		}
-		else if ((bullet::getObjectPtr(it.second) != NULL) &&
+		if ((bullet::getObjectPtr(it.second) != NULL) &&
 			(it.first - enemy_obj < 100 && it.first - enemy_obj > 0)) {
 			enemy* Enemy = enemy::getObjectPtr(it.first);
 			bullet* Bullet = bullet::getObjectPtr(it.second);
@@ -93,6 +77,7 @@ int processCollision() {
 			Player->reducePlayerHp(Bullet->getDamageValue());
 			points -= Bullet->getDamageValue();
 			if (Player->getPlayerHp() <= 0) {
+				animate::play("images/explode.png", 4, 5, sf::Vector2f(Player->getPositionX(), Player->getPositionY()));
 				player::deleteObject(it.first);
 			}
 			bullet::deleteObject(it.second);
@@ -187,7 +172,9 @@ sfe::RichText displayCredit(sf::Font* font, float position_x, float position_y) 
 		<< sf::Color::White << sf::Text::Regular << "Enemy's texture from pngwing.com\n"
 		<< sf::Color::White << sf::Text::Regular << "https://www.pngwing.com/en/free-png-ykqrx\n\n"
 		<< sf::Color::White << sf::Text::Regular << "Bullet's texture by GintasDX\n"
-		<< sf::Color::White << sf::Text::Regular << "https://www.deviantart.com/gintasdx\n\n";
+		<< sf::Color::White << sf::Text::Regular << "https://www.deviantart.com/gintasdx\n\n"
+		<< sf::Color::White << sf::Text::Regular << "Explosion APNG from pngwing.com\n"
+		<< sf::Color::White << sf::Text::Regular << "https://www.pngwing.com/en/free-png-plgdq\n\n";
 
 	return text;
 }
