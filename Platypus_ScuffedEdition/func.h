@@ -2,6 +2,7 @@
 #include "bullet.h"
 #include "enemy.h"
 #include "player.h"
+#include "animation.h"
 
 #include <random>
 #include <ctime>

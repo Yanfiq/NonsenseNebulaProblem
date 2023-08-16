@@ -8,6 +8,7 @@
 #include "Text.h"
 #include "func.h"
 #include "Images.h"
+#include "animation.h"
 
 int main() {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
@@ -65,6 +66,7 @@ int main() {
 	while (window.isOpen()) {
 		bgmusic.setVolume(bgmVolume);
 		sounds::checkAndDeleteSound();
+		animate::monitoringAnimation(window);
 		while (window.pollEvent(event)) {
 			switch (event.type) {
 			case sf::Event::Closed:
@@ -86,6 +88,7 @@ int main() {
 					}
 					if (event.key.code == sf::Keyboard::Enter) {
 						if (choice == 0) {
+							//Animate.playAnimation(window);
 							scene = singleMulti;
 						}
 						if (choice == 1) {

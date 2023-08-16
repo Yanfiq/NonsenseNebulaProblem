@@ -6,6 +6,7 @@ namespace img {
 	sf::Texture texture::keyboardRight;
 	sf::Texture texture::spacebarKey;
 
+
 	void initializeTexture() {
 		texture::background.loadFromFile("images/nebula.jpg");
 		texture::keyboardLeft.loadFromFile("images/wasd.jpg");

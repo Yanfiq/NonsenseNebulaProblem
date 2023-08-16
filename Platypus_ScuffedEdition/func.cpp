@@ -80,8 +80,10 @@ int processCollision() {
 			bullet* Bullet = bullet::getObjectPtr(it.second);
 			Enemy->reduceHp(Bullet->getDamageValue());
 			points += Bullet->getDamageValue();
-			if (Enemy->getHp() <= 0)
+			if (Enemy->getHp() <= 0) {
+				animate::play("images/explode.png", 4, 5, sf::Vector2f(Enemy->getPositionX(), Enemy->getPositionY()));
 				enemy::deleteObject(it.first);
+			}
 			bullet::deleteObject(it.second);
 		}
 		else if ((bullet::getObjectPtr(it.second) != NULL) &&

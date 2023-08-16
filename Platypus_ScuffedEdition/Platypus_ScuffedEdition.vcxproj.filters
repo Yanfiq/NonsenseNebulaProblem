@@ -27,9 +27,6 @@
     <ClCompile Include="bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="anotherObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -48,6 +45,12 @@
     <ClCompile Include="sound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="animationFrame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="objects.h">
@@ -57,9 +60,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="bullet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="anotherObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="enemy.h">
@@ -81,6 +81,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="particleSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="animationFrame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
