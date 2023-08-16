@@ -82,6 +82,7 @@ int main() {
 			{
 				sf::FloatRect visibleArea(0.f, 0.f, event.size.width, event.size.height);
 				window.setView(sf::View(visibleArea));
+				std::cout << window.getSize().x << " ; " << window.getSize().y << std::endl;
 				break;
 			}
 			case sf::Event::KeyPressed:
@@ -428,7 +429,7 @@ int main() {
 					player_1->healPlayer(getRandomFloat(10, 20));
 				}
 			}
-			
+
 			//SECOND PLAYER
 			if (player::getObjectPtr(102) != NULL) {
 				player* player_2 = player::getObjectPtr(102);
@@ -440,7 +441,6 @@ int main() {
 					player_2->shoot(sfxVolume);
 				if (player_2->getBulletCount() >= 30)
 					TextRenderer.displayText(window, "player_2's bullet is empty", 30, sf::Color::White, 850, 650);
-
 				if (clock_2.getElapsedTime().asSeconds() >= 5) {
 					player_2->healPlayer(getRandomFloat(10, 20));
 				}
@@ -459,25 +459,27 @@ int main() {
 			if (generateEnemy) {
 				bullet::clearObject();
 				clock.restart();
+				float min = (window.getSize().x / 288 > window.getSize().y / 176) ? window.getSize().y / 176 : window.getSize().x / 288;
+				float max = (window.getSize().x / 288 > window.getSize().y / 176) ? window.getSize().x / 288 : window.getSize().y / 176;
 				switch (level) {
 				case 1:
 				{
-					for (int i = 1; i < getRandomInteger(2, 3); i++) {
-						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.3, 0.3), getRandomFloat(0.1, 0.3));
+					for (int i = 1; i < getRandomFloat(min, max); i++) {
+						enemy* Enemy = new enemy(i, getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-0.3, 0.3), getRandomFloat(0.1, 0.3));
 					}
 					break;
 				}
 				case 2:
 				{
-					for (int i = 1; i < getRandomInteger(4, 7); i++) {
-						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.6, 0.6), getRandomFloat(-0.6, 0.6));
+					for (int i = 1; i < getRandomInteger(min + 2, max + 3 ); i++) {
+						enemy* Enemy = new enemy(i, getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-0.6, 0.6), getRandomFloat(-0.6, 0.6));
 					}
 					break;
 				}
 				case 3:
 				{
-					for (int i = 1; i < getRandomInteger(7, 11); i++) {
-						enemy* Enemy = new enemy(i, getRandomFloat(400, 1280), getRandomFloat(0, 720), getRandomFloat(-0.9, 0.9), getRandomFloat(-0.9, 0.9));
+					for (int i = 1; i < getRandomInteger(min + 3, max + 5 ); i++) {
+						enemy* Enemy = new enemy(i, getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-0.9, 0.9), getRandomFloat(-0.9, 0.9));
 					}
 					break;
 				}
