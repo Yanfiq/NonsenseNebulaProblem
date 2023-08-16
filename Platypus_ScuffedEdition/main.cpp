@@ -66,7 +66,7 @@ int main() {
 	while (window.isOpen()) {
 		bgmusic.setVolume(bgmVolume);
 		sounds::checkAndDeleteSound();
-		animate::monitoringAnimation(window);
+
 		while (window.pollEvent(event)) {
 			switch (event.type) {
 			case sf::Event::Closed:
@@ -296,7 +296,10 @@ int main() {
 				break;
 			}
 		}
+
+		// draw the background and animation
 		img::displayImage(window, img::texture::background, 0, 0);
+		animate::monitoringAnimation(window);
 
 		//outside pollEvent
 		switch (scene) {
@@ -500,7 +503,7 @@ int main() {
 		}
 		}
 		window.display();
-		window.clear(sf::Color(255, 255, 255));
+		window.clear();
 	}
 	return 0;
 }
