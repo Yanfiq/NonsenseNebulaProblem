@@ -11,7 +11,8 @@
 #include "animation.h"
 
 int main() {
-	sf::RenderWindow window(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
+	sf::RenderWindow window;
+	window.create(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(60);
 
 	sf::View view(sf::FloatRect(0.f, 0.f, 1280.f, 720.f));
@@ -64,6 +65,8 @@ int main() {
 	//volumes
 	int bgmVolume = 100;
 	int sfxVolume = 100;
+
+	bool cheat = false;
 
 	// main game loop
 	while (window.isOpen()) {
@@ -121,8 +124,8 @@ int main() {
 				{
 					if (event.key.code == sf::Keyboard::Down) {
 						choice++;
-						if (choice > 3)
-							choice = 3;
+						if (choice > 4)
+							choice = 4;
 					}
 					if (event.key.code == sf::Keyboard::Up) {
 						choice--;
@@ -141,6 +144,11 @@ int main() {
 								sfxVolume = 0;
 							sounds::playShootSound(sfxVolume);
 						}
+						if (choice == 2) {
+							cheat = false;
+							window.create(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close);
+							window.setFramerateLimit(60);
+						}
 					}
 					if (event.key.code == sf::Keyboard::Right) {
 						if (choice == 0) {
@@ -154,15 +162,20 @@ int main() {
 								sfxVolume = 100;
 							sounds::playShootSound(sfxVolume);
 						}
+						if (choice == 2) {
+							cheat = true;
+							window.create(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
+							window.setFramerateLimit(60);
+						}
 					}
 					if (event.key.code == sf::Keyboard::Escape) {
 						scene = start;
 						choice = 0;
 					}
 					if (event.key.code == sf::Keyboard::Enter) {
-						if (choice == 2)
-							scene = tutorial;
 						if (choice == 3)
+							scene = tutorial;
+						if (choice == 4)
 							scene = credits;
 					}
 					break;
@@ -334,12 +347,14 @@ int main() {
 
 		case settings:
 		{
+			std::string Cheat = (cheat) ? "Enabled" : "Disabled";
 			std::vector<std::string> choices = { "BGM Volume : <" + std::to_string(bgmVolume) + "%>",
 												 "SFX Volume : <" + std::to_string(sfxVolume) + "%>",
+												 "Cheat : < " + Cheat + " >",
 												 "Tutorial",
 												 "Credit"};
 			TextRenderer.displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
-			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 320);
+			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 360);
 			break;
 		}
 
