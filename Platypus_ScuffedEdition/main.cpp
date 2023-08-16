@@ -345,11 +345,11 @@ int main() {
 
 		case credits:
 		{
-			static float positionY = 720;
+			static float positionY = window.getSize().y;
 			sfe::RichText text = displayCredit(TextRenderer.getFont(), 100, positionY);
 			window.draw(text);
-			positionY -= 2;
-			if (positionY < (- 1200)) {
+			positionY -= 5;
+			if (positionY < (- 1500)) {
 				scene = settings;
 				positionY = 800;
 			}
@@ -360,8 +360,8 @@ int main() {
 		{
 			std::vector<std::string> choices = { "Singleplayer", "Multiplayer" };
 			TextRenderer.displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
-			TextRenderer.displayText(window, "Choose your gamemode: ", 40, sf::Color::White, 100, 460);
-			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, 520);
+			TextRenderer.displayText(window, "Choose your gamemode: ", 40, sf::Color::White, 100, window.getSize().y - 220);
+			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 180);
 			break;
 		}
 
@@ -372,16 +372,16 @@ int main() {
 			if(level == -1){ //lOSE
 				TextRenderer.displayText(window, "YOU LOSE :(\nBETTER LUCK NEXT TIME", 40, sf::Color::White, 100, 100);
 				TextRenderer.displayText(window, "Your last score is " + std::to_string(currentPoint), 40, sf::Color::White, 100, 200);
-				TextRenderer.displayText(window, "Press 'R' to back to main menu", 40, sf::Color::White, 100, 600);
+				TextRenderer.displayText(window, "Press 'R' to back to main menu", 40, sf::Color::White, 100, window.getSize().y - 60);
 			}
 			else if (level > 2) { //WIN
 				TextRenderer.displayText(window, "CONGRATULATION :)\nYOU'RE THE WINNER", 40, sf::Color::White, 100, 100);
 				TextRenderer.displayText(window, "Your final score is " + std::to_string(currentPoint), 40, sf::Color::White, 100, 200);
-				TextRenderer.displayText(window, "Press 'R' to back to main menu", 40, sf::Color::White, 100, 600);
+				TextRenderer.displayText(window, "Press 'R' to back to main menu", 40, sf::Color::White, 100, window.getSize().y - 60);
 			}
 			else { //NEXT LEVEL
 				TextRenderer.displayText(window, "LEVEL " + std::to_string(level + 1), 40, sf::Color::Cyan, 100, 100);
-				TextRenderer.displayText(window, "Press ENTER to continue", 30, sf::Color::White, 100, 600);
+				TextRenderer.displayText(window, "Press ENTER to continue", 30, sf::Color::White, 100, window.getSize().y - 60);
 			}
 			break;
 		}
@@ -391,8 +391,7 @@ int main() {
 			TextRenderer.displayText(window, "PAUSE", 40, sf::Color::White, 100, 100);
 
 			std::vector<std::string> choices = { "Resume", "Rage quit" };
-			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, 520);
-			//TextRenderer.displayText(window, "Press 'space' to back to the game", 40, sf::Color::White, 100, 600);
+			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 320);
 			break;
 		}
 
@@ -408,7 +407,7 @@ int main() {
 				if (shoot_1 && player_1->getBulletCount() <= 30)
 					player_1->shoot(sfxVolume);
 				if (player_1->getBulletCount() >= 30)
-					TextRenderer.displayText(window, "player_1's bullet is empty", 30, sf::Color::White, 30, 650);
+					TextRenderer.displayText(window, "player_1's bullet is empty", 30, sf::Color::White, 30, window.getSize().y - 60);
 
 				if (clock_2.getElapsedTime().asSeconds() >= 5) {
 					player_1->healPlayer(getRandomFloat(10, 20));

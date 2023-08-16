@@ -22,12 +22,13 @@ namespace img {
 		sf::RectangleShape shape;
 		shape.setTexture(&texture);
 		shape.setPosition(position_x, position_y);
+		sf::Vector2f textureSize = static_cast<sf::Vector2f>(texture.getSize());
 		if (size.x == 0 && size.y == 0)
-			shape.setSize(sf::Vector2f(texture.getSize()));
-		else if(size.x / size.y < texture.getSize().x / texture.getSize().y)
-			shape.setSize(sf::Vector2f((size.y/texture.getSize().y) * texture.getSize().x, size.y));
-		else if (size.x / size.y > texture.getSize().x / texture.getSize().y)
-			shape.setSize(sf::Vector2f(size.x, (size.x / texture.getSize().x) * texture.getSize().y));
+			shape.setSize(sf::Vector2f(textureSize));
+		else if(size.x / size.y <= textureSize.x / textureSize.y)
+			shape.setSize(sf::Vector2f((size.y/textureSize.y) * textureSize.x, size.y));
+		else if (size.x / size.y > textureSize.x / textureSize.y)
+			shape.setSize(sf::Vector2f(size.x, (size.x / textureSize.x) * textureSize.y));
 		else
 			shape.setSize(size);
 		window.draw(shape);
