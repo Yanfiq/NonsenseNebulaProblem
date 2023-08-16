@@ -82,19 +82,19 @@ void enemy::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 		it.second->update(dt);
 		it.second->drawHpBar(window, it.second->getPositionX() - it.second->getWidth() / 2, it.second->getPositionY() - it.second->getHeight() / 2 - 20, it.second->getWidth(), 10);
 
-		if (it.second->getPositionY() >= 720 || it.second->getPositionY() <= 0) {
+		if (it.second->getPositionY() > window.getSize().y || it.second->getPositionY() < 0) {
 			it.second->setVelocity(it.second->getVelocityX(), it.second->getVelocityY() * -1);
-			if (it.second->getPositionY() >= 720)
-				it.second->setPosition(it.second->getPositionX(), 720);
+			if (it.second->getPositionY() > window.getSize().y)
+				it.second->setPosition(it.second->getPositionX(), window.getSize().y);
 			else if (it.second->getPositionY() <= 0)
 				it.second->setPosition(it.second->getPositionX(), 0);
 		}
-		if (it.second->getPositionX() >= 1280 || it.second->getPositionX() <= 400) {
+		if (it.second->getPositionX() > window.getSize().x || it.second->getPositionX() < 400) {
 			it.second->setVelocity(it.second->getVelocityX() * -1, it.second->getVelocityY());
 			if (it.second->getPositionX() <= 400)
 				it.second->setPosition(400, it.second->getPositionY());
-			else if (it.second->getPositionX() >= 1280)
-				it.second->setPosition(1280, it.second->getPositionY());
+			else if (it.second->getPositionX() > window.getSize().x)
+				it.second->setPosition(window.getSize().x, it.second->getPositionY());
 		}
 		sf::RectangleShape* sprite = it.second->getSprite();
 		window.draw(*sprite);

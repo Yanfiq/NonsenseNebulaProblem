@@ -12,5 +12,5 @@ namespace img {
 	};
 
 	void initializeTexture();
-	void displayImage(sf::RenderWindow& window, sf::Texture texture, float position_x, float position_y);
+	void displayImage(sf::RenderWindow& window, sf::Texture texture, float position_x, float position_y, sf::Vector2f size);
 }

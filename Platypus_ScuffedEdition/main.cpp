@@ -307,7 +307,7 @@ int main() {
 		}
 
 		// draw the background and animation
-		img::displayImage(window, img::texture::background, 0, 0);
+		img::displayImage(window, img::texture::background, 0, 0, sf::Vector2f(window.getSize()));
 		animate::monitoringAnimation(window);
 
 		//outside pollEvent
@@ -316,7 +316,7 @@ int main() {
 		{
 			std::vector<std::string> choices = { "START", "SETTINGS", "EXIT" };
 			TextRenderer.displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
-			TextRenderer.displayMultipleChoice(window, choices, choice, 50, sf::Color::Cyan, sf::Color::White, 100, 450);
+			TextRenderer.displayMultipleChoice(window, choices, choice, 50, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 300);
 			break;
 		}
 
@@ -339,7 +339,7 @@ int main() {
 												 "Tutorial",
 												 "Credit"};
 			TextRenderer.displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
-			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, 400);
+			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 320);
 			break;
 		}
 

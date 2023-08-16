@@ -99,8 +99,8 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Up' instead\n";
 		text_2.setPosition(700, 150);
 
-		img::displayImage(window, img::texture::keyboardLeft, 100, 300);
-		img::displayImage(window, img::texture::keyboardRight, 700, 300);
+		img::displayImage(window, img::texture::keyboardLeft, 100, 300, sf::Vector2f(0, 0));
+		img::displayImage(window, img::texture::keyboardRight, 700, 300, sf::Vector2f(0, 0));
 		break;
 	case 2:
 		text_1 << sf::Color::Cyan << "Step 2\n"
@@ -110,8 +110,8 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Down' instead\n";
 		text_2.setPosition(700, 150);
 
-		img::displayImage(window, img::texture::keyboardLeft, 100, 300);
-		img::displayImage(window, img::texture::keyboardRight, 700, 300);
+		img::displayImage(window, img::texture::keyboardLeft, 100, 300, sf::Vector2f(0, 0));
+		img::displayImage(window, img::texture::keyboardRight, 700, 300, sf::Vector2f(0, 0));
 		break;
 	case 3:
 		text_1 << sf::Color::Cyan << "Step 3\n"
@@ -121,8 +121,8 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Right' instead\n";
 		text_2.setPosition(700, 150);
 
-		img::displayImage(window, img::texture::keyboardLeft, 100, 300);
-		img::displayImage(window, img::texture::keyboardRight, 700, 300);
+		img::displayImage(window, img::texture::keyboardLeft, 100, 300, sf::Vector2f(0, 0));
+		img::displayImage(window, img::texture::keyboardRight, 700, 300, sf::Vector2f(0, 0));
 		break;
 	case 4:
 		text_1 << sf::Color::Cyan << "Step 4\n"
@@ -132,15 +132,15 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Left' instead\n";
 		text_2.setPosition(700, 150);
 
-		img::displayImage(window, img::texture::keyboardLeft, 100, 300);
-		img::displayImage(window, img::texture::keyboardRight, 700, 300);
+		img::displayImage(window, img::texture::keyboardLeft, 100, 300, sf::Vector2f(0, 0));
+		img::displayImage(window, img::texture::keyboardRight, 700, 300, sf::Vector2f(0, 0));
 		break;
 	case 5:
 		text_1 << sf::Color::Cyan << "Step 5\n"
 			<< sf::Color::White << "use spacebar to pause the game\n";
 		text_1.setPosition(400, 100);
 
-		img::displayImage(window, img::texture::spacebarKey, 380, 300);
+		img::displayImage(window, img::texture::spacebarKey, 380, 300, sf::Vector2f(0, 0));
 		break;
 	}
 
