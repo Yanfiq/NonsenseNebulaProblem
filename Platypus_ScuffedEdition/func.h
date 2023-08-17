@@ -1,7 +1,7 @@
 #pragma once
 #include "bullet.h"
 #include "enemy.h"
-#include "textures.h"
+#include "textureManager.h"
 #include "player.h"
 #include "animation.h"
 
@@ -16,8 +16,8 @@ enum objectType {
 	enemyBullet_obj = 400
 };
 
-float getRandomFloat(float min, float max);
-int getRandomInteger(int min, int max);
+float getRandomFloat(float num_1, float num_2);
+int getRandomInteger(int num_1, int num_2);
 
 
 int processCollision();

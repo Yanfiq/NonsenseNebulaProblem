@@ -1,7 +1,11 @@
 #include "func.h"
 
 
-float getRandomFloat(float min, float max) {
+float getRandomFloat(float num_1, float num_2) {
+
+	float min = (num_1 < num_2) ? num_1 : num_2;
+	float max = (min == num_1) ? num_2 : num_1;
+
     // Seed the random number generator with the current time
     static std::mt19937 rng(static_cast<unsigned>(std::time(0)));
 
@@ -12,7 +16,11 @@ float getRandomFloat(float min, float max) {
     return dist(rng);
 }
 
-int getRandomInteger(int min, int max) {
+int getRandomInteger(int num_1, int num_2) {
+
+	int min = (num_1 < num_2) ? num_1 : num_2;
+	int max = (min == num_1) ? num_2 : num_1;
+
     // Define the random number generator engine
     std::random_device rd;
     std::default_random_engine rng(rd());
@@ -57,7 +65,7 @@ int processCollision() {
 	}
 	
 	int points = 0;
-	sf::Texture* explosion = textures::getTexture("gameplay_explode.png");
+	sf::Texture* explosion = textureManager::getTexture("gameplay_explode.png");
 	for (const auto& it : collideObject) {
 		if ((bullet::getObjectPtr(it.second) != NULL) &&
 			(it.first - enemy_obj < 100 && it.first - enemy_obj > 0)) {
@@ -91,9 +99,6 @@ int processCollision() {
 void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 	sfe::RichText text_1(*font);
 	sfe::RichText text_2(*font);
-	sf::Texture* keyb_left = textures::getTexture("tutorial_wasd.jpg");
-	sf::Texture* keyb_right = textures::getTexture("tutorial_arrows.jpg");
-	sf::Texture* spacebar = textures::getTexture("tutorial_spacebar.jpg");
 	switch (step)
 	{
 	case 1:
@@ -104,8 +109,8 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Up' instead\n";
 		text_2.setPosition(700, 150);
 
-		textures::displayImage(window, keyb_left, 100, 300, sf::Vector2f(0, 0));
-		textures::displayImage(window, keyb_right, 700, 300, sf::Vector2f(0, 0));
+		textureManager::displayImage(window, "tutorial_wasd.jpg", 100, 300, sf::Vector2f(0, 0));
+		textureManager::displayImage(window, "tutorial_arrows.jpg", 700, 300, sf::Vector2f(0, 0));
 		break;
 	case 2:
 		text_1 << sf::Color::Cyan << "Step 2\n"
@@ -115,8 +120,8 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Down' instead\n";
 		text_2.setPosition(700, 150);
 
-		textures::displayImage(window, keyb_left, 100, 300, sf::Vector2f(0, 0));
-		textures::displayImage(window, keyb_right, 700, 300, sf::Vector2f(0, 0));
+		textureManager::displayImage(window, "tutorial_wasd.jpg", 100, 300, sf::Vector2f(0, 0));
+		textureManager::displayImage(window, "tutorial_arrows.jpg", 700, 300, sf::Vector2f(0, 0));
 		break;
 	case 3:
 		text_1 << sf::Color::Cyan << "Step 3\n"
@@ -126,8 +131,8 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Right' instead\n";
 		text_2.setPosition(700, 150);
 
-		textures::displayImage(window, keyb_left, 100, 300, sf::Vector2f(0, 0));
-		textures::displayImage(window, keyb_right, 700, 300, sf::Vector2f(0, 0));
+		textureManager::displayImage(window, "tutorial_wasd.jpg", 100, 300, sf::Vector2f(0, 0));
+		textureManager::displayImage(window, "tutorial_arrows.jpg", 700, 300, sf::Vector2f(0, 0));
 		break;
 	case 4:
 		text_1 << sf::Color::Cyan << "Step 4\n"
@@ -137,15 +142,15 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Left' instead\n";
 		text_2.setPosition(700, 150);
 
-		textures::displayImage(window, keyb_left, 100, 300, sf::Vector2f(0, 0));
-		textures::displayImage(window, keyb_right, 700, 300, sf::Vector2f(0, 0));
+		textureManager::displayImage(window, "tutorial_wasd.jpg", 100, 300, sf::Vector2f(0, 0));
+		textureManager::displayImage(window, "tutorial_arrows.jpg", 700, 300, sf::Vector2f(0, 0));
 		break;
 	case 5:
 		text_1 << sf::Color::Cyan << "Step 5\n"
 			<< sf::Color::White << "use spacebar to pause the game\n";
 		text_1.setPosition(400, 100);
 
-		textures::displayImage(window, spacebar, 380, 300, sf::Vector2f(0, 0));
+		textureManager::displayImage(window, "tutorial_spacebar.jpg", 380, 300, sf::Vector2f(0, 0));
 		break;
 	}
 
