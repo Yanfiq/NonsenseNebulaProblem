@@ -63,7 +63,7 @@ void enemy::drawHpBar(sf::RenderWindow& window, float position_x, float position
 }
 
 void enemy::shoot(int& sfxVol) {
-	bullet* Bullet = new bullet(bullet_count++, positionX, positionY, -0.5f, 0.0f);
+	bullet* Bullet = new bullet(bullet_count++, positionX, positionY, -900.0f, 0.0f);
 	Bullet->setDamageValue(20.0f);
 	if (bullet_count == 99)
 		bullet_count = 0;

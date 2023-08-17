@@ -465,21 +465,21 @@ int main() {
 				case 1:
 				{
 					for (int i = 1; i < getRandomFloat(min, max); i++) {
-						enemy* Enemy = new enemy(i, getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-0.3, 0.3), getRandomFloat(0.1, 0.3));
+						enemy* Enemy = new enemy(i, getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-500, 500), getRandomFloat(-500, 500));
 					}
 					break;
 				}
 				case 2:
 				{
-					for (int i = 1; i < getRandomInteger(min + 2, max + 3 ); i++) {
-						enemy* Enemy = new enemy(i, getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-0.6, 0.6), getRandomFloat(-0.6, 0.6));
+					for (int i = 1; i < getRandomInteger(min*2, max*2); i++) {
+						enemy* Enemy = new enemy(i, getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-750, 750), getRandomFloat(-750, 750));
 					}
 					break;
 				}
 				case 3:
 				{
-					for (int i = 1; i < getRandomInteger(min + 3, max + 5 ); i++) {
-						enemy* Enemy = new enemy(i, getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-0.9, 0.9), getRandomFloat(-0.9, 0.9));
+					for (int i = 1; i < getRandomInteger(min*3, max*3); i++) {
+						enemy* Enemy = new enemy(i, getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-1000, 1000), getRandomFloat(-1000, 1000));
 					}
 					break;
 				}
@@ -520,10 +520,11 @@ int main() {
 			TextRenderer.displayText(window, "Score : " + std::to_string(currentPoint), 40, sf::Color::White, 30, 30);
 
 			//update & draw
-			double dt = clock.restart().asSeconds() * 1500;
+			double dt = clock.getElapsedTime().asSeconds();
 			player::updateNDrawAllObject(dt, window);
 			enemy::updateNDrawAllObject(dt, window);
 			bullet::updateNDrawAllObject(dt, window);
+			clock.restart();
 			break;
 		}
 		}

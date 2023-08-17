@@ -41,7 +41,7 @@ sf::RectangleShape* animationFrame::getFrame() {
 bool animationFrame::isEnded() {
 	int left = frame.getTextureRect().left;
 	int top = frame.getTextureRect().top;
-	if (left == frameSize.x * collumn - frameSize.x && top == frameSize.y * row - frameSize.y)
+	if (left == frameSize.x * (collumn-1) && top == frameSize.y * (row-1))
 		return true;
 	return false;
 }

@@ -25,7 +25,7 @@ player* player::getObjectPtr(int id) {
 }
 
 void player::shoot(int &sfxVol) {
-	bullet* Bullet = new bullet(allBullet++, positionX, positionY, 0.5, 0);
+	bullet* Bullet = new bullet(allBullet++, positionX, positionY, 900, 0);
 	bulletFired++;
 	Bullet->setDamageValue(20.0f);
 	sounds::playShootSound(sfxVol);
@@ -43,11 +43,11 @@ int player::getBulletCount() {
 }
 
 void player::thrustUp() {
-	setVelocity(getVelocityX(), getVelocityY() - 0.03f);
+	setVelocity(getVelocityX(), getVelocityY() - 50.0f);
 }
 
 void player::thrustDown() {
-	setVelocity(getVelocityX(), getVelocityY() + 0.03f);
+	setVelocity(getVelocityX(), getVelocityY() + 50.0f);
 }
 
 float player::getPlayerHp() const {
