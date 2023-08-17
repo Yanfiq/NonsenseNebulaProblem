@@ -6,6 +6,7 @@ std::vector<sf::Sound*> sounds::soundPlayed;
 
 void sounds::loadSound() {
 	shootSound.loadFromFile("audio/shoot_2.ogg");
+	boomSound.loadFromFile("audio/boom.ogg");
 }
 
 void sounds::playShootSound(int volume) {
@@ -16,7 +17,15 @@ void sounds::playShootSound(int volume) {
 	soundPlayed.push_back(sound);
 }
 
-void sounds::checkAndDeleteSound() {
+void sounds::playBoomSound(int volume) {
+	sf::Sound* sound = new sf::Sound;
+	sound->setBuffer(boomSound);
+	sound->setVolume(volume);
+	sound->play();
+	soundPlayed.push_back(sound);
+}
+
+void sounds::monitoring() {
 	for (auto it = soundPlayed.begin(); it != soundPlayed.end();) {
 		sf::Sound* sound = *it;
 		if (sound->getStatus() == sf::SoundSource::Status::Stopped) {

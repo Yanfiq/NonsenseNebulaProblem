@@ -13,5 +13,6 @@ private:
 public:
 	static void loadSound();
 	static void playShootSound(int volume);
-	static void checkAndDeleteSound();
+	static void playBoomSound(int volume);
+	static void monitoring();
 };

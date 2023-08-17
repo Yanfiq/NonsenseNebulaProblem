@@ -2,8 +2,8 @@
 
 std::vector<animationFrame*> animate::playing;
 
-void animate::play(std::string textureDirectory, int _row, int _collumn, sf::Vector2f _position) {
-	animationFrame* animation = new animationFrame(textureDirectory, _row, _collumn, _position);
+void animate::play(sf::Texture* texture, int _row, int _collumn, sf::Vector2f _position) {
+	animationFrame* animation = new animationFrame(texture, _row, _collumn, _position);
 	playing.push_back(animation);
 }
 

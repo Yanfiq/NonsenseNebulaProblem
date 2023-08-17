@@ -1,7 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "RichText.hpp"
-#include "Images.h"
 
 class textRenderer {
 private:

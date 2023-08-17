@@ -39,7 +39,7 @@
     <ClCompile Include="func.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Images.cpp">
+    <ClCompile Include="textures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sound.cpp">
@@ -74,7 +74,7 @@
     <ClInclude Include="func.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Images.h">
+    <ClInclude Include="textures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sound.h">

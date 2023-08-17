@@ -2,20 +2,15 @@
 
 std::unordered_map<int, player*> player::player_map;
 int player::allBullet = 1;
-sf::Texture player::texture;
 textRenderer player::TextRenderer("fonts/Poppins-SemiBold.ttf");
 
-player::player(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY) {
-	object_sprite.setTexture(&texture);
-	object_sprite.setSize(sf::Vector2f(texture.getSize()));
-	object_sprite.setOrigin(sf::Vector2f(texture.getSize().x / 2, texture.getSize().y / 2));
+player::player(int _object_id, sf::Texture* texture, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY) {
+	object_sprite.setTexture(texture);
+	object_sprite.setSize(sf::Vector2f(texture->getSize()));
+	object_sprite.setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 	
 	player_map[player_obj + _object_id] = this;
-}
-
-void player::initializeTexture(std::string textureDir) {
-	texture.loadFromFile(textureDir);
 }
 
 player* player::getObjectPtr(int id) {
@@ -25,7 +20,8 @@ player* player::getObjectPtr(int id) {
 }
 
 void player::shoot(int &sfxVol) {
-	bullet* Bullet = new bullet(allBullet++, positionX, positionY, 900, 0);
+	sf::Texture* texture = textures::getTexture("gameplay_bullet.png");
+	bullet* Bullet = new bullet(allBullet++, texture, positionX, positionY, 900, 0);
 	bulletFired++;
 	Bullet->setDamageValue(20.0f);
 	sounds::playShootSound(sfxVol);
@@ -64,8 +60,8 @@ void player::reducePlayerHp(float damage) {
 
 void player::healPlayer(float addHp) {
 	this->hp += addHp;
-	if (this->hp > MAX_HEALTH)
-		this->hp = MAX_HEALTH;
+	if (this->hp > MAX_PLAYER_HEALTH)
+		this->hp = MAX_PLAYER_HEALTH;
 }
 
 void player::drawHpBar(sf::RenderWindow& window, float position_x, float position_y, float width, float height) {
@@ -79,8 +75,8 @@ void player::drawHpBar(sf::RenderWindow& window, float position_x, float positio
 
 	sf::RectangleShape hp_bar;
 	hp_bar.setPosition(sf::Vector2f(rectangle.getPosition().x - rectangle.getOrigin().x, rectangle.getPosition().y - rectangle.getOrigin().y));
-	hp_bar.setSize(sf::Vector2f(((this->hp / MAX_HEALTH) * width), height));
-	if(this->hp >= MAX_HEALTH / 2)
+	hp_bar.setSize(sf::Vector2f(((this->hp / MAX_PLAYER_HEALTH) * width), height));
+	if(this->hp >= MAX_PLAYER_HEALTH / 2)
 		hp_bar.setFillColor(sf::Color::Green);
 	else
 		hp_bar.setFillColor(sf::Color::Red);

@@ -2,19 +2,14 @@
 
 std::unordered_map<int, enemy*> enemy::enemy_map;
 int enemy::bullet_count = 1;
-sf::Texture enemy::texture;
 
-enemy::enemy(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY){
-	object_sprite.setTexture(&texture);
-	object_sprite.setSize(sf::Vector2f(texture.getSize()));
-	object_sprite.setOrigin(sf::Vector2f(texture.getSize().x / 2, texture.getSize().y / 2));
+enemy::enemy(int _object_id, sf::Texture* texture, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY){
+	object_sprite.setTexture(texture);
+	object_sprite.setSize(sf::Vector2f(texture->getSize()));
+	object_sprite.setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 
 	enemy_map[enemy_obj + _object_id] = this;
-}
-
-void enemy::initializeTexture(std::string textureDir) {
-	texture.loadFromFile(textureDir);
 }
 
 std::unordered_map<int, enemy*>* enemy::getEnemyMap() {
@@ -52,8 +47,8 @@ void enemy::drawHpBar(sf::RenderWindow& window, float position_x, float position
 
 	sf::RectangleShape hp_bar;
 	hp_bar.setPosition(sf::Vector2f(rectangle.getPosition().x - rectangle.getOrigin().x, rectangle.getPosition().y - rectangle.getOrigin().y));
-	hp_bar.setSize(sf::Vector2f(((this->hp / MAX_HEALTH_ENEMY) * width), height));
-	if (this->hp >= MAX_HEALTH_ENEMY / 2)
+	hp_bar.setSize(sf::Vector2f(((this->hp / MAX_ENEMY_HEALTH) * width), height));
+	if (this->hp >= MAX_ENEMY_HEALTH / 2)
 		hp_bar.setFillColor(sf::Color::Green);
 	else
 		hp_bar.setFillColor(sf::Color::Red);
@@ -63,7 +58,8 @@ void enemy::drawHpBar(sf::RenderWindow& window, float position_x, float position
 }
 
 void enemy::shoot(int& sfxVol) {
-	bullet* Bullet = new bullet(bullet_count++, positionX, positionY, -900.0f, 0.0f);
+	sf::Texture* texture = textures::getTexture("gameplay_bullet.png");
+	bullet* Bullet = new bullet(bullet_count++, texture, positionX, positionY, -900.0f, 0.0f);
 	Bullet->setDamageValue(20.0f);
 	if (bullet_count == 99)
 		bullet_count = 0;

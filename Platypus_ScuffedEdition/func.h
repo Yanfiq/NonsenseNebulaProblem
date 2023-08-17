@@ -1,6 +1,7 @@
 #pragma once
 #include "bullet.h"
 #include "enemy.h"
+#include "textures.h"
 #include "player.h"
 #include "animation.h"
 

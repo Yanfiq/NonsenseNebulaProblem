@@ -146,7 +146,7 @@
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="func.cpp" />
-    <ClCompile Include="Images.cpp" />
+    <ClCompile Include="textures.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="Text.cpp" />
@@ -160,7 +160,7 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="func.h" />
-    <ClInclude Include="Images.h" />
+    <ClInclude Include="textures.h" />
     <ClInclude Include="particleSystem.hpp" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="Text.h" />

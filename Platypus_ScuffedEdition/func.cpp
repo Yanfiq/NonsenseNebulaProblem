@@ -57,6 +57,7 @@ int processCollision() {
 	}
 	
 	int points = 0;
+	sf::Texture* explosion = textures::getTexture("gameplay_explode.png");
 	for (const auto& it : collideObject) {
 		if ((bullet::getObjectPtr(it.second) != NULL) &&
 			(it.first - enemy_obj < 100 && it.first - enemy_obj > 0)) {
@@ -65,7 +66,8 @@ int processCollision() {
 			Enemy->reduceHp(Bullet->getDamageValue());
 			points += Bullet->getDamageValue();
 			if (Enemy->getHp() <= 0) {
-				animate::play("images/explode.png", 4, 5, sf::Vector2f(Enemy->getPositionX(), Enemy->getPositionY()));
+				animate::play(explosion, 4, 5, sf::Vector2f(Enemy->getPositionX(), Enemy->getPositionY()));
+				sounds::playBoomSound(100);
 				enemy::deleteObject(it.first);
 			}
 			bullet::deleteObject(it.second);
@@ -77,7 +79,7 @@ int processCollision() {
 			Player->reducePlayerHp(Bullet->getDamageValue());
 			points -= Bullet->getDamageValue();
 			if (Player->getPlayerHp() <= 0) {
-				animate::play("images/explode.png", 4, 5, sf::Vector2f(Player->getPositionX(), Player->getPositionY()));
+				animate::play(explosion, 4, 5, sf::Vector2f(Player->getPositionX(), Player->getPositionY()));
 				player::deleteObject(it.first);
 			}
 			bullet::deleteObject(it.second);
@@ -89,6 +91,9 @@ int processCollision() {
 void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 	sfe::RichText text_1(*font);
 	sfe::RichText text_2(*font);
+	sf::Texture* keyb_left = textures::getTexture("tutorial_wasd.jpg");
+	sf::Texture* keyb_right = textures::getTexture("tutorial_arrows.jpg");
+	sf::Texture* spacebar = textures::getTexture("tutorial_spacebar.jpg");
 	switch (step)
 	{
 	case 1:
@@ -99,8 +104,8 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Up' instead\n";
 		text_2.setPosition(700, 150);
 
-		img::displayImage(window, img::texture::keyboardLeft, 100, 300, sf::Vector2f(0, 0));
-		img::displayImage(window, img::texture::keyboardRight, 700, 300, sf::Vector2f(0, 0));
+		textures::displayImage(window, keyb_left, 100, 300, sf::Vector2f(0, 0));
+		textures::displayImage(window, keyb_right, 700, 300, sf::Vector2f(0, 0));
 		break;
 	case 2:
 		text_1 << sf::Color::Cyan << "Step 2\n"
@@ -110,8 +115,8 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Down' instead\n";
 		text_2.setPosition(700, 150);
 
-		img::displayImage(window, img::texture::keyboardLeft, 100, 300, sf::Vector2f(0, 0));
-		img::displayImage(window, img::texture::keyboardRight, 700, 300, sf::Vector2f(0, 0));
+		textures::displayImage(window, keyb_left, 100, 300, sf::Vector2f(0, 0));
+		textures::displayImage(window, keyb_right, 700, 300, sf::Vector2f(0, 0));
 		break;
 	case 3:
 		text_1 << sf::Color::Cyan << "Step 3\n"
@@ -121,8 +126,8 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Right' instead\n";
 		text_2.setPosition(700, 150);
 
-		img::displayImage(window, img::texture::keyboardLeft, 100, 300, sf::Vector2f(0, 0));
-		img::displayImage(window, img::texture::keyboardRight, 700, 300, sf::Vector2f(0, 0));
+		textures::displayImage(window, keyb_left, 100, 300, sf::Vector2f(0, 0));
+		textures::displayImage(window, keyb_right, 700, 300, sf::Vector2f(0, 0));
 		break;
 	case 4:
 		text_1 << sf::Color::Cyan << "Step 4\n"
@@ -132,15 +137,15 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'Left' instead\n";
 		text_2.setPosition(700, 150);
 
-		img::displayImage(window, img::texture::keyboardLeft, 100, 300, sf::Vector2f(0, 0));
-		img::displayImage(window, img::texture::keyboardRight, 700, 300, sf::Vector2f(0, 0));
+		textures::displayImage(window, keyb_left, 100, 300, sf::Vector2f(0, 0));
+		textures::displayImage(window, keyb_right, 700, 300, sf::Vector2f(0, 0));
 		break;
 	case 5:
 		text_1 << sf::Color::Cyan << "Step 5\n"
 			<< sf::Color::White << "use spacebar to pause the game\n";
 		text_1.setPosition(400, 100);
 
-		img::displayImage(window, img::texture::spacebarKey, 380, 300, sf::Vector2f(0, 0));
+		textures::displayImage(window, spacebar, 380, 300, sf::Vector2f(0, 0));
 		break;
 	}
 

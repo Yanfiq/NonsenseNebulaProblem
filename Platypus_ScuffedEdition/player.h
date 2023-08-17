@@ -3,19 +3,19 @@
 #include "bullet.h"
 #include "sound.h"
 #include "Text.h"
-#define MAX_HEALTH 200
+#include "textures.h"
+#define MAX_PLAYER_HEALTH 200
 
 class player : public object {
 protected:
 	static std::unordered_map<int, player*> player_map;
 	static int allBullet;
-	static sf::Texture texture;
 	int bulletFired = 0;
-	float hp = MAX_HEALTH;
+	float hp = MAX_PLAYER_HEALTH;
 	static textRenderer TextRenderer;
 
 public:
-	player(int _object_id, float _positionX, float _positionY, float _velocityX, float _velocityY);
+	player(int _object_id, sf::Texture* texture, float _positionX, float _positionY, float _velocityX, float _velocityY);
 	static player* getObjectPtr(int id);
 	void shoot(int &sfxVol);
 	void resetBulletCount();
@@ -31,7 +31,6 @@ public:
 	
 	static void deleteObject(int id);
 	static void clearObject();
-	static void initializeTexture(std::string textureDir);
 	static std::unordered_map<int, player*>* getPlayerMap();
 	static void updateNDrawAllObject(double dt, sf::RenderWindow& window);
 };
