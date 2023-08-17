@@ -2,7 +2,8 @@
 
 std::unordered_map<int, bullet*> bullet::bullet_map;
 
-bullet::bullet(int _object_id, sf::Texture* texture, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY) {
+bullet::bullet(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY) {
+	sf::Texture* texture = textureManager::getTexture(texture_filename);
 	object_sprite.setTexture(texture);
 	object_sprite.setSize(sf::Vector2f(texture->getSize()));
 	object_sprite.setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));

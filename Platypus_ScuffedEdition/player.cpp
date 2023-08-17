@@ -4,7 +4,8 @@ std::unordered_map<int, player*> player::player_map;
 int player::allBullet = 1;
 textRenderer player::TextRenderer("fonts/Poppins-SemiBold.ttf");
 
-player::player(int _object_id, sf::Texture* texture, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY) {
+player::player(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY) {
+	sf::Texture* texture = textureManager::getTexture(texture_filename);
 	object_sprite.setTexture(texture);
 	object_sprite.setSize(sf::Vector2f(texture->getSize()));
 	object_sprite.setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
@@ -20,8 +21,7 @@ player* player::getObjectPtr(int id) {
 }
 
 void player::shoot(int &sfxVol) {
-	sf::Texture* texture = textures::getTexture("gameplay_bullet.png");
-	bullet* Bullet = new bullet(allBullet++, texture, positionX, positionY, 900, 0);
+	bullet* Bullet = new bullet(allBullet++, "gameplay_bullet_2.png", positionX, positionY, 900, 0);
 	bulletFired++;
 	Bullet->setDamageValue(20.0f);
 	sounds::playShootSound(sfxVol);

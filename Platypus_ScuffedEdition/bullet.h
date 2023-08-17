@@ -1,5 +1,6 @@
 #pragma once
 #include "objects.h"
+#include "textureManager.h"
 
 class bullet : public object {
 protected:
@@ -7,7 +8,7 @@ protected:
 	static std::unordered_map<int, bullet*> bullet_map;
 
 public:
-	bullet(int _object_id, sf::Texture* texture, float _positionX, float _positionY, float _velocityX, float _velocityY);
+	bullet(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY);
 
 	float getDamageValue() const;
 	void setDamageValue(float _damage);

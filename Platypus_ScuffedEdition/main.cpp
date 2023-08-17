@@ -7,7 +7,7 @@
 #include "enemy.h"
 #include "Text.h"
 #include "func.h"
-#include "textures.h"
+#include "textureManager.h"
 #include "animation.h"
 
 int main() {
@@ -28,7 +28,7 @@ int main() {
 	
 	//texture initialization
 	textRenderer TextRenderer("fonts/Poppins-SemiBold.ttf");
-	textures::initializeTexture();
+	textureManager::initializeTexture();
 	sounds::loadSound();
  
 	// enumeration for scene changes
@@ -196,10 +196,9 @@ int main() {
 							choice = 1;
 					}
 					if (event.key.code == sf::Keyboard::Enter) {
-						sf::Texture* texture = textures::getTexture("gameplay_player.png");
-						player* Player_1 = new player(1, texture, 100, 100, 0, 0);
+						player* Player_1 = new player(1, "gameplay_player.png", 100, 100, 0, 0);
 						if (choice == 1) {
-							player* Player_2 = new player(2, texture, 100, 300, 0, 0);
+							player* Player_2 = new player(2, "gameplay_player.png", 100, 300, 0, 0);
 						}
 						scene = transition;
 						choice = 0;
@@ -324,8 +323,7 @@ int main() {
 		}
 
 		// draw the background and animation
-		sf::Texture* bg = textures::getTexture("background_nebula.jpg");
-		textures::displayImage(window, bg, 0, 0, sf::Vector2f(window.getSize()));
+		textureManager::displayImage(window, "background_nebula.jpg", 0, 0, sf::Vector2f(window.getSize()));
 		animate::monitoringAnimation(window);
 
 		//outside pollEvent
@@ -463,28 +461,27 @@ int main() {
 			if (generateEnemy) {
 				bullet::clearObject();
 				clock.restart();
-				sf::Texture* enemy_texture = textures::getTexture("gameplay_enemy.png");
 				float min = (window.getSize().x / 288 > window.getSize().y / 176) ? window.getSize().y / 176 : window.getSize().x / 288;
 				float max = (window.getSize().x / 288 > window.getSize().y / 176) ? window.getSize().x / 288 : window.getSize().y / 176;
 				switch (level) {
 				case 1:
 				{
-					for (int i = 1; i < getRandomFloat(min, max); i++) {
-						enemy* Enemy = new enemy(i, enemy_texture, getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-500, 500), getRandomFloat(-500, 500));
+					for (int i = 1; i < getRandomFloat(window.getSize().x / 288, window.getSize().y / 176); i++) {
+						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-500, 500), getRandomFloat(-500, 500));
 					}
 					break;
 				}
 				case 2:
 				{
-					for (int i = 1; i < getRandomInteger(min*2, max*2); i++) {
-						enemy* Enemy = new enemy(i, enemy_texture, getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-750, 750), getRandomFloat(-750, 750));
+					for (int i = 1; i < getRandomInteger((window.getSize().x / 288) * 2, (window.getSize().y / 176) * 2); i++) {
+						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-750, 750), getRandomFloat(-750, 750));
 					}
 					break;
 				}
 				case 3:
 				{
-					for (int i = 1; i < getRandomInteger(min*3, max*3); i++) {
-						enemy* Enemy = new enemy(i, enemy_texture, getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-1000, 1000), getRandomFloat(-1000, 1000));
+					for (int i = 1; i < getRandomInteger((window.getSize().x / 288) * 3, (window.getSize().y / 176) * 3); i++) {
+						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-1000, 1000), getRandomFloat(-1000, 1000));
 					}
 					break;
 				}

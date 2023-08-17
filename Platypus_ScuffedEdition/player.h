@@ -3,7 +3,7 @@
 #include "bullet.h"
 #include "sound.h"
 #include "Text.h"
-#include "textures.h"
+#include "textureManager.h"
 #define MAX_PLAYER_HEALTH 200
 
 class player : public object {
@@ -15,7 +15,7 @@ protected:
 	static textRenderer TextRenderer;
 
 public:
-	player(int _object_id, sf::Texture* texture, float _positionX, float _positionY, float _velocityX, float _velocityY);
+	player(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY);
 	static player* getObjectPtr(int id);
 	void shoot(int &sfxVol);
 	void resetBulletCount();

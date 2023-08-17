@@ -2,7 +2,7 @@
 #include "objects.h"
 #include "bullet.h"
 #include "sound.h"
-#include "textures.h"
+#include "textureManager.h"
 #define MAX_ENEMY_HEALTH 100
 
 class enemy : public object {
@@ -12,7 +12,7 @@ protected:
 	static std::unordered_map<int, enemy*> enemy_map;
 
 public:
-	enemy(int _object_id, sf::Texture* texture, float _positionX, float _positionY, float _velocityX, float _velocityY);
+	enemy(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY);
 
 	void reduceHp(float damage);
 	void shoot(int& sfxVol);

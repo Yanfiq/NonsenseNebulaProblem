@@ -3,7 +3,8 @@
 std::unordered_map<int, enemy*> enemy::enemy_map;
 int enemy::bullet_count = 1;
 
-enemy::enemy(int _object_id, sf::Texture* texture, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY){
+enemy::enemy(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY){
+	sf::Texture* texture = textureManager::getTexture(texture_filename);
 	object_sprite.setTexture(texture);
 	object_sprite.setSize(sf::Vector2f(texture->getSize()));
 	object_sprite.setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
@@ -58,8 +59,7 @@ void enemy::drawHpBar(sf::RenderWindow& window, float position_x, float position
 }
 
 void enemy::shoot(int& sfxVol) {
-	sf::Texture* texture = textures::getTexture("gameplay_bullet.png");
-	bullet* Bullet = new bullet(bullet_count++, texture, positionX, positionY, -900.0f, 0.0f);
+	bullet* Bullet = new bullet(bullet_count++, "gameplay_bullet_1.png", positionX, positionY, -900.0f, 0.0f);
 	Bullet->setDamageValue(20.0f);
 	if (bullet_count == 99)
 		bullet_count = 0;
