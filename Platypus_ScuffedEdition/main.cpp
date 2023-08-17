@@ -77,9 +77,14 @@ int main() {
 				break;
 			case sf::Event::Resized:
 			{
-				sf::FloatRect visibleArea(0.f, 0.f, event.size.width, event.size.height);
+				int width = event.size.width; int height = event.size.height;
+				if (width < 1280)
+					width = 1280;
+				if (height < 720)
+					height = 720;
+				sf::FloatRect visibleArea(0.f, 0.f, width, height);
+				window.setSize(sf::Vector2u(width, height));
 				window.setView(sf::View(visibleArea));
-				std::cout << window.getSize().x << " ; " << window.getSize().y << std::endl;
 				break;
 			}
 			case sf::Event::KeyPressed:
