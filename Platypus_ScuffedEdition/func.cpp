@@ -65,7 +65,6 @@ int processCollision() {
 	}
 	
 	int points = 0;
-	sf::Texture* explosion = textureManager::getTexture("gameplay_explode.png");
 	for (const auto& it : collideObject) {
 		if ((bullet::getObjectPtr(it.second) != NULL) &&
 			(it.first - enemy_obj < 100 && it.first - enemy_obj > 0)) {
@@ -74,7 +73,7 @@ int processCollision() {
 			Enemy->reduceHp(Bullet->getDamageValue());
 			points += Bullet->getDamageValue();
 			if (Enemy->getHp() <= 0) {
-				animate::play(explosion, 4, 5, sf::Vector2f(Enemy->getPositionX(), Enemy->getPositionY()));
+				animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Enemy->getPositionX(), Enemy->getPositionY()));
 				sounds::playBoomSound(100);
 				enemy::deleteObject(it.first);
 			}
@@ -87,7 +86,7 @@ int processCollision() {
 			Player->reducePlayerHp(Bullet->getDamageValue());
 			points -= Bullet->getDamageValue();
 			if (Player->getPlayerHp() <= 0) {
-				animate::play(explosion, 4, 5, sf::Vector2f(Player->getPositionX(), Player->getPositionY()));
+				animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Player->getPositionX(), Player->getPositionY()));
 				player::deleteObject(it.first);
 			}
 			bullet::deleteObject(it.second);

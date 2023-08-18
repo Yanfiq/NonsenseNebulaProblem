@@ -89,5 +89,8 @@
     <ClInclude Include="animationFrame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -160,6 +160,7 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="func.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="textureManager.h" />
     <ClInclude Include="particleSystem.hpp" />
     <ClInclude Include="sound.h" />
