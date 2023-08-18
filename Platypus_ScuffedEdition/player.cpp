@@ -108,6 +108,12 @@ void player::update(double time) {
 	if (velocityY < 0)
 		velocityY += 5;
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
+	
+	//healing
+	if (healTime.getElapsedTime().asSeconds() > 5) {
+		healPlayer(10);
+		healTime.restart();
+	}
 }
 
 void player::updateNDrawAllObject(double dt, sf::RenderWindow& window) {

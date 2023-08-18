@@ -10,9 +10,11 @@ class player : public object {
 protected:
 	static std::unordered_map<int, player*> player_map;
 	static int allBullet;
+	static textRenderer TextRenderer;
+
 	int bulletFired = 0;
 	float hp = MAX_PLAYER_HEALTH;
-	static textRenderer TextRenderer;
+	sf::Clock healTime;
 
 public:
 	player(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY);

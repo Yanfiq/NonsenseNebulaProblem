@@ -20,7 +20,6 @@ int main() {
 	window.setView(view);
 
 	sf::Clock clock;
-	sf::Clock clock_2;
 	sf::Event event;
 	sf::Music bgmusic;
 	bgmusic.openFromFile("audio/Boooring.ogg");
@@ -100,6 +99,7 @@ int main() {
 				window.setSize(sf::Vector2u(width, height));
 				window.setView(sf::View(visibleArea));
 				break;
+			}
 			}
 			InputManager::Instance()->KRUpdate(event);
 		}
@@ -292,10 +292,6 @@ int main() {
 					if (player_1->getBulletCount() >= 30) {
 						player_1->resetBulletCount();
 					}
-
-					if (clock_2.getElapsedTime().asSeconds() >= 5) {
-						player_1->healPlayer(getRandomFloat(10, 20));
-					}
 				}
 
 				//SECOND PLAYER
@@ -309,10 +305,6 @@ int main() {
 						player_2->shoot(sfxVolume);
 					if (player_2->getBulletCount() >= 30) {
 						player_2->resetBulletCount();
-					}
-
-					if (clock_2.getElapsedTime().asSeconds() >= 5) {
-						player_2->healPlayer(getRandomFloat(10, 20));
 					}
 				}
 				player::updateNDrawAllObject(dt, window);
@@ -339,10 +331,6 @@ int main() {
 					TextRenderer.displayText(window, "player_1's bullet is empty", 30, sf::Color::White, 30, window.getSize().y - 60);
 					if (InputManager::Instance()->KeyPress("Left_1")) player_1->resetBulletCount();
 				}
-
-				if (clock_2.getElapsedTime().asSeconds() >= 5) {
-					player_1->healPlayer(getRandomFloat(10, 20));
-				}
 			}
 
 			//SECOND PLAYER
@@ -358,14 +346,7 @@ int main() {
 					TextRenderer.displayText(window, "player_2's bullet is empty", 30, sf::Color::White, 850, 650);
 					if (InputManager::Instance()->KeyPress("Left_2")) player_2->resetBulletCount();
 				}
-
-				if (clock_2.getElapsedTime().asSeconds() >= 5) {
-					player_2->healPlayer(getRandomFloat(10, 20));
-				}
 			}
-
-			if (clock_2.getElapsedTime().asSeconds() >= 5)
-				clock_2.restart();
 
 			//pause the game if the window lost its focus
 			if (!window.hasFocus()) {
