@@ -239,6 +239,8 @@ int main() {
 
 					
 					if (event.key.code == sf::Keyboard::Space) {
+						if (player::getObjectPtr(101) != NULL) { player::getObjectPtr(101)->setVelocity(0, 0); };
+						if (player::getObjectPtr(102) != NULL) { player::getObjectPtr(102)->setVelocity(0, 0); };
 						scene = pause;
 					}
 					break;
@@ -270,6 +272,27 @@ int main() {
 							player::clearObject();
 						}
 					}
+					if (cheat) {
+						if (event.key.code == sf::Keyboard::W) {
+							up_1 = true;
+						}
+						if (event.key.code == sf::Keyboard::S) {
+							down_1 = true;
+						}
+						if (event.key.code == sf::Keyboard::D) {
+							shoot_1 = true;
+						}
+
+						if (event.key.code == sf::Keyboard::Up) {
+							up_2 = true;
+						}
+						if (event.key.code == sf::Keyboard::Down) {
+							down_2 = true;
+						}
+						if (event.key.code == sf::Keyboard::Right) {
+							shoot_2 = true;
+						}
+					}
 					break;
 				}
 				case transition:
@@ -294,29 +317,23 @@ int main() {
 				break;
 
 			case sf::Event::KeyReleased:
-				switch (scene) {
-				case play:
-				{
-					if (event.key.code == sf::Keyboard::W) {
-						up_1 = false;
-					}
-					if (event.key.code == sf::Keyboard::S) {
-						down_1 = false;
-					}
-					if (event.key.code == sf::Keyboard::D) {
-						shoot_1 = false;
-					}
-					if (event.key.code == sf::Keyboard::Up) {
-						up_2 = false;
-					}
-					if (event.key.code == sf::Keyboard::Down) {
-						down_2 = false;
-					}
-					if (event.key.code == sf::Keyboard::Right) {
-						shoot_2 = false;
-					}
-					break;
+				if (event.key.code == sf::Keyboard::W) {
+					up_1 = false;
 				}
+				if (event.key.code == sf::Keyboard::S) {
+					down_1 = false;
+				}
+				if (event.key.code == sf::Keyboard::D) {
+					shoot_1 = false;
+				}
+				if (event.key.code == sf::Keyboard::Up) {
+					up_2 = false;
+				}
+				if (event.key.code == sf::Keyboard::Down) {
+					down_2 = false;
+				}
+				if (event.key.code == sf::Keyboard::Right) {
+					shoot_2 = false;
 				}
 				break;
 			}
@@ -407,9 +424,47 @@ int main() {
 		case pause:
 		{
 			TextRenderer.displayText(window, "PAUSE", 40, sf::Color::White, 100, 100);
-
 			std::vector<std::string> choices = { "Resume", "Rage quit" };
-			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 320);
+			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 160);
+
+			if (!cheat) {
+				player::justDrawAllObject(window);
+				bullet::justDrawAllObject(window);
+				enemy::justDrawAllObject(window);
+			}
+			else {
+				float dt = clock.getElapsedTime().asSeconds();
+				//FIRST PLAYER
+				if (player::getObjectPtr(101) != NULL) {
+					player* player_1 = player::getObjectPtr(101);
+					if (up_1)
+						player_1->thrustUp();
+					if (down_1)
+						player_1->thrustDown();
+					if (shoot_1 && player_1->getBulletCount() <= 30)
+						player_1->shoot(sfxVolume);
+					if (player_1->getBulletCount() >= 30)
+						player_1->resetBulletCount();
+				}
+
+				//SECOND PLAYER
+				if (player::getObjectPtr(102) != NULL) {
+					player* player_2 = player::getObjectPtr(102);
+					if (up_2)
+						player_2->thrustUp();
+					if (down_2)
+						player_2->thrustDown();
+					if (shoot_2 && player_2->getBulletCount() <= 30)
+						player_2->shoot(sfxVolume);
+					if (player_2->getBulletCount() >= 30)
+						player_2->resetBulletCount();
+				}
+				player::updateNDrawAllObject(dt, window);
+				bullet::updateNDrawAllObject(dt, window);
+				enemy::justDrawAllObject(window);
+				currentPoint += processCollision();
+				clock.restart();
+			}
 			break;
 		}
 

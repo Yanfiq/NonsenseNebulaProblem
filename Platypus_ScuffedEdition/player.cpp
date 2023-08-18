@@ -104,9 +104,9 @@ void player::clearObject() {
 void player::update(double time) {
 	positionY += velocityY * time;
 	if (velocityY > 0)
-		velocityY -= 0.002;
+		velocityY -= 5;
 	if (velocityY < 0)
-		velocityY += 0.002;
+		velocityY += 5;
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 }
 
@@ -123,6 +123,19 @@ void player::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 			it.second->setPosition(it.second->getPositionX(), 0);
 			it.second->setVelocity(it.second->getVelocityX(), it.second->getVelocityY() * -1 - 0.05);
 		}
+		sf::RectangleShape* sprite = it.second->getSprite();
+		window.draw(*sprite);
+
+		std::string string = "player " + std::to_string(it.first - 100);
+		float x = it.second->getPositionX() - it.second->getSprite()->getOrigin().x;
+		float y = it.second->getPositionY() + it.second->getSprite()->getOrigin().y;
+		TextRenderer.displayText(window, string, 20, sf::Color::White, x, y);
+	}
+}
+
+void player::justDrawAllObject(sf::RenderWindow& window) {
+	for (const auto& it : player_map) {
+		it.second->drawHpBar(window, it.second->getPositionX(), it.second->getPositionY() - it.second->getHeight() / 2 - 20, it.second->getWidth(), 10);
 		sf::RectangleShape* sprite = it.second->getSprite();
 		window.draw(*sprite);
 

@@ -63,3 +63,10 @@ void bullet::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 		}
 	}
 }
+
+void bullet::justDrawAllObject(sf::RenderWindow& window) {
+	for (auto it = bullet_map.begin(); it != bullet_map.end(); it++) {
+		sf::RectangleShape* sprite = it->second->getSprite();
+		window.draw(*sprite);
+	}
+}

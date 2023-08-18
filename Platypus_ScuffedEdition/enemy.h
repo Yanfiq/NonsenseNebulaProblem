@@ -25,4 +25,5 @@ public:
 
 	static void clearObject();
 	static void updateNDrawAllObject(double dt, sf::RenderWindow& window);
+	static void justDrawAllObject(sf::RenderWindow& window);
 };

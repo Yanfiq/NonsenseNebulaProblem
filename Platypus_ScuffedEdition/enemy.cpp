@@ -96,3 +96,11 @@ void enemy::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 		window.draw(*sprite);
 	}
 }
+
+void enemy::justDrawAllObject(sf::RenderWindow& window) {
+	for (const auto& it : enemy_map) {
+		it.second->drawHpBar(window, it.second->getPositionX() - it.second->getWidth() / 2, it.second->getPositionY() - it.second->getHeight() / 2 - 20, it.second->getWidth(), 10);
+		sf::RectangleShape* sprite = it.second->getSprite();
+		window.draw(*sprite);
+	}
+}

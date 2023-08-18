@@ -33,4 +33,5 @@ public:
 	static void clearObject();
 	static std::unordered_map<int, player*>* getPlayerMap();
 	static void updateNDrawAllObject(double dt, sf::RenderWindow& window);
+	static void justDrawAllObject(sf::RenderWindow& window);
 };
