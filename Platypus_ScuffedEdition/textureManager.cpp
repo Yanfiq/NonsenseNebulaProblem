@@ -22,16 +22,27 @@ sf::Texture* textureManager::getTexture(std::string filename) {
 void textureManager::displayImage(sf::RenderWindow& window, std::string texture_filename, float position_x, float position_y, sf::Vector2f size) {
 	sf::Texture* texture = getTexture(texture_filename);
 	sf::RectangleShape shape;
+	shape.setSize(size);
 	shape.setTexture(texture);
 	shape.setPosition(position_x, position_y);
 	sf::Vector2f textureSize = static_cast<sf::Vector2f>(texture->getSize());
-	if (size.x == 0 && size.y == 0)
-		shape.setSize(sf::Vector2f(textureSize));
-	else if (size.x / size.y <= textureSize.x / textureSize.y)
-		shape.setSize(sf::Vector2f((size.y / textureSize.y) * textureSize.x, size.y));
-	else if (size.x / size.y > textureSize.x / textureSize.y)
-		shape.setSize(sf::Vector2f(size.x, (size.x / textureSize.x) * textureSize.y));
-	else
-		shape.setSize(size);
+
+	sf::IntRect textureRect;
+	textureRect.left = 0;
+	textureRect.top = 0;
+
+	if (size.x / size.y <= textureSize.x / textureSize.y) {
+		textureRect.width = (textureSize.y / size.y) * size.x;
+		textureRect.height = textureSize.y;
+	}
+	else if (size.x / size.y > textureSize.x / textureSize.y) {
+		textureRect.width = textureSize.x;
+		textureRect.height = (textureSize.x / size.x) * size.y;
+	}
+	else {
+		textureRect.width = textureSize.x;
+		textureRect.height = textureSize.y;
+	}
+	shape.setTextureRect(textureRect);
 	window.draw(shape);
 }
