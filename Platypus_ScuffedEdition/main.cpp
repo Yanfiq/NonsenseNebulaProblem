@@ -99,7 +99,28 @@ int main() {
 
 		// draw the background and animation
 		textureManager::displayImage(window, "background_nebula.jpg", 0, 0, sf::Vector2f(window.getSize()));
+		// sprites render
+		float dt = clock.restart().asSeconds();
+		if (scene == pause) {
+			if (!cheat) {
+				player::justDrawAllObject(window);
+				bullet::justDrawAllObject(window);
+			}
+			else {
+				player::updateNDrawAllObject(dt, window);
+				bullet::updateNDrawAllObject(dt, window);
+			}
+
+			enemy::justDrawAllObject(window);
+		}
+		else {
+			player::updateNDrawAllObject(dt, window);
+			bullet::updateNDrawAllObject(dt, window);
+			enemy::updateNDrawAllObject(dt, window);
+		}
+		currentPoint += processCollision();
 		animate::monitoringAnimation(window);
+
 		//outside pollEvent
 		switch (scene) {
 		case start:
@@ -263,8 +284,14 @@ int main() {
 			if (InputManager::Instance()->KeyPress("Down_1")) choice = 1;
 			if (InputManager::Instance()->KeyPress("Enter")) {
 				switch (choice) {
-				case 0:scene = play;  break;
-				case 1:scene = start; break;
+				case 0:
+					scene = play;  
+					break;
+				case 1:
+					scene = start; 
+					level = 0;
+					player::clearObject();
+					break;
 				}
 			}
 			break;
@@ -343,7 +370,6 @@ int main() {
 			}
 
 			//collision detection and object removal
-			currentPoint += processCollision();
 			TextRenderer.displayText(window, "Score : " + std::to_string(currentPoint), 40, sf::Color::White, 30, 30);
 			break;
 		}
@@ -359,7 +385,7 @@ int main() {
 					player_1->thrustDown();
 				if (InputManager::Instance()->KeyDown("Right_1") && player_1->getBulletCount() <= 30)
 					player_1->shoot(sfxVolume);
-				if (player_1->getBulletCount() >= 30) {
+				if (player_1->getBulletCount() >= 30 && (scene == play || scene == pause)) {
 					TextRenderer.displayText(window, "player_1's bullet is empty", 30, sf::Color::White, 30, window.getSize().y - 60);
 					if (InputManager::Instance()->KeyPress("Left_1")) player_1->resetBulletCount();
 				}
@@ -374,31 +400,11 @@ int main() {
 					player_2->thrustDown();
 				if (InputManager::Instance()->KeyDown("Right_2") && player_2->getBulletCount() <= 30)
 					player_2->shoot(sfxVolume);
-				if (player_2->getBulletCount() >= 30) {
+				if (player_2->getBulletCount() >= 30 && (scene == play || scene == pause)) {
 					TextRenderer.displayText(window, "player_2's bullet is empty", 30, sf::Color::White, 850, 650);
 					if (InputManager::Instance()->KeyPress("Left_2")) player_2->resetBulletCount();
 				}
 			}
-		}
-
-		// sprites render
-		float dt = clock.restart().asSeconds();
-		if (scene == pause) {
-			if (!cheat) {
-				player::justDrawAllObject(window);
-				bullet::justDrawAllObject(window);
-			}
-			else {
-				player::updateNDrawAllObject(dt, window);
-				bullet::updateNDrawAllObject(dt, window);
-			}
-
-			enemy::justDrawAllObject(window);
-		}
-		else {
-			player::updateNDrawAllObject(dt, window);
-			bullet::updateNDrawAllObject(dt, window);
-			enemy::updateNDrawAllObject(dt, window);
 		}
 
 		window.display();
