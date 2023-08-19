@@ -87,6 +87,7 @@ int processCollision() {
 			points -= Bullet->getDamageValue();
 			if (Player->getPlayerHp() <= 0) {
 				animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Player->getPositionX(), Player->getPositionY()));
+				sounds::playBoomSound(100);
 				player::deleteObject(it.first);
 			}
 			bullet::deleteObject(it.second);

@@ -20,6 +20,7 @@ int main() {
 	window.setView(view);
 
 	sf::Clock clock;
+	sf::Clock elapsed;
 	sf::Event event;
 	sf::Music bgmusic;
 	bgmusic.openFromFile("audio/Boooring.ogg");
@@ -45,18 +46,15 @@ int main() {
 	int level = 0;					// as the name implies, to differentiate levels
 	int currentPoint = 0;			// as the name implies, to save the point calculation result
 	bool generateEnemy = false;		// decides whether to generate new enemies
+	bool endless = false;
+	bool cheat = false;
 
 	// variables that'll be used on multiple choices scene
 	int scene = start;				// decide what scene is being run
 
-	// only for tutorial scene
-	int stepTutorial = 1;
-
 	//volumes
 	int bgmVolume = 100;
 	int sfxVolume = 100;
-
-	bool cheat = false;
 
 	//binding keys
 	InputManager::Instance()->KBind("Enter", sf::Keyboard::Enter);
@@ -246,19 +244,32 @@ int main() {
 				TextRenderer.displayText(window, "Your last score is " + std::to_string(currentPoint), 40, sf::Color::White, 100, 200);
 				TextRenderer.displayText(window, "Press Enter to back to main menu", 40, sf::Color::White, 100, window.getSize().y - 60);
 				if (InputManager::Instance()->KeyPress("Enter")) {
+					player::clearObject();
 					level = 0;
 					currentPoint = 0;
 					scene = start;
 				}
 			}
 			else if (level > 2) { //WIN
+				static int choice = 0;
 				TextRenderer.displayText(window, "CONGRATULATION :)\nYOU'RE THE WINNER", 40, sf::Color::White, 100, 100);
 				TextRenderer.displayText(window, "Your final score is " + std::to_string(currentPoint), 40, sf::Color::White, 100, 200);
-				TextRenderer.displayText(window, "Press Enter to back to main menu", 40, sf::Color::White, 100, window.getSize().y - 60);
+				std::vector<std::string>choices = {"ENDLESS MODE", "Main menu"};
+				TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 180);
+
+				if (InputManager::Instance()->KeyPress("Up_1"))   choice = 0;
+				if (InputManager::Instance()->KeyPress("Down_1")) choice = 1;
 				if (InputManager::Instance()->KeyPress("Enter")) {
-					level = 0;
-					currentPoint = 0;
-					scene = start;
+					if (choice == 0) {
+						endless = true;
+						scene = play;
+					}
+					else if (choice == 1) {
+						player::clearObject();
+						level = 0;
+						currentPoint = 0;
+						scene = start;
+					}
 				}
 			}
 			else { //NEXT LEVEL
@@ -304,6 +315,24 @@ int main() {
 				scene = pause;
 			}
 
+			if (endless) {
+				static int difficulty = 3;
+				static int counts = 1; // just for id
+				if (elapsed.getElapsedTime().asSeconds() > 10 || enemy::getEnemyMap()->size() < 3) {
+					//generate enemy
+					int counter = 0;
+					for (int i = counts; i < counts + (getRandomFloat((window.getSize().x / 288) * difficulty, (window.getSize().y / 176) * difficulty)); i++) {
+						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-1000, 1000), getRandomFloat(-1000, 1000));
+						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPositionX(), Enemy->getPositionY()));
+						counter++;
+					}
+					counts += counter;
+					if (counts == 99)counts = 1;
+					difficulty += 0.5;
+					elapsed.restart();
+				}
+			}
+
 
 			//level mechanics and enemy object creation
 			if (generateEnemy) {
@@ -339,7 +368,7 @@ int main() {
 			}
 
 			//level up when the enemy is 0
-			if (enemy::getEnemyMap()->empty()) {
+			if (enemy::getEnemyMap()->empty() && !endless) {
 				scene = transition;
 				break;
 			}
