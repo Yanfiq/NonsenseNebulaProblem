@@ -41,7 +41,7 @@ int processCollision() {
 	std::unordered_map<int, int> collideObject;
 	for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end(); bullet_object++) {
 		//bullets from the player
-		if ((bullet_object->second != NULL) && (bullet_object->second->getVelocityX() > 0)) {
+		if ((bullet_object->second != NULL) && (bullet_object->second->getVelocity().x > 0)) {
 			for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
 
 				//collision happens between enemy and bullet
@@ -53,7 +53,7 @@ int processCollision() {
 		}
 
 		//bullets from the enemy
-		else if (bullet_object->second != NULL && bullet_object->second->getVelocityX() < 0) {
+		else if (bullet_object->second != NULL && bullet_object->second->getVelocity().x < 0) {
 			for (auto player_object = playerMap->begin(); player_object != playerMap->end(); player_object++){
 				//collision happens between player and the bullet
 				if (player_object->second != NULL && object::isintersect(player_object->second->getSprite(), bullet_object->second->getSprite())) {
@@ -73,7 +73,7 @@ int processCollision() {
 			Enemy->reduceHp(Bullet->getDamageValue());
 			points += Bullet->getDamageValue();
 			if (Enemy->getHp() <= 0) {
-				animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Enemy->getPositionX(), Enemy->getPositionY()));
+				animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
 				sounds::playBoomSound(100);
 				enemy::deleteObject(it.first);
 			}
@@ -86,7 +86,7 @@ int processCollision() {
 			Player->reducePlayerHp(Bullet->getDamageValue());
 			points -= Bullet->getDamageValue();
 			if (Player->getPlayerHp() <= 0) {
-				animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Player->getPositionX(), Player->getPositionY()));
+				animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Player->getPosition().x, Player->getPosition().y));
 				sounds::playBoomSound(100);
 				player::deleteObject(it.first);
 			}

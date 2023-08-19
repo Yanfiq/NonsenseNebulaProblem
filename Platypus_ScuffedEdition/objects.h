@@ -21,12 +21,9 @@ protected:
 public:
 	object(float _positionX, float _positionY, float _velocityX, float _velocityY);
 	sf::RectangleShape* getSprite();
-	float getPositionX();
-	float getPositionY();
-	float getVelocityX();
-	float getVelocityY();
-	float getWidth();
-	float getHeight();
+	sf::Vector2f getPosition();
+	sf::Vector2f getVelocity();
+	sf::Vector2f getSize();
 	void setVelocity(float vx, float vy);
 	void setPosition(float px, float py);
 	virtual void update(double time); 

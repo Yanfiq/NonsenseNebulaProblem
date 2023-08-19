@@ -23,27 +23,16 @@ void object::setPosition(float px, float py) {
 	positionY = py;
 }
 
-float object::getPositionX() {
-	return positionX;
-}
-float object::getPositionY() {
-	return positionY;
+sf::Vector2f object::getPosition() {
+	return sf::Vector2f(positionX, positionY);
 }
 
-float object::getVelocityX() {
-	return velocityX;
+sf::Vector2f object::getVelocity() {
+	return sf::Vector2f(velocityX, velocityY);
 }
 
-float object::getVelocityY() {
-	return velocityY;
-}
-
-float object::getWidth() {
-	return object_sprite.getSize().x;
-}
-
-float object::getHeight() {
-	return object_sprite.getSize().y;
+sf::Vector2f object::getSize() {
+	return sf::Vector2f(object_sprite.getSize().x, object_sprite.getSize().y);
 }
 
 void object::update(double time) {

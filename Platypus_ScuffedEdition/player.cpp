@@ -4,7 +4,10 @@ std::unordered_map<int, player*> player::player_map;
 int player::allBullet = 1;
 textRenderer player::TextRenderer("fonts/Poppins-SemiBold.ttf");
 
-player::player(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY) {
+player::player(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY) : 
+	object(_positionX, _positionY, _velocityX, _velocityY), 
+	HPBar(sf::Color::White, 2, sf::Color::Red, sf::Color::Green, MAX_PLAYER_HEALTH, textureManager::getTexture(texture_filename)->getSize().x, textureManager::getTexture(texture_filename)->getSize().y/10) 
+{
 	sf::Texture* texture = textureManager::getTexture(texture_filename);
 	object_sprite.setTexture(texture);
 	object_sprite.setSize(sf::Vector2f(texture->getSize()));
@@ -39,11 +42,11 @@ int player::getBulletCount() {
 }
 
 void player::thrustUp() {
-	setVelocity(getVelocityX(), getVelocityY() - 50.0f);
+	setVelocity(getVelocity().x, getVelocity().y - 50.0f);
 }
 
 void player::thrustDown() {
-	setVelocity(getVelocityX(), getVelocityY() + 50.0f);
+	setVelocity(getVelocity().x, getVelocity().y + 50.0f);
 }
 
 float player::getPlayerHp() const {
@@ -62,27 +65,6 @@ void player::healPlayer(float addHp) {
 	this->hp += addHp;
 	if (this->hp > MAX_PLAYER_HEALTH)
 		this->hp = MAX_PLAYER_HEALTH;
-}
-
-void player::drawHpBar(sf::RenderWindow& window, float position_x, float position_y, float width, float height) {
-	sf::RectangleShape rectangle;
-	rectangle.setOutlineColor(sf::Color::White); 
-	rectangle.setOutlineThickness(2);
-	rectangle.setFillColor(sf::Color::Transparent);
-	rectangle.setSize(sf::Vector2f(width, height));
-	rectangle.setOrigin(sf::Vector2f(width / 2, height / 2));
-	rectangle.setPosition(positionX, position_y);
-
-	sf::RectangleShape hp_bar;
-	hp_bar.setPosition(sf::Vector2f(rectangle.getPosition().x - rectangle.getOrigin().x, rectangle.getPosition().y - rectangle.getOrigin().y));
-	hp_bar.setSize(sf::Vector2f(((this->hp / MAX_PLAYER_HEALTH) * width), height));
-	if(this->hp >= MAX_PLAYER_HEALTH / 2)
-		hp_bar.setFillColor(sf::Color::Green);
-	else
-		hp_bar.setFillColor(sf::Color::Red);
-
-	window.draw(rectangle);
-	window.draw(hp_bar);
 }
 
 std::unordered_map<int, player*>* player::getPlayerMap() {
@@ -118,36 +100,36 @@ void player::update(double time) {
 
 void player::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 	for (const auto& it : player_map) {
-		it.second->drawHpBar(window, it.second->getPositionX(), it.second->getPositionY() - it.second->getHeight() / 2 - 20, it.second->getWidth(), 10);
 		it.second->update(dt);
+		it.second->HPBar.draw(window, it.second->getPlayerHp(), sf::Vector2f(it.second->getPosition().x, it.second->getPosition().y - it.second->getSprite()->getOrigin().y - 10));
 
-		if (it.second->getPositionY() >= window.getSize().y) {
-			it.second->setPosition(it.second->getPositionX(), window.getSize().y);
-			it.second->setVelocity(it.second->getVelocityX(), it.second->getVelocityY() * -1 + 0.05);
+		if (it.second->getPosition().y >= window.getSize().y) {
+			it.second->setPosition(it.second->getPosition().x, window.getSize().y);
+			it.second->setVelocity(it.second->getVelocity().x, it.second->getVelocity().y * -1 + 0.05);
 		}
-		else if (it.second->getPositionY() <= 0) {
-			it.second->setPosition(it.second->getPositionX(), 0);
-			it.second->setVelocity(it.second->getVelocityX(), it.second->getVelocityY() * -1 - 0.05);
+		else if (it.second->getPosition().y <= 0) {
+			it.second->setPosition(it.second->getPosition().x, 0);
+			it.second->setVelocity(it.second->getVelocity().x, it.second->getVelocity().y * -1 - 0.05);
 		}
 		sf::RectangleShape* sprite = it.second->getSprite();
 		window.draw(*sprite);
 
 		std::string string = "player " + std::to_string(it.first - 100);
-		float x = it.second->getPositionX() - it.second->getSprite()->getOrigin().x;
-		float y = it.second->getPositionY() + it.second->getSprite()->getOrigin().y;
+		float x = it.second->getPosition().x - it.second->getSprite()->getOrigin().x;
+		float y = it.second->getPosition().y + it.second->getSprite()->getOrigin().y;
 		TextRenderer.displayText(window, string, 20, sf::Color::White, x, y);
 	}
 }
 
 void player::justDrawAllObject(sf::RenderWindow& window) {
 	for (const auto& it : player_map) {
-		it.second->drawHpBar(window, it.second->getPositionX(), it.second->getPositionY() - it.second->getHeight() / 2 - 20, it.second->getWidth(), 10);
+		it.second->HPBar.draw(window, it.second->getPlayerHp(), sf::Vector2f(it.second->getPosition().x, it.second->getPosition().y - it.second->getSprite()->getOrigin().y - 10));
 		sf::RectangleShape* sprite = it.second->getSprite();
 		window.draw(*sprite);
 
 		std::string string = "player " + std::to_string(it.first - 100);
-		float x = it.second->getPositionX() - it.second->getSprite()->getOrigin().x;
-		float y = it.second->getPositionY() + it.second->getSprite()->getOrigin().y;
+		float x = it.second->getPosition().x - it.second->getSprite()->getOrigin().x;
+		float y = it.second->getPosition().y + it.second->getSprite()->getOrigin().y;
 		TextRenderer.displayText(window, string, 20, sf::Color::White, x, y);
 	}
 }

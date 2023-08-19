@@ -245,6 +245,7 @@ int main() {
 				TextRenderer.displayText(window, "Press Enter to back to main menu", 40, sf::Color::White, 100, window.getSize().y - 60);
 				if (InputManager::Instance()->KeyPress("Enter")) {
 					player::clearObject();
+					enemy::clearObject();
 					level = 0;
 					currentPoint = 0;
 					scene = start;
@@ -323,7 +324,7 @@ int main() {
 					int counter = 0;
 					for (int i = counts; i < counts + (getRandomFloat((window.getSize().x / 288) * difficulty, (window.getSize().y / 176) * difficulty)); i++) {
 						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-1000, 1000), getRandomFloat(-1000, 1000));
-						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPositionX(), Enemy->getPositionY()));
+						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
 						counter++;
 					}
 					counts += counter;
@@ -342,7 +343,7 @@ int main() {
 				{
 					for (int i = 1; i < getRandomFloat(window.getSize().x / 288, window.getSize().y / 176); i++) {
 						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-500, 500), getRandomFloat(-500, 500));
-						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPositionX(), Enemy->getPositionY()));
+						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
 					}
 					break;
 				}
@@ -350,7 +351,7 @@ int main() {
 				{
 					for (int i = 1; i < getRandomFloat((window.getSize().x / 288) * 2, (window.getSize().y / 176) * 2); i++) {
 						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-750, 750), getRandomFloat(-750, 750));
-						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPositionX(), Enemy->getPositionY()));
+						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
 					}
 					break;
 				}
@@ -358,7 +359,7 @@ int main() {
 				{
 					for (int i = 1; i < getRandomFloat((window.getSize().x / 288) * 3, (window.getSize().y / 176) * 3); i++) {
 						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-1000, 1000), getRandomFloat(-1000, 1000));
-						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPositionX(), Enemy->getPositionY()));
+						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
 					}
 					break;
 				}
@@ -381,6 +382,8 @@ int main() {
 			}
 
 			if (InputManager::Instance()->KeyPress("Spacebar")) {
+				if (player::getObjectPtr(101) != NULL) player::getObjectPtr(101)->setVelocity(0, 0);
+				if (player::getObjectPtr(102) != NULL) player::getObjectPtr(102)->setVelocity(0, 0);
 				scene = pause;
 			}
 
@@ -391,8 +394,8 @@ int main() {
 				enemy* Enemy = enemy_object->second;
 				for (auto player_object = playerMap->begin(); player_object != playerMap->end(); player_object++) {
 					player* Player = player_object->second;
-					if ((Enemy->getPositionY() < Player->getPositionY() + 5) &&
-						(Enemy->getPositionY() > Player->getPositionY() - 5)) {
+					if ((Enemy->getPosition().y < Player->getPosition().y + 5) &&
+						(Enemy->getPosition().y > Player->getPosition().y - 5)) {
 						Enemy->shoot(sfxVolume);
 					}
 				}

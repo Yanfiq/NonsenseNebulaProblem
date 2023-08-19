@@ -3,6 +3,7 @@
 #include "bullet.h"
 #include "sound.h"
 #include "Text.h"
+#include "bar.h"
 #include "textureManager.h"
 #define MAX_PLAYER_HEALTH 200
 
@@ -15,6 +16,7 @@ protected:
 	int bulletFired = 0;
 	float hp = MAX_PLAYER_HEALTH;
 	sf::Clock healTime;
+	bar HPBar;
 
 public:
 	player(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY);
@@ -29,7 +31,6 @@ public:
 	void reducePlayerHp(float damage);
 	void healPlayer(float addHp);
 	void update(double time) override;
-	void drawHpBar(sf::RenderWindow& window, float position_x, float position_y, float width, float height);
 	
 	static void deleteObject(int id);
 	static void clearObject();

@@ -3,7 +3,10 @@
 std::unordered_map<int, enemy*> enemy::enemy_map;
 int enemy::bullet_count = 1;
 
-enemy::enemy(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY) : object(_positionX, _positionY, _velocityX, _velocityY){
+enemy::enemy(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY) : 
+	object(_positionX, _positionY, _velocityX, _velocityY),
+	HPBar(sf::Color::White, 2, sf::Color::Red, sf::Color::Green, MAX_ENEMY_HEALTH, textureManager::getTexture(texture_filename)->getSize().x, textureManager::getTexture(texture_filename)->getSize().y / 10)
+{
 	sf::Texture* texture = textureManager::getTexture(texture_filename);
 	object_sprite.setTexture(texture);
 	object_sprite.setSize(sf::Vector2f(texture->getSize()));
@@ -37,26 +40,26 @@ float enemy::getHp() {
 	return hp;
 }
 
-void enemy::drawHpBar(sf::RenderWindow& window, float position_x, float position_y, float width, float height) {
-	sf::RectangleShape rectangle;
-	rectangle.setOutlineColor(sf::Color::White);
-	rectangle.setOutlineThickness(2);
-	rectangle.setFillColor(sf::Color::Transparent);
-	rectangle.setSize(sf::Vector2f(width, height));
-	rectangle.setOrigin(sf::Vector2f(width / 2, height / 2));
-	rectangle.setPosition(positionX, position_y);
-
-	sf::RectangleShape hp_bar;
-	hp_bar.setPosition(sf::Vector2f(rectangle.getPosition().x - rectangle.getOrigin().x, rectangle.getPosition().y - rectangle.getOrigin().y));
-	hp_bar.setSize(sf::Vector2f(((this->hp / MAX_ENEMY_HEALTH) * width), height));
-	if (this->hp >= MAX_ENEMY_HEALTH / 2)
-		hp_bar.setFillColor(sf::Color::Green);
-	else
-		hp_bar.setFillColor(sf::Color::Red);
-
-	window.draw(rectangle);
-	window.draw(hp_bar);
-}
+//void enemy::drawHpBar(sf::RenderWindow& window, float position_x, float position_y, float width, float height) {
+//	sf::RectangleShape rectangle;
+//	rectangle.setOutlineColor(sf::Color::White);
+//	rectangle.setOutlineThickness(2);
+//	rectangle.setFillColor(sf::Color::Transparent);
+//	rectangle.setSize(sf::Vector2f(width, height));
+//	rectangle.setOrigin(sf::Vector2f(width / 2, height / 2));
+//	rectangle.setPosition(positionX, position_y);
+//
+//	sf::RectangleShape hp_bar;
+//	hp_bar.setPosition(sf::Vector2f(rectangle.getPosition().x - rectangle.getOrigin().x, rectangle.getPosition().y - rectangle.getOrigin().y));
+//	hp_bar.setSize(sf::Vector2f(((this->hp / MAX_ENEMY_HEALTH) * width), height));
+//	if (this->hp >= MAX_ENEMY_HEALTH / 2)
+//		hp_bar.setFillColor(sf::Color::Green);
+//	else
+//		hp_bar.setFillColor(sf::Color::Red);
+//
+//	window.draw(rectangle);
+//	window.draw(hp_bar);
+//}
 
 void enemy::shoot(int& sfxVol) {
 	bullet* Bullet = new bullet(bullet_count++, "gameplay_bullet_1.png", positionX, positionY, -900.0f, 0.0f);
@@ -76,21 +79,21 @@ void enemy::clearObject() {
 void enemy::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 	for (const auto& it : enemy_map) {
 		it.second->update(dt);
-		it.second->drawHpBar(window, it.second->getPositionX() - it.second->getWidth() / 2, it.second->getPositionY() - it.second->getHeight() / 2 - 20, it.second->getWidth(), 10);
+		it.second->HPBar.draw(window, it.second->getHp(), sf::Vector2f(it.second->getPosition().x, it.second->getPosition().y - it.second->getSprite()->getOrigin().y - 10));
 
-		if (it.second->getPositionY() > window.getSize().y || it.second->getPositionY() < 0) {
-			it.second->setVelocity(it.second->getVelocityX(), it.second->getVelocityY() * -1);
-			if (it.second->getPositionY() > window.getSize().y)
-				it.second->setPosition(it.second->getPositionX(), window.getSize().y);
-			else if (it.second->getPositionY() <= 0)
-				it.second->setPosition(it.second->getPositionX(), 0);
+		if (it.second->getPosition().y > window.getSize().y || it.second->getPosition().y < 0) {
+			it.second->setVelocity(it.second->getVelocity().x, it.second->getVelocity().y * -1);
+			if (it.second->getPosition().y > window.getSize().y)
+				it.second->setPosition(it.second->getPosition().x, window.getSize().y);
+			else if (it.second->getPosition().y <= 0)
+				it.second->setPosition(it.second->getPosition().x, 0);
 		}
-		if (it.second->getPositionX() > window.getSize().x || it.second->getPositionX() < 400) {
-			it.second->setVelocity(it.second->getVelocityX() * -1, it.second->getVelocityY());
-			if (it.second->getPositionX() <= 400)
-				it.second->setPosition(400, it.second->getPositionY());
-			else if (it.second->getPositionX() > window.getSize().x)
-				it.second->setPosition(window.getSize().x, it.second->getPositionY());
+		if (it.second->getPosition().x > window.getSize().x || it.second->getPosition().x < 400) {
+			it.second->setVelocity(it.second->getVelocity().x * -1, it.second->getVelocity().y);
+			if (it.second->getPosition().x <= 400)
+				it.second->setPosition(400, it.second->getPosition().y);
+			else if (it.second->getPosition().x > window.getSize().x)
+				it.second->setPosition(window.getSize().x, it.second->getPosition().y);
 		}
 		sf::RectangleShape* sprite = it.second->getSprite();
 		window.draw(*sprite);
@@ -99,7 +102,7 @@ void enemy::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 
 void enemy::justDrawAllObject(sf::RenderWindow& window) {
 	for (const auto& it : enemy_map) {
-		it.second->drawHpBar(window, it.second->getPositionX() - it.second->getWidth() / 2, it.second->getPositionY() - it.second->getHeight() / 2 - 20, it.second->getWidth(), 10);
+		it.second->HPBar.draw(window, it.second->getHp(), sf::Vector2f(it.second->getPosition().x, it.second->getPosition().y - it.second->getSprite()->getOrigin().y - 10));
 		sf::RectangleShape* sprite = it.second->getSprite();
 		window.draw(*sprite);
 	}

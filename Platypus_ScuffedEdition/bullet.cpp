@@ -54,7 +54,7 @@ void bullet::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 		sf::RectangleShape* sprite = it->second->getSprite();
 		window.draw(*sprite);
 
-		if (it->second->getPositionX() < 0 || it->second->getPositionX() > window.getSize().x){
+		if (it->second->getPosition().x < 0 || it->second->getPosition().x > window.getSize().x){
 			delete it->second;
 			it = bullet_map.erase(it);
 		}
