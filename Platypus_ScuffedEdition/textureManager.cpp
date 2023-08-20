@@ -1,6 +1,7 @@
 #include "textureManager.h"
 
 std::unordered_map<std::string, sf::Texture*> textureManager::textures_map;
+sf::RectangleShape textureManager::shape;
 
 void textureManager::initializeTexture() {
 	for (const auto& entry : std::filesystem::directory_iterator("images")) {
@@ -21,10 +22,10 @@ sf::Texture* textureManager::getTexture(std::string filename) {
 
 void textureManager::displayImage(sf::RenderWindow& window, std::string texture_filename, float position_x, float position_y, sf::Vector2f size) {
 	sf::Texture* texture = getTexture(texture_filename);
-	sf::RectangleShape shape;
 	shape.setSize(size);
 	shape.setTexture(texture);
 	shape.setPosition(position_x, position_y);
+	shape.setOrigin(sf::Vector2f(size.x / 2, size.y / 2));
 	sf::Vector2f textureSize = static_cast<sf::Vector2f>(texture->getSize());
 
 	sf::IntRect textureRect;

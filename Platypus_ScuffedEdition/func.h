@@ -9,16 +9,13 @@
 #include <ctime>
 #include <unordered_map>
 
-enum objectType {
-	player_obj = 100,
-	playerBullet_obj = 200,
-	enemy_obj = 300,
-	enemyBullet_obj = 400
-};
-
+// generating random float between 2 number
 float getRandomFloat(float num_1, float num_2);
+
+// generating random integer between 2 number
 int getRandomInteger(int num_1, int num_2);
 
-int processCollision();
+// unodular function, created just to make main function cleaner
+int processCollision(int sfxVolume);
 void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step);
 sfe::RichText displayCredit(sf::Font* font, float position_x, float position_y);

@@ -13,12 +13,15 @@ protected:
 	float maxY = 0.5f;
 	float minY = -0.5f;
 	sf::RectangleShape object_sprite;
-	enum objectType{player_obj = 100, 
-					playerBullet_obj = 200, 
-					enemy_obj = 300, 
-					enemyBullet_obj = 400};
 
 public:
+	enum Type {
+		player_obj = 1000,
+		playerBullet_obj = 2000,
+		enemy_obj = 3000,
+		enemyBullet_obj = 4000
+	};
+
 	object(float _positionX, float _positionY, float _velocityX, float _velocityY);
 	sf::RectangleShape* getSprite();
 	sf::Vector2f getPosition();
@@ -26,6 +29,6 @@ public:
 	sf::Vector2f getSize();
 	void setVelocity(float vx, float vy);
 	void setPosition(float px, float py);
-	virtual void update(double time); 
+	virtual void update(float time); 
 	static bool isintersect(sf::RectangleShape* shape_1, sf::RectangleShape* shape_2);
 };

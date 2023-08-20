@@ -6,6 +6,7 @@
 class textureManager {
 private:
 	static std::unordered_map<std::string, sf::Texture*> textures_map;
+	static sf::RectangleShape shape;
 
 public:
 	static void initializeTexture();

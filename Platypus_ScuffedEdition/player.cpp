@@ -6,7 +6,8 @@ textRenderer player::TextRenderer("fonts/Poppins-SemiBold.ttf");
 
 player::player(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY) : 
 	object(_positionX, _positionY, _velocityX, _velocityY), 
-	HPBar(sf::Color::White, 2, sf::Color::Red, sf::Color::Green, MAX_PLAYER_HEALTH, textureManager::getTexture(texture_filename)->getSize().x, textureManager::getTexture(texture_filename)->getSize().y/10) 
+	HPBar(sf::Color::White, 2, sf::Color::Red, sf::Color::Green, MAX_PLAYER_HEALTH, textureManager::getTexture(texture_filename)->getSize().x, textureManager::getTexture(texture_filename)->getSize().y/10),
+	bulletBar(sf::Color::White, 2, sf::Color::Red, sf::Color::Green, MAX_PLAYER_BULLET, 200, 30)
 {
 	sf::Texture* texture = textureManager::getTexture(texture_filename);
 	object_sprite.setTexture(texture);
@@ -28,7 +29,7 @@ void player::shoot(int &sfxVol) {
 	bulletFired++;
 	Bullet->setDamageValue(20.0f);
 	sounds::playShootSound(sfxVol);
-	if (allBullet == 99)
+	if (allBullet == 999)
 		allBullet = 0;
 }
 
@@ -83,7 +84,7 @@ void player::clearObject() {
 	}
 }
 
-void player::update(double time) {
+void player::update(float time) {
 	positionY += velocityY * time;
 	if (velocityY > 0)
 		velocityY -= 5;
@@ -114,10 +115,10 @@ void player::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 		sf::RectangleShape* sprite = it.second->getSprite();
 		window.draw(*sprite);
 
-		std::string string = "player " + std::to_string(it.first - 100);
-		float x = it.second->getPosition().x - it.second->getSprite()->getOrigin().x;
+		std::string string = "player " + std::to_string(it.first - player_obj);
+		float x = it.second->getPosition().x;
 		float y = it.second->getPosition().y + it.second->getSprite()->getOrigin().y;
-		TextRenderer.displayText(window, string, 20, sf::Color::White, x, y);
+		TextRenderer.displayText(window, string, 1, 20, sf::Color::White, x, y);
 	}
 }
 
@@ -127,9 +128,9 @@ void player::justDrawAllObject(sf::RenderWindow& window) {
 		sf::RectangleShape* sprite = it.second->getSprite();
 		window.draw(*sprite);
 
-		std::string string = "player " + std::to_string(it.first - 100);
-		float x = it.second->getPosition().x - it.second->getSprite()->getOrigin().x;
+		std::string string = "player " + std::to_string(it.first - player_obj);
+		float x = it.second->getPosition().x;
 		float y = it.second->getPosition().y + it.second->getSprite()->getOrigin().y;
-		TextRenderer.displayText(window, string, 20, sf::Color::White, x, y);
+		TextRenderer.displayText(window, string, 1, 20, sf::Color::White, x, y);
 	}
 }

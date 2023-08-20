@@ -6,12 +6,20 @@ textRenderer::textRenderer(std::string fontDirectory) {
 }
 
 
-
-void textRenderer::displayText(sf::RenderWindow& window, std::string string, int size, sf::Color color, float position_x, float position_y) {
+// displaying text into the RenderWindow
+// align : 0 = align left, 1 = align center, 2 = align right
+void textRenderer::displayText(sf::RenderWindow& window, std::string string, int align, int size, sf::Color color, float position_x, float position_y) {
 	Text.setString(string);
 	Text.setCharacterSize(size);
-	Text.setPosition(position_x, position_y);
 	Text.setFillColor(color);
+	Text.setPosition(position_x, position_y);
+
+	switch (align) {
+	case 0: Text.setOrigin(sf::Vector2f(0, Text.getLocalBounds().height/2)); break;
+	case 1: Text.setOrigin(sf::Vector2f(Text.getLocalBounds().width / 2, Text.getLocalBounds().height / 2)); break;
+	case 2: Text.setOrigin(sf::Vector2f(Text.getLocalBounds().width, Text.getLocalBounds().height / 2)); break;
+	}
+
 	window.draw(Text);
 }
 

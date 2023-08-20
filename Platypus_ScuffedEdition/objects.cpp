@@ -35,7 +35,7 @@ sf::Vector2f object::getSize() {
 	return sf::Vector2f(object_sprite.getSize().x, object_sprite.getSize().y);
 }
 
-void object::update(double time) {
+void object::update(float time) {
 	positionX += velocityX * time;
 	positionY += velocityY * time;
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));

@@ -31,7 +31,7 @@ int getRandomInteger(int num_1, int num_2) {
     return dist(rng);
 }
 
-int processCollision() {
+int processCollision(int sfxVolume) {
 	//collision detection and object removal
 	std::unordered_map<int, bullet*>* bulletMap = bullet::getBulletMap();
 	std::unordered_map<int, enemy*>* enemyMap = enemy::getEnemyMap();
@@ -63,31 +63,31 @@ int processCollision() {
 			}
 		}
 	}
-	
+
 	int points = 0;
 	for (const auto& it : collideObject) {
 		if ((bullet::getObjectPtr(it.second) != NULL) &&
-			(it.first - enemy_obj < 100 && it.first - enemy_obj > 0)) {
+			(it.first - object::Type::enemy_obj > 0 && it.first - object::Type::enemy_obj < 1000)) {
 			enemy* Enemy = enemy::getObjectPtr(it.first);
 			bullet* Bullet = bullet::getObjectPtr(it.second);
 			Enemy->reduceHp(Bullet->getDamageValue());
 			points += Bullet->getDamageValue();
 			if (Enemy->getHp() <= 0) {
 				animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
-				sounds::playBoomSound(100);
+				sounds::playBoomSound(sfxVolume);
 				enemy::deleteObject(it.first);
 			}
 			bullet::deleteObject(it.second);
 		}
 		else if ((bullet::getObjectPtr(it.second) != NULL) &&
-			(it.first - player_obj < 100 && it.first - player_obj > 0)) {
+			(it.first - object::Type::player_obj > 0 && it.first - object::Type::player_obj < 1000)) {
 			player* Player = player::getObjectPtr(it.first);
 			bullet* Bullet = bullet::getObjectPtr(it.second);
 			Player->reducePlayerHp(Bullet->getDamageValue());
 			points -= Bullet->getDamageValue();
 			if (Player->getPlayerHp() <= 0) {
 				animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Player->getPosition().x, Player->getPosition().y));
-				sounds::playBoomSound(100);
+				sounds::playBoomSound(sfxVolume);
 				player::deleteObject(it.first);
 			}
 			bullet::deleteObject(it.second);
@@ -99,61 +99,64 @@ int processCollision() {
 void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 	sfe::RichText text_1(*font);
 	sfe::RichText text_2(*font);
+
 	switch (step)
 	{
 	case 1:
 		text_1 << sf::Color::Cyan << "Step 1\n"
-			<< sf::Color::White << "use 'W' button to go up";
-		text_1.setPosition(100, 100);
+			<< sf::Color::White << "use 'Up' button to go up";
+		text_1.setPosition(window.getSize().x / 4, window.getSize().y / 4);
 
-		text_2 << sf::Color::White << "for the player_2, use 'Up' instead\n";
-		text_2.setPosition(700, 150);
+		text_2 << sf::Color::White << "for the player_2, use 'W' instead\n";
+		text_2.setPosition(window.getSize().x / 1.35, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_wasd.jpg", 100, 300, sf::Vector2f(500, 281));
-		textureManager::displayImage(window, "tutorial_arrows.jpg", 700, 300, sf::Vector2f(500, 281));
+		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
+		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
 		break;
 	case 2:
 		text_1 << sf::Color::Cyan << "Step 2\n"
-			<< sf::Color::White << "use 'S' button to go down\n";
-		text_1.setPosition(100, 100);
+			<< sf::Color::White << "use 'Down' button to go down\n";
+		text_1.setPosition(window.getSize().x / 4, window.getSize().y / 4);
 
-		text_2 << sf::Color::White << "for the player_2, use 'Down' instead\n";
-		text_2.setPosition(700, 150);
+		text_2 << sf::Color::White << "for the player_2, use 'S' instead\n";
+		text_2.setPosition(window.getSize().x / 1.35, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_wasd.jpg", 100, 300, sf::Vector2f(500, 281));
-		textureManager::displayImage(window, "tutorial_arrows.jpg", 700, 300, sf::Vector2f(500, 281));
+		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
+		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
 		break;
 	case 3:
 		text_1 << sf::Color::Cyan << "Step 3\n"
-			<< sf::Color::White << "use 'D' button to fire the bullet\n";
-		text_1.setPosition(100, 100);
+			<< sf::Color::White << "use 'Right' button to fire the bullet\n";
+		text_1.setPosition(window.getSize().x / 4, window.getSize().y / 4);
 
-		text_2 << sf::Color::White << "for the player_2, use 'Right' instead\n";
-		text_2.setPosition(700, 150);
+		text_2 << sf::Color::White << "for the player_2, use 'D' instead\n";
+		text_2.setPosition(window.getSize().x / 1.35, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_wasd.jpg", 100, 300, sf::Vector2f(500, 281));
-		textureManager::displayImage(window, "tutorial_arrows.jpg", 700, 300, sf::Vector2f(500, 281));
+		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
+		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
 		break;
 	case 4:
 		text_1 << sf::Color::Cyan << "Step 4\n"
-			<< sf::Color::White << "use 'A' button to reload the bullet\n";
-		text_1.setPosition(100, 100);
+			<< sf::Color::White << "use 'Left' button to reload the bullet\n";
+		text_1.setPosition(window.getSize().x / 4, window.getSize().y / 4);
 
-		text_2 << sf::Color::White << "for the player_2, use 'Left' instead\n";
-		text_2.setPosition(700, 150);
+		text_2 << sf::Color::White << "for the player_2, use 'A' instead\n";
+		text_2.setPosition(window.getSize().x / 1.35, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_wasd.jpg", 100, 300, sf::Vector2f(500, 281));
-		textureManager::displayImage(window, "tutorial_arrows.jpg", 700, 300, sf::Vector2f(500, 281));
+		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
+		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
 		break;
 	case 5:
 		text_1 << sf::Color::Cyan << "Step 5\n"
 			<< sf::Color::White << "use spacebar to pause the game\n";
-		text_1.setPosition(400, 100);
+		text_1.setPosition(window.getSize().x / 2, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_spacebar.jpg", 380, 300, sf::Vector2f(500, 281));
+		textureManager::displayImage(window, "tutorial_spacebar.jpg", window.getSize().x / 2, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
 		break;
 	}
 
+	text_1.setOrigin(sf::Vector2f(text_1.getLocalBounds().width / 2, text_1.getLocalBounds().height / 2));
+	text_2.setOrigin(sf::Vector2f(text_2.getLocalBounds().width / 2, text_2.getLocalBounds().height / 2));
 	text_1.setCharacterSize(30); text_2.setCharacterSize(30);
 	window.draw(text_1);
 	window.draw(text_2);

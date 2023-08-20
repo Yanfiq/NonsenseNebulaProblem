@@ -7,6 +7,7 @@
 #include "enemy.h"
 #include "Text.h"
 #include "func.h"
+#include "bar.h"
 #include "textureManager.h"
 #include "InputManager.h"
 #include "animation.h"
@@ -34,20 +35,13 @@ int main() {
  
 	// enumeration for scene changes
 	enum part { start, settings , tutorial, credits, transition, singleMulti, play, pause };
-	// enumeration for objectType
-	enum objectType {
-		player_obj = 100,
-		playerBullet_obj = 200,
-		enemy_obj = 300,
-		enemyBullet_obj = 400
-	};
 
 	// variables that'll be used inside the main game
 	int level = 0;					// as the name implies, to differentiate levels
 	int currentPoint = 0;			// as the name implies, to save the point calculation result
 	bool generateEnemy = false;		// decides whether to generate new enemies
-	bool endless = false;
-	bool cheat = false;
+	bool endless = false;			// endless mode
+	bool cheat = false;				// cheat
 
 	// variables that'll be used on multiple choices scene
 	int scene = start;				// decide what scene is being run
@@ -74,6 +68,7 @@ int main() {
 		bgmusic.setVolume(bgmVolume);
 		sounds::monitoring();
 
+		// POLL EVENT SECTION ----------------------------------------------------------------------------------------------------------------------------------------------------------
 		while (window.pollEvent(event)) {
 			switch (event.type) {
 			case sf::Event::Closed:
@@ -94,10 +89,11 @@ int main() {
 			}
 			InputManager::Instance()->KRUpdate(event);
 		}
+		// END OF POLL EVENT SECTION ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-		// draw the background and animation
-		textureManager::displayImage(window, "background_nebula.jpg", 0, 0, sf::Vector2f(window.getSize()));
-		// sprites render
+		// RENDER SECTION --------------------------------------------------------------------------------------------------------------------------------------------------------------
+		textureManager::displayImage(window, "background_nebula.jpg", window.getSize().x/2, window.getSize().y/2, sf::Vector2f(window.getSize()));
+		// delta time between frame
 		float dt = clock.restart().asSeconds();
 		if (scene == pause) {
 			if (!cheat) {
@@ -116,18 +112,20 @@ int main() {
 			bullet::updateNDrawAllObject(dt, window);
 			enemy::updateNDrawAllObject(dt, window);
 		}
-		currentPoint += processCollision();
+		currentPoint += processCollision(sfxVolume);
 		animate::monitoringAnimation(window);
+		// END OF RENDER RECTION -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-		//outside pollEvent
+		// SCENES AND VIDEO GAME LOGIC -----------------------------------------------------------------------------------------------------------------------------------------------------
 		switch (scene) {
 		case start:
 		{
 			bullet::clearObject();
 			enemy::clearObject();
+			TextRenderer.displayText(window, "something is happening somewhere", 1, 50, sf::Color::White, window.getSize().x / 2, 100);
+
 			static int choice = 0;
 			std::vector<std::string> choices = { "START", "SETTINGS", "EXIT" };
-			TextRenderer.displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
 			TextRenderer.displayMultipleChoice(window, choices, choice, 50, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 300);
 
 			if (InputManager::Instance()->KeyPress("Up_1"))   choice = (choice == 0) ? 0 : choice - 1;
@@ -146,7 +144,7 @@ int main() {
 		{
 			static int step = 1;
 			displayTutorial(window, TextRenderer.getFont(), step);
-			TextRenderer.displayText(window, "Press ENTER to continue", 30, sf::Color::White, 100, 600);
+			TextRenderer.displayText(window, "Press ENTER to continue", 1, 30, sf::Color::White, window.getSize().x/2, window.getSize().y - 110);
 			if (InputManager::Instance()->KeyPress("Enter")) step++;
 			if (step > 5) {
 				scene = settings;
@@ -157,6 +155,8 @@ int main() {
 
 		case settings:
 		{
+			TextRenderer.displayText(window, "something is happening somewhere", 1, 50, sf::Color::White, window.getSize().x / 2, 100);
+
 			static int choice = 0;
 			std::string Cheat = (cheat) ? "Enabled" : "Disabled";
 			std::vector<std::string> choices = { "BGM Volume : <" + std::to_string(bgmVolume) + "%>",
@@ -165,14 +165,15 @@ int main() {
 												 "Tutorial",
 												 "Credit",
 												 "Back to main menu"};
-			TextRenderer.displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
 			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 400);
 
+
+			// ACTION
 			// moving between choices
 			if (InputManager::Instance()->KeyPress("Up_1")) choice = (choice == 0) ? 0 : choice - 1;
 			if (InputManager::Instance()->KeyPress("Down_1")) choice = (choice == 5) ? 5 : choice + 1;
 
-			// Decrease
+			// Decrease / disable
 			if (InputManager::Instance()->KeyPress("Left_1")) {
 				switch (choice) {
 				case 0:bgmVolume = (bgmVolume == 0) ? 0 : bgmVolume - 5; break; 
@@ -181,7 +182,7 @@ int main() {
 				}
 			}
 
-			//Increase
+			// Increase / enable
 			if (InputManager::Instance()->KeyPress("Right_1")) {
 				switch (choice) {
 				case 0:bgmVolume = (bgmVolume == 100) ? 100 : bgmVolume + 5; break;
@@ -190,7 +191,7 @@ int main() {
 				}
 			}
 
-			// move scene
+			// scene changes
 			if (InputManager::Instance()->KeyPress("Enter")) {
 				switch (choice) {
 				case 3:scene = tutorial; break;
@@ -219,8 +220,8 @@ int main() {
 		{
 			static int choice;
 			std::vector<std::string> choices = { "Singleplayer", "Multiplayer" };
-			TextRenderer.displayText(window, "something is happening somewhere", 50, sf::Color::White, 100, 100);
-			TextRenderer.displayText(window, "Choose your gamemode: ", 40, sf::Color::White, 100, window.getSize().y - 220);
+			TextRenderer.displayText(window, "something is happening somewhere", 1, 50, sf::Color::White, window.getSize().x/2, 100);
+			TextRenderer.displayText(window, "Choose your gamemode: ", 0, 40, sf::Color::White, 100, window.getSize().y - 220);
 			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 180);
 
 			// moving between choices
@@ -240,9 +241,9 @@ int main() {
 		case transition:
 		{
 			if(level == -1){ //lOSE
-				TextRenderer.displayText(window, "YOU LOSE :(\nBETTER LUCK NEXT TIME", 40, sf::Color::White, 100, 100);
-				TextRenderer.displayText(window, "Your last score is " + std::to_string(currentPoint), 40, sf::Color::White, 100, 200);
-				TextRenderer.displayText(window, "Press Enter to back to main menu", 40, sf::Color::White, 100, window.getSize().y - 60);
+				TextRenderer.displayText(window, "YOU LOSE :(\nBETTER LUCK NEXT TIME", 0, 40, sf::Color::White, 100, 100);
+				TextRenderer.displayText(window, "Your last score is " + std::to_string(currentPoint), 0, 40, sf::Color::White, 100, 200);
+				TextRenderer.displayText(window, "Press Enter to back to main menu", 1, 40, sf::Color::White, window.getSize().x/2, window.getSize().y - 60);
 				if (InputManager::Instance()->KeyPress("Enter")) {
 					player::clearObject();
 					enemy::clearObject();
@@ -253,8 +254,8 @@ int main() {
 			}
 			else if (level > 2) { //WIN
 				static int choice = 0;
-				TextRenderer.displayText(window, "CONGRATULATION :)\nYOU'RE THE WINNER", 40, sf::Color::White, 100, 100);
-				TextRenderer.displayText(window, "Your final score is " + std::to_string(currentPoint), 40, sf::Color::White, 100, 200);
+				TextRenderer.displayText(window, "CONGRATULATION :)\nYOU'RE THE WINNER", 0, 40, sf::Color::White, 100, 120);
+				TextRenderer.displayText(window, "Your final score is " + std::to_string(currentPoint), 0, 40, sf::Color::White, 100, 210);
 				std::vector<std::string>choices = {"ENDLESS MODE", "Main menu"};
 				TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 180);
 
@@ -274,8 +275,8 @@ int main() {
 				}
 			}
 			else { //NEXT LEVEL
-				TextRenderer.displayText(window, "LEVEL " + std::to_string(level + 1), 40, sf::Color::Cyan, 100, 100);
-				TextRenderer.displayText(window, "Press ENTER to continue", 30, sf::Color::White, 100, window.getSize().y - 60);
+				TextRenderer.displayText(window, "LEVEL " + std::to_string(level + 1), 0, 40, sf::Color::Cyan, 100, 100);
+				TextRenderer.displayText(window, "Press ENTER to continue", 1, 30, sf::Color::White, window.getSize().x/2, window.getSize().y - 60);
 				if (InputManager::Instance()->KeyPress("Enter")) {
 					level++;
 					generateEnemy = true;
@@ -288,7 +289,7 @@ int main() {
 		case pause:
 		{
 			static int choice = 0;
-			TextRenderer.displayText(window, "PAUSE", 40, sf::Color::White, 100, 100);
+			TextRenderer.displayText(window, "PAUSE", 0, 40, sf::Color::White, 100, 100);
 			std::vector<std::string> choices = { "Resume", "Rage quit" };
 			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 160);
 
@@ -317,7 +318,7 @@ int main() {
 			}
 
 			if (endless) {
-				static int difficulty = 3;
+				static float difficulty = 3;
 				static int counts = 1; // just for id
 				if (elapsed.getElapsedTime().asSeconds() > 10 || enemy::getEnemyMap()->size() < 3) {
 					//generate enemy
@@ -328,7 +329,7 @@ int main() {
 						counter++;
 					}
 					counts += counter;
-					if (counts == 99)counts = 1;
+					if (counts == 999)counts = 1;
 					difficulty += 0.5;
 					elapsed.restart();
 				}
@@ -402,42 +403,46 @@ int main() {
 			}
 
 			//collision detection and object removal
-			TextRenderer.displayText(window, "Score : " + std::to_string(currentPoint), 40, sf::Color::White, 30, 30);
+			TextRenderer.displayText(window, "Score : " + std::to_string(currentPoint), 0, 40, sf::Color::White, 30, 30);
 			break;
 		}
 		}
 
+		/*VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV PLAYER'S CONTROL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV*/
 		if ((scene != pause) || (scene == pause && cheat)) {
 			//FIRST PLAYER
-			if (player::getObjectPtr(101) != NULL) {
-				player* player_1 = player::getObjectPtr(101);
+			if (player::getObjectPtr(object::Type::player_obj + 1) != NULL) {
+				player* player_1 = player::getObjectPtr(object::Type::player_obj + 1);
+				player_1->bulletBar.draw(window, MAX_PLAYER_BULLET - player_1->getBulletCount(), sf::Vector2f(150, window.getSize().y - 50));
+				TextRenderer.displayText(window, "player_1's bullet", 1, 20, sf::Color::Black, 150, window.getSize().y - 50);
 				if (InputManager::Instance()->KeyDown("Up_1"))
 					player_1->thrustUp();
 				if (InputManager::Instance()->KeyDown("Down_1"))
 					player_1->thrustDown();
 				if (InputManager::Instance()->KeyDown("Right_1") && player_1->getBulletCount() <= 30)
 					player_1->shoot(sfxVolume);
-				if (player_1->getBulletCount() >= 30 && (scene == play || scene == pause)) {
-					TextRenderer.displayText(window, "player_1's bullet is empty", 30, sf::Color::White, 30, window.getSize().y - 60);
+				if (scene == play || scene == pause) {
 					if (InputManager::Instance()->KeyPress("Left_1")) player_1->resetBulletCount();
 				}
 			}
 
 			//SECOND PLAYER
-			if (player::getObjectPtr(102) != NULL) {
-				player* player_2 = player::getObjectPtr(102);
+			if (player::getObjectPtr(object::Type::player_obj + 2) != NULL) {
+				player* player_2 = player::getObjectPtr(object::Type::player_obj + 1);
+				player_2->bulletBar.draw(window, MAX_PLAYER_BULLET - player_2->getBulletCount(), sf::Vector2f(window.getSize().x - 150, window.getSize().y - 50));
+				TextRenderer.displayText(window, "player_2's bullet", 1, 20, sf::Color::Black, window.getSize().x - 150, window.getSize().y - 50);
 				if (InputManager::Instance()->KeyDown("Up_2"))
 					player_2->thrustUp();
 				if (InputManager::Instance()->KeyDown("Down_2"))
 					player_2->thrustDown();
 				if (InputManager::Instance()->KeyDown("Right_2") && player_2->getBulletCount() <= 30)
 					player_2->shoot(sfxVolume);
-				if (player_2->getBulletCount() >= 30 && (scene == play || scene == pause)) {
-					TextRenderer.displayText(window, "player_2's bullet is empty", 30, sf::Color::White, 850, 650);
+				if (scene == play || scene == pause) {
 					if (InputManager::Instance()->KeyPress("Left_2")) player_2->resetBulletCount();
 				}
 			}
 		}
+		/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ PLAYER'S CONTROL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
 
 		window.display();
 		window.clear();
