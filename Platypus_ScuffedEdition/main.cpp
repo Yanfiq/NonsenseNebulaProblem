@@ -82,6 +82,7 @@ int main() {
 				if (height < 720)
 					height = 720;
 				sf::FloatRect visibleArea(0.f, 0.f, width, height);
+				std::cout << width << " , " << height << std::endl;
 				window.setSize(sf::Vector2u(width, height));
 				window.setView(sf::View(visibleArea));
 				break;
@@ -165,7 +166,7 @@ int main() {
 												 "Tutorial",
 												 "Credit",
 												 "Back to main menu"};
-			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 400);
+			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 450);
 
 
 			// ACTION
@@ -250,6 +251,7 @@ int main() {
 					level = 0;
 					currentPoint = 0;
 					scene = start;
+					endless = false;
 				}
 			}
 			else if (level > 2) { //WIN
@@ -350,7 +352,7 @@ int main() {
 				}
 				case 2:
 				{
-					for (int i = 1; i < getRandomFloat((window.getSize().x / 288) * 2, (window.getSize().y / 176) * 2); i++) {
+					for (int i = 1; i < getRandomFloat((window.getSize().x / 288), (window.getSize().y / 176)) * 2; i++) {
 						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-750, 750), getRandomFloat(-750, 750));
 						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
 					}
@@ -358,7 +360,7 @@ int main() {
 				}
 				case 3:
 				{
-					for (int i = 1; i < getRandomFloat((window.getSize().x / 288) * 3, (window.getSize().y / 176) * 3); i++) {
+					for (int i = 1; i < getRandomFloat((window.getSize().x / 288), (window.getSize().y / 176)) * 3; i++) {
 						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-1000, 1000), getRandomFloat(-1000, 1000));
 						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
 					}
@@ -428,7 +430,7 @@ int main() {
 
 			//SECOND PLAYER
 			if (player::getObjectPtr(object::Type::player_obj + 2) != NULL) {
-				player* player_2 = player::getObjectPtr(object::Type::player_obj + 1);
+				player* player_2 = player::getObjectPtr(object::Type::player_obj + 2);
 				player_2->bulletBar.draw(window, MAX_PLAYER_BULLET - player_2->getBulletCount(), sf::Vector2f(window.getSize().x - 150, window.getSize().y - 50));
 				TextRenderer.displayText(window, "player_2's bullet", 1, 20, sf::Color::Black, window.getSize().x - 150, window.getSize().y - 50);
 				if (InputManager::Instance()->KeyDown("Up_2"))

@@ -19,9 +19,7 @@ player::player(int _object_id, std::string texture_filename, float _positionX, f
 }
 
 player* player::getObjectPtr(int id) {
-	if (player_map.find(id) == player_map.end())
-		return NULL;
-	return player_map[id];
+	return (player_map.find(id) != player_map.end()) ? player_map[id] : NULL;
 }
 
 void player::shoot(int &sfxVol) {

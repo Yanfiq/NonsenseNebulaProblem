@@ -99,6 +99,7 @@ int processCollision(int sfxVolume) {
 void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 	sfe::RichText text_1(*font);
 	sfe::RichText text_2(*font);
+	float sizeMultiplier = (static_cast<float>(window.getSize().x * 0.75) > static_cast<float>(window.getSize().y)) ? static_cast<float>(window.getSize().y) / 720 : static_cast<float>(window.getSize().x) / 1280;
 
 	switch (step)
 	{
@@ -110,8 +111,8 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'W' instead\n";
 		text_2.setPosition(window.getSize().x / 1.35, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
-		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
+		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
 		break;
 	case 2:
 		text_1 << sf::Color::Cyan << "Step 2\n"

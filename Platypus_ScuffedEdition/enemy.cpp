@@ -21,10 +21,7 @@ std::unordered_map<int, enemy*>* enemy::getEnemyMap() {
 }
 
 enemy* enemy::getObjectPtr(int id) {
-	if (enemy_map.find(id) != enemy_map.end())
-		return enemy_map[id];
-	else
-		return NULL;
+	return (enemy_map.find(id) != enemy_map.end()) ? enemy_map[id] : NULL;
 }
 
 void enemy::deleteObject(int id) {
@@ -36,15 +33,15 @@ void enemy::reduceHp(float damage) {
 	hp -= damage;
 }
 
-float enemy::getHp() {
+float enemy::getHp() {	
 	return hp;
 }
 
 void enemy::shoot(int& sfxVol) {
-	bullet* Bullet = new bullet(bullet_count++, "gameplay_bullet_1.png", positionX, positionY, -900.0f, 0.0f);
+	bullet* Bullet = new bullet(bullet_count, "gameplay_bullet_1.png", positionX, positionY, -900.0f, 0.0f);
+	bullet_count = (bullet_count == 999) ? 0 : bullet_count + 1;
+
 	Bullet->setDamageValue(20.0f);
-	if (bullet_count == 999)
-		bullet_count = 0;
 	sounds::playShootSound(sfxVol);
 }
 

@@ -18,10 +18,7 @@ bullet::bullet(int _object_id, std::string texture_filename, float _positionX, f
 }
 
 bullet* bullet::getObjectPtr(int id) {
-	if (bullet_map.find(id) != bullet_map.end())
-		return bullet_map[id];
-	else
-		return NULL;
+	return (bullet_map.find(id) != bullet_map.end()) ? bullet_map[id] : NULL;
 }
 
 float bullet::getDamageValue() const {
