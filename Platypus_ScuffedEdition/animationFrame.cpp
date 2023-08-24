@@ -20,7 +20,7 @@ void animationFrame::updateFrame() {
 	int top = frame.getTextureRect().top;
 
 	//start play the next row
-	if (left == frameSize.x * collumn - frameSize.x) {
+	if (left == frameSize.x * (collumn - 1)) {
 		left = frameSize.x * -1;
 		top += frameSize.y; //update the top value
 	}
@@ -40,7 +40,5 @@ sf::RectangleShape* animationFrame::getFrame() {
 bool animationFrame::isEnded() {
 	int left = frame.getTextureRect().left;
 	int top = frame.getTextureRect().top;
-	if (left == frameSize.x * (collumn-1) && top == frameSize.y * (row-1))
-		return true;
-	return false;
+	return (left == frameSize.x * (collumn - 1) && top == frameSize.y * (row - 1)) ? true : false;
 }

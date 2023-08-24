@@ -17,10 +17,9 @@ void animate::monitoringAnimation(sf::RenderWindow& window) {
 		if (frame->isEnded()) {
 			delete frame;
 			it = playing.erase(it);
+			continue;
 		}
-		else {
-			frame->updateFrame();
-			it++;
-		}
+		frame->updateFrame();
+		it++;
 	}
 }

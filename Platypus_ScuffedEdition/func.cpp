@@ -41,11 +41,11 @@ int processCollision(int sfxVolume) {
 	std::unordered_map<int, int> collideObject;
 	for (auto bullet_object = bulletMap->begin(); bullet_object != bulletMap->end(); bullet_object++) {
 		//bullets from the player
-		if ((bullet_object->second != NULL) && (bullet_object->second->getVelocity().x > 0)) {
+		if (bullet_object->second->getVelocity().x > 0) {
 			for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
 
 				//collision happens between enemy and bullet
-				if (enemy_object->second != NULL && object::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
+				if (object::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
 					//add the bullet's id and enemy's id to the map
 					collideObject[enemy_object->first] = bullet_object->first;
 				}
@@ -53,10 +53,10 @@ int processCollision(int sfxVolume) {
 		}
 
 		//bullets from the enemy
-		else if (bullet_object->second != NULL && bullet_object->second->getVelocity().x < 0) {
+		else if (bullet_object->second->getVelocity().x < 0) {
 			for (auto player_object = playerMap->begin(); player_object != playerMap->end(); player_object++){
 				//collision happens between player and the bullet
-				if (player_object->second != NULL && object::isintersect(player_object->second->getSprite(), bullet_object->second->getSprite())) {
+				if (object::isintersect(player_object->second->getSprite(), bullet_object->second->getSprite())) {
 					//add the bullet's id and player's id to the map
 					collideObject[player_object->first] = (bullet_object->first);
 				}
@@ -66,29 +66,29 @@ int processCollision(int sfxVolume) {
 
 	int points = 0;
 	for (const auto& it : collideObject) {
-		if ((bullet::getObjectPtr(it.second) != NULL) &&
-			(it.first - object::Type::enemy_obj > 0 && it.first - object::Type::enemy_obj < 1000)) {
-			enemy* Enemy = enemy::getObjectPtr(it.first);
+		if ((bullet::getObjectPtr(it.second) != NULL)) {
 			bullet* Bullet = bullet::getObjectPtr(it.second);
-			Enemy->reduceHp(Bullet->getDamageValue());
-			points += Bullet->getDamageValue();
-			if (Enemy->getHp() <= 0) {
-				animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
-				sounds::playBoomSound(sfxVolume);
-				enemy::deleteObject(it.first);
+			if (it.first - object::Type::enemy_obj > 0 && it.first - object::Type::enemy_obj < 1000) {
+				enemy* Enemy = enemy::getObjectPtr(it.first);
+				Enemy->reduceHp(Bullet->getDamageValue());
+
+				points += Bullet->getDamageValue();
+				if (Enemy->getHp() <= 0) {
+					animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
+					sounds::playBoomSound(sfxVolume);
+					enemy::deleteObject(it.first);
+				}
 			}
-			bullet::deleteObject(it.second);
-		}
-		else if ((bullet::getObjectPtr(it.second) != NULL) &&
-			(it.first - object::Type::player_obj > 0 && it.first - object::Type::player_obj < 1000)) {
-			player* Player = player::getObjectPtr(it.first);
-			bullet* Bullet = bullet::getObjectPtr(it.second);
-			Player->reducePlayerHp(Bullet->getDamageValue());
-			points -= Bullet->getDamageValue();
-			if (Player->getPlayerHp() <= 0) {
-				animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Player->getPosition().x, Player->getPosition().y));
-				sounds::playBoomSound(sfxVolume);
-				player::deleteObject(it.first);
+			else if (it.first - object::Type::player_obj > 0 && it.first - object::Type::player_obj < 1000) {
+				player* Player = player::getObjectPtr(it.first);
+				Player->reducePlayerHp(Bullet->getDamageValue());
+
+				points -= Bullet->getDamageValue();
+				if (Player->getPlayerHp() <= 0) {
+					animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Player->getPosition().x, Player->getPosition().y));
+					sounds::playBoomSound(sfxVolume);
+					player::deleteObject(it.first);
+				}
 			}
 			bullet::deleteObject(it.second);
 		}
@@ -104,8 +104,7 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 	switch (step)
 	{
 	case 1:
-		text_1 << sf::Color::Cyan << "Step 1\n"
-			<< sf::Color::White << "use 'Up' button to go up";
+		text_1 << sf::Color::White << "use 'Up' button to go up\n";
 		text_1.setPosition(window.getSize().x / 4, window.getSize().y / 4);
 
 		text_2 << sf::Color::White << "for the player_2, use 'W' instead\n";
@@ -115,44 +114,40 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
 		break;
 	case 2:
-		text_1 << sf::Color::Cyan << "Step 2\n"
-			<< sf::Color::White << "use 'Down' button to go down\n";
+		text_1 << sf::Color::White << "use 'Down' button to go down\n";
 		text_1.setPosition(window.getSize().x / 4, window.getSize().y / 4);
 
 		text_2 << sf::Color::White << "for the player_2, use 'S' instead\n";
 		text_2.setPosition(window.getSize().x / 1.35, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
-		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
+		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
 		break;
 	case 3:
-		text_1 << sf::Color::Cyan << "Step 3\n"
-			<< sf::Color::White << "use 'Right' button to fire the bullet\n";
+		text_1 << sf::Color::White << "use 'Right' button to fire the bullet\n";
 		text_1.setPosition(window.getSize().x / 4, window.getSize().y / 4);
 
 		text_2 << sf::Color::White << "for the player_2, use 'D' instead\n";
 		text_2.setPosition(window.getSize().x / 1.35, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
-		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
+		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
 		break;
 	case 4:
-		text_1 << sf::Color::Cyan << "Step 4\n"
-			<< sf::Color::White << "use 'Left' button to reload the bullet\n";
+		text_1 << sf::Color::White << "use 'Left' button to reload the bullet\n";
 		text_1.setPosition(window.getSize().x / 4, window.getSize().y / 4);
 
 		text_2 << sf::Color::White << "for the player_2, use 'A' instead\n";
 		text_2.setPosition(window.getSize().x / 1.35, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
-		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
+		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
 		break;
 	case 5:
-		text_1 << sf::Color::Cyan << "Step 5\n"
-			<< sf::Color::White << "use spacebar to pause the game\n";
+		text_1 << sf::Color::White << "use spacebar to pause the game\n";
 		text_1.setPosition(window.getSize().x / 2, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_spacebar.jpg", window.getSize().x / 2, window.getSize().y / 2, sf::Vector2f(window.getSize().x / 2.5, window.getSize().y / 2.5));
+		textureManager::displayImage(window, "tutorial_spacebar.jpg", window.getSize().x / 2, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
 		break;
 	}
 

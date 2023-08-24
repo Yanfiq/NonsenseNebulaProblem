@@ -47,8 +47,8 @@ int main() {
 	int scene = start;				// decide what scene is being run
 
 	//volumes
-	int bgmVolume = 100;
-	int sfxVolume = 100;
+	int bgmVolume = 0;
+	int sfxVolume = 50;
 
 	//binding keys
 	InputManager::Instance()->KBind("Enter", sf::Keyboard::Enter);
@@ -76,11 +76,8 @@ int main() {
 				break;
 			case sf::Event::Resized:
 			{
-				int width = event.size.width; int height = event.size.height;
-				if (width < 1280)
-					width = 1280;
-				if (height < 720)
-					height = 720;
+				int width = (event.size.width < 1280) ? 1280 : event.size.width;
+				int height = (event.size.height < 720) ? 720 : event.size.height;
 				sf::FloatRect visibleArea(0.f, 0.f, width, height);
 				std::cout << width << " , " << height << std::endl;
 				window.setSize(sf::Vector2u(width, height));
@@ -123,7 +120,7 @@ int main() {
 		{
 			bullet::clearObject();
 			enemy::clearObject();
-			TextRenderer.displayText(window, "something is happening somewhere", 1, 50, sf::Color::White, window.getSize().x / 2, 100);
+			TextRenderer.displayText(window, "something is happening somewhere", 1, 60, sf::Color::White, window.getSize().x / 2, 100);
 
 			static int choice = 0;
 			std::vector<std::string> choices = { "START", "SETTINGS", "EXIT" };
@@ -156,7 +153,7 @@ int main() {
 
 		case settings:
 		{
-			TextRenderer.displayText(window, "something is happening somewhere", 1, 50, sf::Color::White, window.getSize().x / 2, 100);
+			TextRenderer.displayText(window, "something is happening somewhere", 1, 60, sf::Color::White, window.getSize().x / 2, 100);
 
 			static int choice = 0;
 			std::string Cheat = (cheat) ? "Enabled" : "Disabled";
@@ -229,9 +226,12 @@ int main() {
 			if (InputManager::Instance()->KeyPress("Up_1"))   choice = 0;
 			if (InputManager::Instance()->KeyPress("Down_1")) choice = 1;
 			if (InputManager::Instance()->KeyPress("Enter")){
-				player* Player_1 = new player(1, "gameplay_player.png", 100, 100, 0, 0);
+				if (choice == 0) {
+					player* Player_1 = new player(1, "gameplay_player.png", 100, static_cast<float>(window.getSize().y) * 1/2, 0, 0);
+				}
 				if (choice == 1) {
-					player* Player_2 = new player(2, "gameplay_player.png", 100, 300, 0, 0);
+					player* Player_1 = new player(1, "gameplay_player.png", 100, static_cast<float>(window.getSize().y) * 1/3, 0, 0);
+					player* Player_2 = new player(2, "gameplay_player.png", 100, static_cast<float>(window.getSize().y) * 2/3, 0, 0);
 				}
 				scene = play;
 				choice = 0;
@@ -325,7 +325,7 @@ int main() {
 				if (elapsed.getElapsedTime().asSeconds() > 10 || enemy::getEnemyMap()->size() < 3) {
 					//generate enemy
 					int counter = 0;
-					for (int i = counts; i < counts + (getRandomFloat((window.getSize().x / 288) * difficulty, (window.getSize().y / 176) * difficulty)); i++) {
+					for (int i = counts; i < counts + ((getRandomFloat(window.getSize().x / 288, window.getSize().y / 176)) * difficulty); i++) {
 						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-1000, 1000), getRandomFloat(-1000, 1000));
 						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
 						counter++;
@@ -385,8 +385,8 @@ int main() {
 			}
 
 			if (InputManager::Instance()->KeyPress("Spacebar")) {
-				if (player::getObjectPtr(101) != NULL) player::getObjectPtr(101)->setVelocity(0, 0);
-				if (player::getObjectPtr(102) != NULL) player::getObjectPtr(102)->setVelocity(0, 0);
+				if (player::getObjectPtr(object::Type::player_obj + 1) != NULL) player::getObjectPtr(object::Type::player_obj + 1)->setVelocity(0, 0);
+				if (player::getObjectPtr(object::Type::player_obj + 2) != NULL) player::getObjectPtr(object::Type::player_obj + 2)->setVelocity(0, 0);
 				scene = pause;
 			}
 
@@ -404,7 +404,6 @@ int main() {
 				}
 			}
 
-			//collision detection and object removal
 			TextRenderer.displayText(window, "Score : " + std::to_string(currentPoint), 0, 40, sf::Color::White, 30, 30);
 			break;
 		}
@@ -414,33 +413,48 @@ int main() {
 		if ((scene != pause) || (scene == pause && cheat)) {
 			//FIRST PLAYER
 			if (player::getObjectPtr(object::Type::player_obj + 1) != NULL) {
+				static bool cooldown = false;
 				player* player_1 = player::getObjectPtr(object::Type::player_obj + 1);
-				player_1->bulletBar.draw(window, MAX_PLAYER_BULLET - player_1->getBulletCount(), sf::Vector2f(150, window.getSize().y - 50));
+				player_1->bulletBar.draw(window, player_1->getBulletRemain(), sf::Vector2f(150, window.getSize().y - 50));
 				TextRenderer.displayText(window, "player_1's bullet", 1, 20, sf::Color::Black, 150, window.getSize().y - 50);
 				if (InputManager::Instance()->KeyDown("Up_1"))
 					player_1->thrustUp();
 				if (InputManager::Instance()->KeyDown("Down_1"))
 					player_1->thrustDown();
-				if (InputManager::Instance()->KeyDown("Right_1") && player_1->getBulletCount() <= 30)
+				if (InputManager::Instance()->KeyDown("Right_1") && player_1->getBulletRemain() >= 1 && !cooldown)
 					player_1->shoot(sfxVolume);
-				if (scene == play || scene == pause) {
-					if (InputManager::Instance()->KeyPress("Left_1")) player_1->resetBulletCount();
+				if (InputManager::Instance()->KeyPress("Left_1")) 
+					cooldown = true;
+				if (cooldown) {
+					if (player_1->getBulletRemain() >= MAX_PLAYER_BULLET) {
+						cooldown = false;
+					}
+					else
+						player_1->reloadBullet(1);
 				}
 			}
 
 			//SECOND PLAYER
 			if (player::getObjectPtr(object::Type::player_obj + 2) != NULL) {
+				bool cooldown = false;
 				player* player_2 = player::getObjectPtr(object::Type::player_obj + 2);
-				player_2->bulletBar.draw(window, MAX_PLAYER_BULLET - player_2->getBulletCount(), sf::Vector2f(window.getSize().x - 150, window.getSize().y - 50));
+				player_2->bulletBar.draw(window, player_2->getBulletRemain(), sf::Vector2f(window.getSize().x - 150, window.getSize().y - 50));
 				TextRenderer.displayText(window, "player_2's bullet", 1, 20, sf::Color::Black, window.getSize().x - 150, window.getSize().y - 50);
 				if (InputManager::Instance()->KeyDown("Up_2"))
 					player_2->thrustUp();
 				if (InputManager::Instance()->KeyDown("Down_2"))
 					player_2->thrustDown();
-				if (InputManager::Instance()->KeyDown("Right_2") && player_2->getBulletCount() <= 30)
+				if (InputManager::Instance()->KeyDown("Right_2") && player_2->getBulletRemain() >= 1 && !cooldown)
 					player_2->shoot(sfxVolume);
-				if (scene == play || scene == pause) {
-					if (InputManager::Instance()->KeyPress("Left_2")) player_2->resetBulletCount();
+				if (InputManager::Instance()->KeyPress("Left_2"))
+					cooldown = true;
+				if (cooldown) {
+					if (player_2->getBulletRemain() >= MAX_PLAYER_BULLET) {
+						cooldown = false;
+					}
+					else {
+						player_2->reloadBullet(1);
+					}
 				}
 			}
 		}

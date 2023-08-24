@@ -6,7 +6,7 @@
 #include "bar.h"
 #include "textureManager.h"
 #define MAX_PLAYER_HEALTH 200
-#define MAX_PLAYER_BULLET 31
+#define MAX_PLAYER_BULLET 30
 
 class player : public object {
 protected:
@@ -14,7 +14,7 @@ protected:
 	static int allBullet;
 	static textRenderer TextRenderer;
 
-	int bulletFired = 0;
+	int bulletAvailable = MAX_PLAYER_BULLET;
 	float hp = MAX_PLAYER_HEALTH;
 	sf::Clock healTime;
 	bar HPBar;
@@ -29,10 +29,10 @@ public:
 	void shoot(int &sfxVol);
 
 	// resets the bullet_count variable
-	void resetBulletCount();
+	void reloadBullet(int num);
 
 	// returns a bullet_count variable with integer data type
-	int getBulletCount();
+	int getBulletRemain();
 
 	// 
 	void thrustUp();

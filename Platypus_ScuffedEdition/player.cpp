@@ -24,20 +24,19 @@ player* player::getObjectPtr(int id) {
 
 void player::shoot(int &sfxVol) {
 	bullet* Bullet = new bullet(allBullet++, "gameplay_bullet_2.png", positionX, positionY, 900, 0);
-	bulletFired++;
+	bulletAvailable--;
 	Bullet->setDamageValue(20.0f);
 	sounds::playShootSound(sfxVol);
 	if (allBullet == 999)
 		allBullet = 0;
 }
 
-void player::resetBulletCount() {
-	bulletFired = 0;
+void player::reloadBullet(int num) {
+	bulletAvailable += num;
 }
 
-int player::getBulletCount() {
-	if(this != NULL)
-		return bulletFired;
+int player::getBulletRemain() {
+	return bulletAvailable;
 }
 
 void player::thrustUp() {
