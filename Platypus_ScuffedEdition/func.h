@@ -3,6 +3,7 @@
 #include "enemy.h"
 #include "textureManager.h"
 #include "player.h"
+#include "sound.h"
 #include "animation.h"
 
 #include <random>
@@ -16,6 +17,5 @@ float getRandomFloat(float num_1, float num_2);
 int getRandomInteger(int num_1, int num_2);
 
 // unodular function, created just to make main function cleaner
-int processCollision(int sfxVolume);
 void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step);
 sfe::RichText displayCredit(sf::Font* font, float position_x, float position_y);

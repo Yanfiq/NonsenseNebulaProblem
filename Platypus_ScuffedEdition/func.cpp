@@ -1,6 +1,5 @@
 #include "func.h"
 
-
 float getRandomFloat(float num_1, float num_2) {
 
 	float min = (num_1 < num_2) ? num_1 : num_2;
@@ -29,71 +28,6 @@ int getRandomInteger(int num_1, int num_2) {
     std::uniform_int_distribution<int> dist(min, max);
 
     return dist(rng);
-}
-
-int processCollision(int sfxVolume) {
-	//collision detection and object removal
-	std::unordered_map<int, bullet*>* bulletPlayerMap = bullet::getBulletMap(object::Type::playerBullet_obj);
-	std::unordered_map<int, bullet*>* bulletEnemyMap = bullet::getBulletMap(object::Type::enemyBullet_obj);
-	std::unordered_map<int, enemy*>* enemyMap = enemy::getEnemyMap();
-	std::unordered_map<int, player*>* playerMap = player::getPlayerMap();
-
-	//  something...collided with...something
-	std::unordered_map<int, int> collideObject;
-
-	//bullets from the player
-	for (auto bullet_object = bulletPlayerMap->begin(); bullet_object != bulletPlayerMap->end(); bullet_object++) {
-		for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
-
-			//collision happens between enemy and bullet
-			if (object::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
-				//add the bullet's id and enemy's id to the map
-				collideObject[enemy_object->first] = bullet_object->first;
-			}
-		}
-	}
-
-	//bullets from the enemy
-	for (auto bullet_object = bulletEnemyMap->begin(); bullet_object != bulletEnemyMap->end(); bullet_object++) {
-		for (auto player_object = playerMap->begin(); player_object != playerMap->end(); player_object++) {
-			//collision happens between player and the bullet
-			if (object::isintersect(player_object->second->getSprite(), bullet_object->second->getSprite())) {
-				//add the bullet's id and player's id to the map
-				collideObject[player_object->first] = (bullet_object->first);
-			}
-		}
-	}
-
-	int points = 0;
-	for (const auto& it : collideObject) {
-		if ((bullet::getObjectPtr(it.second) != NULL)) {
-			bullet* Bullet = bullet::getObjectPtr(it.second);
-			if (it.first - object::Type::enemy_obj > 0 && it.first - object::Type::enemy_obj < 1000) {
-				enemy* Enemy = enemy::getObjectPtr(it.first);
-				Enemy->reduceHp(Bullet->getDamageValue());
-
-				points += Bullet->getDamageValue();
-				if (Enemy->getHp() <= 0) {
-					animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
-					sounds::playBoomSound(sfxVolume);
-					enemy::deleteObject(it.first);
-				}
-			}
-			else if (it.first - object::Type::player_obj > 0 && it.first - object::Type::player_obj < 1000) {
-				player* Player = player::getObjectPtr(it.first);
-				Player->reducePlayerHp(Bullet->getDamageValue());
-
-				points -= Bullet->getDamageValue();
-				if (Player->getPlayerHp() <= 0) {
-					animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(Player->getPosition().x, Player->getPosition().y));
-					sounds::playBoomSound(sfxVolume);
-					player::deleteObject(it.first);
-				}
-			}
-			bullet::deleteObject(it.second);
-		}
-	}
-	return points;
 }
 
 void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {

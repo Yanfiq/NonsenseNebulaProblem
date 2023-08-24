@@ -2,6 +2,7 @@
 #include "objects.h"
 #include "bullet.h"
 #include "sound.h"
+#include "animation.h"
 #include "Text.h"
 #include "bar.h"
 #include "textureManager.h"
@@ -25,8 +26,8 @@ public:
 	// returns a pointer to the object with the specified id
 	static player* getObjectPtr(int id);
 
-	// constructs a bullet type object with the sound of the shot, its volume based on the function argument
-	void shoot(int &sfxVol);
+	// constructs a bullet type object with the sound of the shot
+	void shoot();
 
 	// resets the bullet_count variable
 	void reloadBullet(int num);

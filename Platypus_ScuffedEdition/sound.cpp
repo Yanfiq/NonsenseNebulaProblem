@@ -4,23 +4,26 @@ sf::SoundBuffer sounds::shootSound;
 sf::SoundBuffer sounds::boomSound;
 std::vector<sf::Sound*> sounds::soundPlayed;
 
+int bgmVolume = 100;
+int sfxVolume = 100;
+
 void sounds::loadSound() {
-	shootSound.loadFromFile("audio/shoot_2.ogg");
-	boomSound.loadFromFile("audio/boom.ogg");
+	shootSound.loadFromFile("audio/sfx_shoot.ogg");
+	boomSound.loadFromFile("audio/sfx_boom.ogg");
 }
 
-void sounds::playShootSound(int volume) {
+void sounds::playShootSound() {
 	sf::Sound* sound = new sf::Sound;
 	sound->setBuffer(shootSound);
-	sound->setVolume(volume);
+	sound->setVolume(sfxVolume);
 	sound->play();
 	soundPlayed.push_back(sound);
 }
 
-void sounds::playBoomSound(int volume) {
+void sounds::playBoomSound() {
 	sf::Sound* sound = new sf::Sound;
 	sound->setBuffer(boomSound);
-	sound->setVolume(volume);
+	sound->setVolume(sfxVolume);
 	sound->play();
 	soundPlayed.push_back(sound);
 }

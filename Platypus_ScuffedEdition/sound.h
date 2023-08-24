@@ -4,6 +4,9 @@
 #include <vector>
 #include <iostream>
 
+extern int bgmVolume;
+extern int sfxVolume;
+
 class sounds {
 private:
 	static sf::SoundBuffer shootSound;
@@ -12,7 +15,7 @@ private:
 
 public:
 	static void loadSound();
-	static void playShootSound(int volume);
-	static void playBoomSound(int volume);
+	static void playShootSound();
+	static void playBoomSound();
 	static void monitoring();
 };

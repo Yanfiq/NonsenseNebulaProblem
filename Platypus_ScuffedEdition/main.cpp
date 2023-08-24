@@ -6,11 +6,16 @@
 #include "bullet.h"
 #include "enemy.h"
 #include "Text.h"
+#include "sound.h"
 #include "func.h"
 #include "bar.h"
 #include "textureManager.h"
 #include "InputManager.h"
 #include "animation.h"
+#include "collisionHandler.h"
+
+extern int bgmVolume;
+extern int sfxVolume;
 
 int main() {
 	sf::RenderWindow window;
@@ -24,7 +29,7 @@ int main() {
 	sf::Clock elapsed;
 	sf::Event event;
 	sf::Music bgmusic;
-	bgmusic.openFromFile("audio/Boooring.ogg");
+	bgmusic.openFromFile("audio/bgm_Boooring.ogg");
 	bgmusic.play();
 	bgmusic.setLoop(true);
 	
@@ -45,10 +50,6 @@ int main() {
 
 	// variables that'll be used on multiple choices scene
 	int scene = start;				// decide what scene is being run
-
-	//volumes
-	int bgmVolume = 0;
-	int sfxVolume = 50;
 
 	//binding keys
 	InputManager::Instance()->KBind("Enter", sf::Keyboard::Enter);
@@ -96,21 +97,23 @@ int main() {
 		if (scene == pause) {
 			if (!cheat) {
 				player::justDrawAllObject(window);
-				bullet::justDrawAllObject(window);
+				bullet::justDrawAllObject(window, object::Type::playerBullet_obj);
+				bullet::justDrawAllObject(window, object::Type::enemyBullet_obj);
 			}
 			else {
 				player::updateNDrawAllObject(dt, window);
-				bullet::updateNDrawAllObject(dt, window);
+				bullet::updateNDrawAllObject(dt, window, object::Type::playerBullet_obj);
+				bullet::justDrawAllObject(window, object::Type::enemyBullet_obj);
 			}
-
 			enemy::justDrawAllObject(window);
 		}
 		else {
 			player::updateNDrawAllObject(dt, window);
-			bullet::updateNDrawAllObject(dt, window);
+			bullet::updateNDrawAllObject(dt, window, object::Type::playerBullet_obj);
+			bullet::updateNDrawAllObject(dt, window, object::Type::enemyBullet_obj);
 			enemy::updateNDrawAllObject(dt, window);
 		}
-		currentPoint += processCollision(sfxVolume);
+		currentPoint += collisionHandler::handleCollision();
 		animate::monitoringAnimation(window);
 		// END OF RENDER RECTION -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -144,7 +147,7 @@ int main() {
 			displayTutorial(window, TextRenderer.getFont(), step);
 			TextRenderer.displayText(window, "Press ENTER to continue", 1, 30, sf::Color::White, window.getSize().x/2, window.getSize().y - 110);
 			if (InputManager::Instance()->KeyPress("Enter")) step++;
-			if (step > 5) {
+			if (step > 11) {
 				scene = settings;
 				step = 1;
 			}
@@ -175,7 +178,7 @@ int main() {
 			if (InputManager::Instance()->KeyPress("Left_1")) {
 				switch (choice) {
 				case 0:bgmVolume = (bgmVolume == 0) ? 0 : bgmVolume - 5; break; 
-				case 1:sfxVolume = (sfxVolume == 0) ? 0 : sfxVolume - 5; sounds::playShootSound(sfxVolume); break;
+				case 1:sfxVolume = (sfxVolume == 0) ? 0 : sfxVolume - 5; sounds::playShootSound(); break;
 				case 2:cheat = false; window.create(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close); window.setFramerateLimit(60);  break;
 				}
 			}
@@ -184,7 +187,7 @@ int main() {
 			if (InputManager::Instance()->KeyPress("Right_1")) {
 				switch (choice) {
 				case 0:bgmVolume = (bgmVolume == 100) ? 100 : bgmVolume + 5; break;
-				case 1:sfxVolume = (sfxVolume == 100) ? 100 : sfxVolume + 5; sounds::playShootSound(sfxVolume); break;
+				case 1:sfxVolume = (sfxVolume == 100) ? 100 : sfxVolume + 5; sounds::playShootSound(); break;
 				case 2:cheat = true; window.create(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize); window.setFramerateLimit(60);  break;
 				}
 			}
@@ -346,7 +349,6 @@ int main() {
 				{
 					for (int i = 1; i < getRandomFloat(window.getSize().x / 288, window.getSize().y / 176); i++) {
 						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-500, 500), getRandomFloat(-500, 500));
-						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
 					}
 					break;
 				}
@@ -354,7 +356,6 @@ int main() {
 				{
 					for (int i = 1; i < getRandomFloat((window.getSize().x / 288), (window.getSize().y / 176)) * 2; i++) {
 						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-750, 750), getRandomFloat(-750, 750));
-						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
 					}
 					break;
 				}
@@ -362,7 +363,6 @@ int main() {
 				{
 					for (int i = 1; i < getRandomFloat((window.getSize().x / 288), (window.getSize().y / 176)) * 3; i++) {
 						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-1000, 1000), getRandomFloat(-1000, 1000));
-						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
 					}
 					break;
 				}
@@ -399,7 +399,7 @@ int main() {
 					player* Player = player_object->second;
 					if ((Enemy->getPosition().y < Player->getPosition().y + 5) &&
 						(Enemy->getPosition().y > Player->getPosition().y - 5)) {
-						Enemy->shoot(sfxVolume);
+						Enemy->shoot();
 					}
 				}
 			}
@@ -422,7 +422,7 @@ int main() {
 				if (InputManager::Instance()->KeyDown("Down_1"))
 					player_1->thrustDown();
 				if (InputManager::Instance()->KeyDown("Right_1") && player_1->getBulletRemain() >= 1 && !cooldown)
-					player_1->shoot(sfxVolume);
+					player_1->shoot();
 				if (InputManager::Instance()->KeyPress("Left_1")) 
 					cooldown = true;
 				if (cooldown) {
@@ -436,7 +436,7 @@ int main() {
 
 			//SECOND PLAYER
 			if (player::getObjectPtr(object::Type::player_obj + 2) != NULL) {
-				bool cooldown = false;
+				static bool cooldown = false;
 				player* player_2 = player::getObjectPtr(object::Type::player_obj + 2);
 				player_2->bulletBar.draw(window, player_2->getBulletRemain(), sf::Vector2f(window.getSize().x - 150, window.getSize().y - 50));
 				TextRenderer.displayText(window, "player_2's bullet", 1, 20, sf::Color::Black, window.getSize().x - 150, window.getSize().y - 50);
@@ -445,7 +445,7 @@ int main() {
 				if (InputManager::Instance()->KeyDown("Down_2"))
 					player_2->thrustDown();
 				if (InputManager::Instance()->KeyDown("Right_2") && player_2->getBulletRemain() >= 1 && !cooldown)
-					player_2->shoot(sfxVolume);
+					player_2->shoot();
 				if (InputManager::Instance()->KeyPress("Left_2"))
 					cooldown = true;
 				if (cooldown) {

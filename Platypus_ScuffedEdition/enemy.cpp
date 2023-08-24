@@ -14,6 +14,7 @@ enemy::enemy(int _object_id, std::string texture_filename, float _positionX, flo
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 
 	enemy_map[enemy_obj + _object_id] = this;
+	animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(positionX, positionY));
 }
 
 std::unordered_map<int, enemy*>* enemy::getEnemyMap() {
@@ -25,6 +26,8 @@ enemy* enemy::getObjectPtr(int id) {
 }
 
 void enemy::deleteObject(int id) {
+	animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(enemy_map[id]->getPosition().x, enemy_map[id]->getPosition().y));
+	sounds::playBoomSound();
 	delete enemy_map[id];
 	enemy_map.erase(id);
 }
@@ -37,12 +40,12 @@ float enemy::getHp() {
 	return hp;
 }
 
-void enemy::shoot(int& sfxVol) {
+void enemy::shoot() {
 	bullet* Bullet = new bullet(bullet_count, "gameplay_bullet_1.png", positionX, positionY, -900.0f, 0.0f);
 	bullet_count = (bullet_count == 999) ? 0 : bullet_count + 1;
 
 	Bullet->setDamageValue(20.0f);
-	sounds::playShootSound(sfxVol);
+	sounds::playShootSound();
 }
 
 void enemy::clearObject() {

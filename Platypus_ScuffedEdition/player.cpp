@@ -16,17 +16,18 @@ player::player(int _object_id, std::string texture_filename, float _positionX, f
 	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 	
 	player_map[player_obj + _object_id] = this;
+	animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(positionX, positionY));
 }
 
 player* player::getObjectPtr(int id) {
 	return (player_map.find(id) != player_map.end()) ? player_map[id] : NULL;
 }
 
-void player::shoot(int &sfxVol) {
+void player::shoot() {
 	bullet* Bullet = new bullet(allBullet++, "gameplay_bullet_2.png", positionX, positionY, 900, 0);
 	bulletAvailable--;
 	Bullet->setDamageValue(20.0f);
-	sounds::playShootSound(sfxVol);
+	sounds::playShootSound();
 	if (allBullet == 999)
 		allBullet = 0;
 }
@@ -70,6 +71,8 @@ std::unordered_map<int, player*>* player::getPlayerMap() {
 }
 
 void player::deleteObject(int id) {
+	animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(player_map[id]->getPosition().x, player_map[id]->getPosition().y));
+	sounds::playBoomSound();
 	delete player_map[id];
 	player_map.erase(id);
 }

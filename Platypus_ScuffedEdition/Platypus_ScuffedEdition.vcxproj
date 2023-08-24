@@ -130,6 +130,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -145,6 +146,7 @@
     <ClCompile Include="animationFrame.cpp" />
     <ClCompile Include="bar.cpp" />
     <ClCompile Include="bullet.cpp" />
+    <ClCompile Include="collisionHandler.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="func.cpp" />
     <ClCompile Include="textureManager.cpp" />
@@ -160,6 +162,7 @@
     <ClInclude Include="animationFrame.h" />
     <ClInclude Include="bar.h" />
     <ClInclude Include="bullet.h" />
+    <ClInclude Include="collisionHandler.h" />
     <ClInclude Include="enemy.h" />
     <ClInclude Include="func.h" />
     <ClInclude Include="InputManager.h" />
