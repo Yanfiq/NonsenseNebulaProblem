@@ -22,6 +22,7 @@ protected:
 
 public:
 	player(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY);
+	bar bulletBar;
 
 	// returns a pointer to the object with the specified id
 	static player* getObjectPtr(int id);
@@ -39,7 +40,6 @@ public:
 	void thrustUp();
 	void thrustDown();
 	float getPlayerHp() const;
-	bar bulletBar;
 	void setPlayerHp(float _hp);
 	void reducePlayerHp(float damage);
 	void healPlayer(float addHp);
@@ -48,6 +48,5 @@ public:
 	static void deleteObject(int id);
 	static void clearObject();
 	static std::unordered_map<int, player*>* getPlayerMap();
-	static void updateNDrawAllObject(double dt, sf::RenderWindow& window);
-	static void justDrawAllObject(sf::RenderWindow& window);
+	static void renderAllObject(double dt, sf::RenderWindow& window, bool Update);
 };

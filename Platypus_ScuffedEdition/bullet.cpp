@@ -8,7 +8,6 @@ bullet::bullet(int _object_id, std::string texture_filename, float _positionX, f
 	object_sprite.setTexture(texture);
 	object_sprite.setSize(sf::Vector2f(texture->getSize()));
 	object_sprite.setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
-	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 	
 	if (velocityX > 0.0f) {
 		playerBullet_map[playerBullet_obj + _object_id] = this;
@@ -60,10 +59,12 @@ void bullet::clearObject() {
 	}
 }
 
-void bullet::updateNDrawAllObject(double dt, sf::RenderWindow& window, int objectType) {
+void bullet::renderAllObject(double dt, sf::RenderWindow& window, int objectType, bool Update) {
 	std::unordered_map<int, bullet*>* map = (objectType == enemyBullet_obj) ? &enemyBullet_map : &playerBullet_map;
 	for (auto it = map->begin(); it != map->end();) {
-		it->second->update(dt);
+		if (Update) {
+			it->second->update(dt);
+		}
 		sf::RectangleShape* sprite = it->second->getSprite();
 		window.draw(*sprite);
 
@@ -74,13 +75,5 @@ void bullet::updateNDrawAllObject(double dt, sf::RenderWindow& window, int objec
 		else {
 			it++;
 		}
-	}
-}
-
-void bullet::justDrawAllObject(sf::RenderWindow& window, int objectType) {
-	std::unordered_map<int, bullet*>* map = (objectType == enemyBullet_obj) ? &enemyBullet_map : &playerBullet_map;
-	for (auto it = map->begin(); it != map->end(); it++) {
-		sf::RectangleShape* sprite = it->second->getSprite();
-		window.draw(*sprite);
 	}
 }

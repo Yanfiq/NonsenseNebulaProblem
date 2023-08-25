@@ -167,7 +167,6 @@
     <ClInclude Include="func.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="textureManager.h" />
-    <ClInclude Include="particleSystem.hpp" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="objects.h" />

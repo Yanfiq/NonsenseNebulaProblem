@@ -8,7 +8,6 @@
 
 class object {
 protected:
-	float positionX = 0.f, positionY = 0.f;
 	float velocityX = 0.f, velocityY = 0.f;
 	float maxY = 0.5f;
 	float minY = -0.5f;

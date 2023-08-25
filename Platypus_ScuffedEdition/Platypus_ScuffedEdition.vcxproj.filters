@@ -86,9 +86,6 @@
     <ClInclude Include="soundManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="particleSystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>

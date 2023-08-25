@@ -13,10 +13,9 @@ player::player(int _object_id, std::string texture_filename, float _positionX, f
 	object_sprite.setTexture(texture);
 	object_sprite.setSize(sf::Vector2f(texture->getSize()));
 	object_sprite.setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
-	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 	
 	player_map[player_obj + _object_id] = this;
-	animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(positionX, positionY));
+	animate::play("gameplay_spawn.png", 4, 4, getPosition());
 }
 
 player* player::getObjectPtr(int id) {
@@ -24,7 +23,7 @@ player* player::getObjectPtr(int id) {
 }
 
 void player::shoot() {
-	bullet* Bullet = new bullet(allBullet++, "gameplay_bullet_2.png", positionX, positionY, 900, 0);
+	bullet* Bullet = new bullet(allBullet++, "gameplay_bullet_2.png", getPosition().x, getPosition().y, 900, 0);
 	bulletAvailable--;
 	Bullet->setDamageValue(20.0f);
 	if (allBullet == 999)
@@ -84,12 +83,11 @@ void player::clearObject() {
 }
 
 void player::update(float time) {
-	positionY += velocityY * time;
 	if (velocityY > 0)
 		velocityY -= 5;
 	if (velocityY < 0)
 		velocityY += 5;
-	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
+	object_sprite.move(0, velocityY * time);
 	
 	//healing
 	if (healTime.getElapsedTime().asSeconds() > 5) {
@@ -98,19 +96,20 @@ void player::update(float time) {
 	}
 }
 
-void player::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
+void player::renderAllObject(double dt, sf::RenderWindow& window, bool Update) {
 	for (const auto& it : player_map) {
-		it.second->update(dt);
-		it.second->HPBar.draw(window, it.second->getPlayerHp(), sf::Vector2f(it.second->getPosition().x, it.second->getPosition().y - it.second->getSprite()->getOrigin().y - 10));
+		if (Update) {
+			it.second->update(dt);
+			if (it.second->getPosition().y >= window.getSize().y) {
+				it.second->setPosition(it.second->getPosition().x, window.getSize().y);
+				it.second->setVelocity(it.second->getVelocity().x, it.second->getVelocity().y * -1 + 0.05);
+			}
+			else if (it.second->getPosition().y <= 0) {
+				it.second->setPosition(it.second->getPosition().x, 0);
+				it.second->setVelocity(it.second->getVelocity().x, it.second->getVelocity().y * -1 - 0.05);
+			}
+		}
 
-		if (it.second->getPosition().y >= window.getSize().y) {
-			it.second->setPosition(it.second->getPosition().x, window.getSize().y);
-			it.second->setVelocity(it.second->getVelocity().x, it.second->getVelocity().y * -1 + 0.05);
-		}
-		else if (it.second->getPosition().y <= 0) {
-			it.second->setPosition(it.second->getPosition().x, 0);
-			it.second->setVelocity(it.second->getVelocity().x, it.second->getVelocity().y * -1 - 0.05);
-		}
 		sf::RectangleShape* sprite = it.second->getSprite();
 		window.draw(*sprite);
 
@@ -118,18 +117,6 @@ void player::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
 		float x = it.second->getPosition().x;
 		float y = it.second->getPosition().y + it.second->getSprite()->getOrigin().y;
 		TextRenderer.displayText(window, string, 1, 20, sf::Color::White, x, y);
-	}
-}
-
-void player::justDrawAllObject(sf::RenderWindow& window) {
-	for (const auto& it : player_map) {
 		it.second->HPBar.draw(window, it.second->getPlayerHp(), sf::Vector2f(it.second->getPosition().x, it.second->getPosition().y - it.second->getSprite()->getOrigin().y - 10));
-		sf::RectangleShape* sprite = it.second->getSprite();
-		window.draw(*sprite);
-
-		std::string string = "player " + std::to_string(it.first - player_obj);
-		float x = it.second->getPosition().x;
-		float y = it.second->getPosition().y + it.second->getSprite()->getOrigin().y;
-		TextRenderer.displayText(window, string, 1, 20, sf::Color::White, x, y);
 	}
 }

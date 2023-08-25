@@ -96,22 +96,22 @@ int main() {
 		float dt = clock.restart().asSeconds();
 		if (scene == pause) {
 			if (!cheat) {
-				player::justDrawAllObject(window);
-				bullet::justDrawAllObject(window, object::Type::playerBullet_obj);
-				bullet::justDrawAllObject(window, object::Type::enemyBullet_obj);
+				player::renderAllObject(dt, window, false);
+				bullet::renderAllObject(dt, window, object::Type::playerBullet_obj, false);
+				bullet::renderAllObject(dt, window, object::Type::enemyBullet_obj, false);
 			}
 			else {
-				player::updateNDrawAllObject(dt, window);
-				bullet::updateNDrawAllObject(dt, window, object::Type::playerBullet_obj);
-				bullet::justDrawAllObject(window, object::Type::enemyBullet_obj);
+				player::renderAllObject(dt, window, true);
+				bullet::renderAllObject(dt, window, object::Type::playerBullet_obj, true);
+				bullet::renderAllObject(dt, window, object::Type::enemyBullet_obj, false);
 			}
-			enemy::justDrawAllObject(window);
+			enemy::renderAllObject(dt, window, false);
 		}
 		else {
-			player::updateNDrawAllObject(dt, window);
-			bullet::updateNDrawAllObject(dt, window, object::Type::playerBullet_obj);
-			bullet::updateNDrawAllObject(dt, window, object::Type::enemyBullet_obj);
-			enemy::updateNDrawAllObject(dt, window);
+			player::renderAllObject(dt, window, true);
+			bullet::renderAllObject(dt, window, object::Type::playerBullet_obj, true);
+			bullet::renderAllObject(dt, window, object::Type::enemyBullet_obj, true);
+			enemy::renderAllObject(dt, window, true);
 		}
 		currentPoint += collisionHandler::handleCollision();
 		animate::monitoringAnimation(window);
@@ -459,7 +459,7 @@ int main() {
 			}
 		}
 		/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ PLAYER'S CONTROL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-
+		sf::Listener::setPosition(0, 0, 0);
 		window.display();
 		window.clear();
 		InputManager::Instance()->Update();

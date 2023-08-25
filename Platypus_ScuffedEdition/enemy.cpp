@@ -11,10 +11,9 @@ enemy::enemy(int _object_id, std::string texture_filename, float _positionX, flo
 	object_sprite.setTexture(texture);
 	object_sprite.setSize(sf::Vector2f(texture->getSize()));
 	object_sprite.setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
-	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
 
 	enemy_map[enemy_obj + _object_id] = this;
-	animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(positionX, positionY));
+	animate::play("gameplay_spawn.png", 4, 4, getPosition());
 }
 
 std::unordered_map<int, enemy*>* enemy::getEnemyMap() {
@@ -41,7 +40,7 @@ float enemy::getHp() {
 }
 
 void enemy::shoot() {
-	bullet* Bullet = new bullet(bullet_count, "gameplay_bullet_1.png", positionX, positionY, -900.0f, 0.0f);
+	bullet* Bullet = new bullet(bullet_count, "gameplay_bullet_1.png", getPosition().x, getPosition().y, -900.0f, 0.0f);
 	bullet_count = (bullet_count == 999) ? 0 : bullet_count + 1;
 
 	Bullet->setDamageValue(20.0f);
@@ -54,34 +53,28 @@ void enemy::clearObject() {
 	}
 }
 
-void enemy::updateNDrawAllObject(double dt, sf::RenderWindow& window) {
+void enemy::renderAllObject(double dt, sf::RenderWindow& window, bool Update) {
 	for (const auto& it : enemy_map) {
-		it.second->update(dt);
-		it.second->HPBar.draw(window, it.second->getHp(), sf::Vector2f(it.second->getPosition().x, it.second->getPosition().y - it.second->getSprite()->getOrigin().y - 10));
+		if (Update) {
+			it.second->update(dt);
+			if (it.second->getPosition().y > window.getSize().y || it.second->getPosition().y < 0) {
+				it.second->setVelocity(it.second->getVelocity().x, it.second->getVelocity().y * -1);
+				if (it.second->getPosition().y > window.getSize().y)
+					it.second->setPosition(it.second->getPosition().x, window.getSize().y);
+				else if (it.second->getPosition().y <= 0)
+					it.second->setPosition(it.second->getPosition().x, 0);
+			}
+			if (it.second->getPosition().x > window.getSize().x || it.second->getPosition().x < 400) {
+				it.second->setVelocity(it.second->getVelocity().x * -1, it.second->getVelocity().y);
+				if (it.second->getPosition().x <= 400)
+					it.second->setPosition(400, it.second->getPosition().y);
+				else if (it.second->getPosition().x > window.getSize().x)
+					it.second->setPosition(window.getSize().x, it.second->getPosition().y);
+			}
+		}
 
-		if (it.second->getPosition().y > window.getSize().y || it.second->getPosition().y < 0) {
-			it.second->setVelocity(it.second->getVelocity().x, it.second->getVelocity().y * -1);
-			if (it.second->getPosition().y > window.getSize().y)
-				it.second->setPosition(it.second->getPosition().x, window.getSize().y);
-			else if (it.second->getPosition().y <= 0)
-				it.second->setPosition(it.second->getPosition().x, 0);
-		}
-		if (it.second->getPosition().x > window.getSize().x || it.second->getPosition().x < 400) {
-			it.second->setVelocity(it.second->getVelocity().x * -1, it.second->getVelocity().y);
-			if (it.second->getPosition().x <= 400)
-				it.second->setPosition(400, it.second->getPosition().y);
-			else if (it.second->getPosition().x > window.getSize().x)
-				it.second->setPosition(window.getSize().x, it.second->getPosition().y);
-		}
 		sf::RectangleShape* sprite = it.second->getSprite();
 		window.draw(*sprite);
-	}
-}
-
-void enemy::justDrawAllObject(sf::RenderWindow& window) {
-	for (const auto& it : enemy_map) {
 		it.second->HPBar.draw(window, it.second->getHp(), sf::Vector2f(it.second->getPosition().x, it.second->getPosition().y - it.second->getSprite()->getOrigin().y - 10));
-		sf::RectangleShape* sprite = it.second->getSprite();
-		window.draw(*sprite);
 	}
 }

@@ -1,8 +1,7 @@
 #include "objects.h"
 
 object::object(float _positionX, float _positionY, float _velocityX, float _velocityY) {
-	positionX = _positionX; 
-	positionY = _positionY; 
+	object_sprite.setPosition(sf::Vector2f(_positionX, _positionY));
 	velocityX = _velocityX;
 	velocityY = _velocityY;
 }
@@ -19,12 +18,11 @@ void object::setVelocity(float vx, float vy) {
 }
 
 void object::setPosition(float px, float py) {
-	positionX = px;
-	positionY = py;
+	object_sprite.setPosition(sf::Vector2f(px, py));
 }
 
 sf::Vector2f object::getPosition() {
-	return sf::Vector2f(positionX, positionY);
+	return object_sprite.getPosition();
 }
 
 sf::Vector2f object::getVelocity() {
@@ -36,9 +34,7 @@ sf::Vector2f object::getSize() {
 }
 
 void object::update(float time) {
-	positionX += velocityX * time;
-	positionY += velocityY * time;
-	object_sprite.setPosition(sf::Vector2f(positionX, positionY));
+	object_sprite.move(sf::Vector2f(velocityX * time, velocityY * time));
 }
 
 bool object::isintersect(sf::RectangleShape* shape_1, sf::RectangleShape* shape_2) {

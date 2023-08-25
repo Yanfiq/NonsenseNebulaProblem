@@ -26,6 +26,5 @@ public:
 	static void deleteObject(int id);
 
 	static void clearObject();
-	static void updateNDrawAllObject(double dt, sf::RenderWindow& window);
-	static void justDrawAllObject(sf::RenderWindow& window);
+	static void renderAllObject(double dt, sf::RenderWindow& window, bool Update);
 };
