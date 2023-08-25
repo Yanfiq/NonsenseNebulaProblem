@@ -3,7 +3,6 @@
 #include "enemy.h"
 #include "textureManager.h"
 #include "player.h"
-#include "sound.h"
 #include "animation.h"
 
 #include <random>

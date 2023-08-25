@@ -151,7 +151,7 @@
     <ClCompile Include="func.cpp" />
     <ClCompile Include="textureManager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="sound.cpp" />
+    <ClCompile Include="soundManager.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="objects.cpp" />
     <ClCompile Include="player.cpp" />
@@ -168,7 +168,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="textureManager.h" />
     <ClInclude Include="particleSystem.hpp" />
-    <ClInclude Include="sound.h" />
+    <ClInclude Include="soundManager.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="objects.h" />
     <ClInclude Include="player.h" />

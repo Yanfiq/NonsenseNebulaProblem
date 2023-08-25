@@ -1,21 +1,20 @@
 #pragma once
-
 #include "SFML/Audio.hpp"
 #include <vector>
+#include <unordered_map>
+#include <filesystem>
 #include <iostream>
 
 extern int bgmVolume;
 extern int sfxVolume;
 
-class sounds {
+class soundManager {
 private:
-	static sf::SoundBuffer shootSound;
-	static sf::SoundBuffer boomSound;
 	static std::vector<sf::Sound*> soundPlayed;
+	static std::unordered_map<std::string, sf::SoundBuffer*> sounds_map;
 
 public:
 	static void loadSound();
-	static void playShootSound();
-	static void playBoomSound();
+	static void playSound(std::string fileName);
 	static void monitoring();
 };

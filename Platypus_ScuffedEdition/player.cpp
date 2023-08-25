@@ -27,7 +27,6 @@ void player::shoot() {
 	bullet* Bullet = new bullet(allBullet++, "gameplay_bullet_2.png", positionX, positionY, 900, 0);
 	bulletAvailable--;
 	Bullet->setDamageValue(20.0f);
-	sounds::playShootSound();
 	if (allBullet == 999)
 		allBullet = 0;
 }
@@ -72,7 +71,7 @@ std::unordered_map<int, player*>* player::getPlayerMap() {
 
 void player::deleteObject(int id) {
 	animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(player_map[id]->getPosition().x, player_map[id]->getPosition().y));
-	sounds::playBoomSound();
+	soundManager::playSound("sfx_boom.ogg");
 	delete player_map[id];
 	player_map.erase(id);
 }

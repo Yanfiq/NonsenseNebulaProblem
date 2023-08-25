@@ -42,7 +42,7 @@
     <ClCompile Include="textureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sound.cpp">
+    <ClCompile Include="soundManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="animation.cpp">
@@ -83,7 +83,7 @@
     <ClInclude Include="textureManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sound.h">
+    <ClInclude Include="soundManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="particleSystem.hpp">

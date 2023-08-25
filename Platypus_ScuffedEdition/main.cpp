@@ -6,7 +6,7 @@
 #include "bullet.h"
 #include "enemy.h"
 #include "Text.h"
-#include "sound.h"
+#include "soundManager.h"
 #include "func.h"
 #include "bar.h"
 #include "textureManager.h"
@@ -36,7 +36,7 @@ int main() {
 	//texture initialization
 	textRenderer TextRenderer("fonts/Poppins-SemiBold.ttf");
 	textureManager::initializeTexture();
-	sounds::loadSound();
+	soundManager::loadSound();
  
 	// enumeration for scene changes
 	enum part { start, settings , tutorial, credits, transition, singleMulti, play, pause };
@@ -67,7 +67,7 @@ int main() {
 	// main game loop
 	while (window.isOpen()) {
 		bgmusic.setVolume(bgmVolume);
-		sounds::monitoring();
+		soundManager::monitoring();
 
 		// POLL EVENT SECTION ----------------------------------------------------------------------------------------------------------------------------------------------------------
 		while (window.pollEvent(event)) {
@@ -178,7 +178,7 @@ int main() {
 			if (InputManager::Instance()->KeyPress("Left_1")) {
 				switch (choice) {
 				case 0:bgmVolume = (bgmVolume == 0) ? 0 : bgmVolume - 5; break; 
-				case 1:sfxVolume = (sfxVolume == 0) ? 0 : sfxVolume - 5; sounds::playShootSound(); break;
+				case 1:sfxVolume = (sfxVolume == 0) ? 0 : sfxVolume - 5; soundManager::playSound("sfx_shoot.ogg"); break;
 				case 2:cheat = false; window.create(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close); window.setFramerateLimit(60);  break;
 				}
 			}
@@ -187,7 +187,7 @@ int main() {
 			if (InputManager::Instance()->KeyPress("Right_1")) {
 				switch (choice) {
 				case 0:bgmVolume = (bgmVolume == 100) ? 100 : bgmVolume + 5; break;
-				case 1:sfxVolume = (sfxVolume == 100) ? 100 : sfxVolume + 5; sounds::playShootSound(); break;
+				case 1:sfxVolume = (sfxVolume == 100) ? 100 : sfxVolume + 5; soundManager::playSound("sfx_shoot.ogg"); break;
 				case 2:cheat = true; window.create(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize); window.setFramerateLimit(60);  break;
 				}
 			}

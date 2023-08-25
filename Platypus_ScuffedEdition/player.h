@@ -1,13 +1,13 @@
 #pragma once
 #include "objects.h"
 #include "bullet.h"
-#include "sound.h"
+#include "soundManager.h"
 #include "animation.h"
 #include "Text.h"
 #include "bar.h"
 #include "textureManager.h"
-#define MAX_PLAYER_HEALTH 200
-#define MAX_PLAYER_BULLET 30
+#define MAX_PLAYER_HEALTH 500
+#define MAX_PLAYER_BULLET 40
 
 class player : public object {
 protected:

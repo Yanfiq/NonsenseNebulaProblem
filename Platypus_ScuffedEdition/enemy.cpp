@@ -27,7 +27,7 @@ enemy* enemy::getObjectPtr(int id) {
 
 void enemy::deleteObject(int id) {
 	animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(enemy_map[id]->getPosition().x, enemy_map[id]->getPosition().y));
-	sounds::playBoomSound();
+	soundManager::playSound("sfx_boom.ogg");
 	delete enemy_map[id];
 	enemy_map.erase(id);
 }
@@ -45,7 +45,6 @@ void enemy::shoot() {
 	bullet_count = (bullet_count == 999) ? 0 : bullet_count + 1;
 
 	Bullet->setDamageValue(20.0f);
-	sounds::playShootSound();
 }
 
 void enemy::clearObject() {

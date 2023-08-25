@@ -1,7 +1,7 @@
 #pragma once
 #include "objects.h"
 #include "bullet.h"
-#include "sound.h"
+#include "soundManager.h"
 #include "animation.h"
 #include "bar.h"
 #include "textureManager.h"

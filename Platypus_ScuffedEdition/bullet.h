@@ -1,5 +1,6 @@
 #pragma once
 #include "objects.h"
+#include "soundManager.h"
 #include "textureManager.h"
 
 class bullet : public object {
