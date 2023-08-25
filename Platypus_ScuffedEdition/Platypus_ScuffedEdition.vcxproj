@@ -149,6 +149,7 @@
     <ClCompile Include="collisionHandler.cpp" />
     <ClCompile Include="enemy.cpp" />
     <ClCompile Include="func.cpp" />
+    <ClCompile Include="RNG.cpp" />
     <ClCompile Include="textureManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="soundManager.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="enemy.h" />
     <ClInclude Include="func.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="RNG.h" />
     <ClInclude Include="textureManager.h" />
     <ClInclude Include="soundManager.h" />
     <ClInclude Include="Text.h" />

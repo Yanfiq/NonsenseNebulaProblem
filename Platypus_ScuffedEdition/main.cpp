@@ -8,6 +8,7 @@
 #include "Text.h"
 #include "soundManager.h"
 #include "func.h"
+#include "RNG.h"
 #include "bar.h"
 #include "textureManager.h"
 #include "InputManager.h"
@@ -328,8 +329,8 @@ int main() {
 				if (elapsed.getElapsedTime().asSeconds() > 10 || enemy::getEnemyMap()->size() < 3) {
 					//generate enemy
 					int counter = 0;
-					for (int i = counts; i < counts + ((getRandomFloat(window.getSize().x / 288, window.getSize().y / 176)) * difficulty); i++) {
-						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-1000, 1000), getRandomFloat(-1000, 1000));
+					for (int i = counts; i < counts + ((RNG::generateRandomFloat(window.getSize().x / 288, window.getSize().y / 176)) * difficulty); i++) {
+						enemy* Enemy = new enemy(i, "gameplay_enemy.png", RNG::generateRandomFloat(400, window.getSize().x), RNG::generateRandomFloat(0, window.getSize().y), RNG::generateRandomFloat(-1000, 1000), RNG::generateRandomFloat(-1000, 1000));
 						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
 						counter++;
 					}
@@ -347,22 +348,22 @@ int main() {
 				switch (level) {
 				case 1:
 				{
-					for (int i = 1; i < getRandomFloat(window.getSize().x / 288, window.getSize().y / 176); i++) {
-						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-500, 500), getRandomFloat(-500, 500));
+					for (int i = 1; i < RNG::generateRandomFloat(window.getSize().x / 288, window.getSize().y / 176); i++) {
+						enemy* Enemy = new enemy(i, "gameplay_enemy.png", RNG::generateRandomFloat(400, window.getSize().x), RNG::generateRandomFloat(0, window.getSize().y), RNG::generateRandomFloat(-500, 500), RNG::generateRandomFloat(-500, 500));
 					}
 					break;
 				}
 				case 2:
 				{
-					for (int i = 1; i < getRandomFloat((window.getSize().x / 288), (window.getSize().y / 176)) * 2; i++) {
-						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-750, 750), getRandomFloat(-750, 750));
+					for (int i = 1; i < RNG::generateRandomFloat((window.getSize().x / 288), (window.getSize().y / 176)) * 2; i++) {
+						enemy* Enemy = new enemy(i, "gameplay_enemy.png", RNG::generateRandomFloat(400, window.getSize().x), RNG::generateRandomFloat(0, window.getSize().y), RNG::generateRandomFloat(-750, 750), RNG::generateRandomFloat(-750, 750));
 					}
 					break;
 				}
 				case 3:
 				{
-					for (int i = 1; i < getRandomFloat((window.getSize().x / 288), (window.getSize().y / 176)) * 3; i++) {
-						enemy* Enemy = new enemy(i, "gameplay_enemy.png", getRandomFloat(400, window.getSize().x), getRandomFloat(0, window.getSize().y), getRandomFloat(-1000, 1000), getRandomFloat(-1000, 1000));
+					for (int i = 1; i < RNG::generateRandomFloat((window.getSize().x / 288), (window.getSize().y / 176)) * 3; i++) {
+						enemy* Enemy = new enemy(i, "gameplay_enemy.png", RNG::generateRandomFloat(400, window.getSize().x), RNG::generateRandomFloat(0, window.getSize().y), RNG::generateRandomFloat(-1000, 1000), RNG::generateRandomFloat(-1000, 1000));
 					}
 					break;
 				}
