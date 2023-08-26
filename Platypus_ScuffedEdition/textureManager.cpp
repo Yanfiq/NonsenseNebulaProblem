@@ -1,9 +1,19 @@
 #include "textureManager.h"
 
-std::unordered_map<std::string, sf::Texture*> textureManager::textures_map;
-sf::RectangleShape textureManager::shape;
+textureManager* textureManager::pInstance = NULL;
 
-void textureManager::initializeTexture() {
+textureManager* textureManager::Instance() {
+	if (pInstance == NULL)
+		pInstance = new textureManager;
+
+	return pInstance;
+}
+
+textureManager::textureManager() {
+	shape = new sf::RectangleShape;
+}
+
+void textureManager::loadTexture() {
 	for (const auto& entry : std::filesystem::directory_iterator("images")) {
 		sf::Texture* texture = new sf::Texture();
 		std::string path = entry.path().generic_string();
@@ -22,10 +32,10 @@ sf::Texture* textureManager::getTexture(std::string filename) {
 
 void textureManager::displayImage(sf::RenderWindow& window, std::string texture_filename, float position_x, float position_y, sf::Vector2f size) {
 	sf::Texture* texture = getTexture(texture_filename);
-	shape.setSize(size);
-	shape.setTexture(texture);
-	shape.setPosition(position_x, position_y);
-	shape.setOrigin(sf::Vector2f(size.x / 2, size.y / 2));
+	shape->setSize(size);
+	shape->setTexture(texture);
+	shape->setPosition(position_x, position_y);
+	shape->setOrigin(sf::Vector2f(size.x / 2, size.y / 2));
 	sf::Vector2f textureSize = static_cast<sf::Vector2f>(texture->getSize());
 
 	sf::IntRect textureRect;
@@ -44,6 +54,6 @@ void textureManager::displayImage(sf::RenderWindow& window, std::string texture_
 		textureRect.width = textureSize.x;
 		textureRect.height = textureSize.y;
 	}
-	shape.setTextureRect(textureRect);
-	window.draw(shape);
+	shape->setTextureRect(textureRect);
+	window.draw(*shape);
 }

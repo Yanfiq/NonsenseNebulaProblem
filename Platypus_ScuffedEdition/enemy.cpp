@@ -5,9 +5,9 @@ int enemy::bullet_count = 1;
 
 enemy::enemy(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY) : 
 	object(_positionX, _positionY, _velocityX, _velocityY),
-	HPBar(sf::Color::White, 2, sf::Color::Red, sf::Color::Green, MAX_ENEMY_HEALTH, textureManager::getTexture(texture_filename)->getSize().x, textureManager::getTexture(texture_filename)->getSize().y / 10)
+	HPBar(sf::Color::White, 2, sf::Color::Red, sf::Color::Green, MAX_ENEMY_HEALTH, textureManager::Instance()->getTexture(texture_filename)->getSize().x, textureManager::Instance()->getTexture(texture_filename)->getSize().y / 10)
 {
-	sf::Texture* texture = textureManager::getTexture(texture_filename);
+	sf::Texture* texture = textureManager::Instance()->getTexture(texture_filename);
 	object_sprite.setTexture(texture);
 	object_sprite.setSize(sf::Vector2f(texture->getSize()));
 	object_sprite.setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));

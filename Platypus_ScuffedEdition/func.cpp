@@ -14,31 +14,31 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 			<< sf::Color::White << "(the player's heal speed is 1/20 points every 5 seconds).";
 		text_1.setPosition(window.getSize().x / 2, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_beforeWave.png", window.getSize().x / 2, window.getSize().y * 1.8/3, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_beforeWave.png", window.getSize().x / 2, window.getSize().y * 1.8/3, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
 		break;
 	case 2:
 		text_1 << sf::Color::White << "In each player sprite, there are 2 things attached to the player, \nthe player label and the HP bar.";
 		text_1.setPosition(window.getSize().x / 2, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_player.png", window.getSize().x / 2, window.getSize().y / 2, sf::Vector2f(146 * sizeMultiplier, 166 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_player.png", window.getSize().x / 2, window.getSize().y / 2, sf::Vector2f(146 * sizeMultiplier, 166 * sizeMultiplier));
 		break;
 	case 3:
 		text_1 << sf::Color::White << "in the bottom corner, there is a bar that displays the player's remaining bullets\n";
 		text_1.setPosition(window.getSize().x / 2, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_bulletBar.png", window.getSize().x / 2, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_bulletBar.png", window.getSize().x / 2, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
 		break;
 	case 4:
 		text_1 << sf::Color::White << "in the top corner, there is text showing the accumulated score\n";
 		text_1.setPosition(window.getSize().x / 2, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_score.png", window.getSize().x / 2, window.getSize().y / 2, sf::Vector2f(348 * sizeMultiplier, 121 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_score.png", window.getSize().x / 2, window.getSize().y / 2, sf::Vector2f(348 * sizeMultiplier, 121 * sizeMultiplier));
 		break;
 	case 5:
 		text_1 << sf::Color::White << "The main objective of this game is to destroy all enemies\n";
 		text_1.setPosition(window.getSize().x / 2, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_gameplay.png", window.getSize().x / 2, window.getSize().y * 1.8/3, sf::Vector2f(500 * sizeMultiplier, 282 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_gameplay.png", window.getSize().x / 2, window.getSize().y * 1.8/3, sf::Vector2f(500 * sizeMultiplier, 282 * sizeMultiplier));
 
 		break;
 	case 6:
@@ -48,8 +48,8 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'W' instead\n";
 		text_2.setPosition(window.getSize().x / 1.35, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
-		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
 		break;
 	case 7:
 		text_1 << sf::Color::White << "use 'Down' button to go down\n";
@@ -58,8 +58,8 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'S' instead\n";
 		text_2.setPosition(window.getSize().x / 1.35, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
-		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
 		break;
 	case 8:
 		text_1 << sf::Color::White << "use 'Right' button to fire the bullet\n";
@@ -68,8 +68,8 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'D' instead\n";
 		text_2.setPosition(window.getSize().x / 1.35, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
-		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
 		break;
 	case 9:
 		text_1 << sf::Color::White << "use 'Left' button to reload the bullet\n";
@@ -78,14 +78,14 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 		text_2 << sf::Color::White << "for the player_2, use 'A' instead\n";
 		text_2.setPosition(window.getSize().x / 1.35, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
-		textureManager::displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_arrows.jpg", window.getSize().x / 4, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_wasd.jpg", window.getSize().x / 1.35, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
 		break;
 	case 10:
 		text_1 << sf::Color::White << "use spacebar to pause the game\n";
 		text_1.setPosition(window.getSize().x / 2, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_spacebar.jpg", window.getSize().x / 2, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_spacebar.jpg", window.getSize().x / 2, window.getSize().y / 2, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
 		break;
 	case 11:
 		text_1 << sf::Color::White << "You may already know that in the settings menu there's an option to turn on cheats.\n"
@@ -93,7 +93,7 @@ void displayTutorial(sf::RenderWindow& window, sf::Font* font, int step) {
 			<< sf::Color::White << "universe shape-shifting and time freeze\n";
 		text_1.setPosition(window.getSize().x / 2, window.getSize().y / 4);
 
-		textureManager::displayImage(window, "tutorial_cheats.png", window.getSize().x / 2, window.getSize().y * 1.8/3, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
+		textureManager::Instance()->displayImage(window, "tutorial_cheats.png", window.getSize().x / 2, window.getSize().y * 1.8/3, sf::Vector2f(500 * sizeMultiplier, 281 * sizeMultiplier));
 		break;
 	}
 

@@ -4,7 +4,7 @@ std::vector<animationFrame*> animate::playing;
 
 
 void animate::play(std::string texture_filename, int _row, int _collumn, sf::Vector2f _position) {
-	sf::Texture* texture = textureManager::getTexture(texture_filename);
+	sf::Texture* texture = textureManager::Instance()->getTexture(texture_filename);
 	animationFrame* animation = new animationFrame(texture, _row, _collumn, _position);
 	playing.push_back(animation);
 }

@@ -29,7 +29,7 @@ int main() {
 	
 	//texture initialization
 	textRenderer TextRenderer("fonts/Poppins-SemiBold.ttf");
-	textureManager::initializeTexture();
+	textureManager::Instance()->loadTexture();
 	soundManager::Instance()->loadSound();
  
 	// enumeration for scene changes
@@ -84,7 +84,7 @@ int main() {
 		// END OF POLL EVENT SECTION ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 		// RENDER SECTION --------------------------------------------------------------------------------------------------------------------------------------------------------------
-		textureManager::displayImage(window, "background_nebula.jpg", window.getSize().x/2, window.getSize().y/2, sf::Vector2f(window.getSize()));
+		textureManager::Instance()->displayImage(window, "background_nebula.jpg", window.getSize().x/2, window.getSize().y/2, sf::Vector2f(window.getSize()));
 		// delta time between frame
 		float dt = clock.restart().asSeconds();
 		if (scene == pause) {
@@ -365,15 +365,9 @@ int main() {
 			}
 
 			//level up when the enemy is 0
-			if (enemy::getEnemyMap()->empty() && !endless) {
+			if ((enemy::getEnemyMap()->empty() || player::getPlayerMap()->empty())) {
 				scene = transition;
-				break;
-			}
-
-			//lose when the player is 0
-			if (player::getPlayerMap()->empty()) {
-				level = -1;
-				scene = transition;
+				level = (player::getPlayerMap()->empty()) ? -1 : level;
 				break;
 			}
 
