@@ -9,7 +9,8 @@ int collisionHandler::handleCollision() {
 
 	int points = 0;
 	//bullets from the player
-	for (auto bullet_object = bulletPlayerMap->begin(); bullet_object != bulletPlayerMap->end(); bullet_object++) {
+	for (auto bullet_object = bulletPlayerMap->begin(); bullet_object != bulletPlayerMap->end();) {
+		bool collide = false;
 		for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
 
 			//collision happens between enemy and bullet
@@ -20,14 +21,20 @@ int collisionHandler::handleCollision() {
 				if (enemy_object->second->getHp() <= 0) {
 					enemy::deleteObject(enemy_object->first);
 				}
-				bullet::deleteObject(bullet_object->first);
+				//bullet::deleteObject(bullet_object->first);
+				delete bullet_object->second;
+				bullet_object = bulletPlayerMap->erase(bullet_object);
+				collide = true;
 				break;
 			}
 		}
+		if (!collide)
+			++bullet_object;
 	}
 
 	//bullets from the enemy
-	for (auto bullet_object = bulletEnemyMap->begin(); bullet_object != bulletEnemyMap->end(); bullet_object++) {
+	for (auto bullet_object = bulletEnemyMap->begin(); bullet_object != bulletEnemyMap->end();) {
+		bool collide = false;
 		for (auto player_object = playerMap->begin(); player_object != playerMap->end(); player_object++) {
 			//collision happens between player and the bullet
 			if (object::isintersect(player_object->second->getSprite(), bullet_object->second->getSprite())) {
@@ -38,10 +45,15 @@ int collisionHandler::handleCollision() {
 				if (player_object->second->getPlayerHp() <= 0) {
 					player::deleteObject(player_object->first);
 				}
-				bullet::deleteObject(bullet_object->first);
+				//bullet::deleteObject(bullet_object->first);
+				delete bullet_object->second;
+				bullet_object = bulletEnemyMap->erase(bullet_object);
+				collide = true;
 				break;
 			}
 		}
+		if(!collide)
+			++bullet_object;
 	}
 	return points;
 }
