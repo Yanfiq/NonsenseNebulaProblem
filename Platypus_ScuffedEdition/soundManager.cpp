@@ -1,10 +1,17 @@
 #include "soundManager.h"
 
-std::vector<sf::Sound*> soundManager::soundPlayed;
-std::unordered_map<std::string, sf::SoundBuffer*> soundManager::sounds_map;
+soundManager* soundManager::pInstance = NULL;
 
-int bgmVolume = 100;
-int sfxVolume = 100;
+soundManager* soundManager::Instance() {
+	if (pInstance == NULL)
+		pInstance = new soundManager;
+
+	return pInstance;
+}
+
+soundManager::soundManager(){
+	bgm = new sf::Music;
+}
 
 void soundManager::loadSound() {
 	for (const auto& entry : std::filesystem::directory_iterator("audio")) {
@@ -15,6 +22,9 @@ void soundManager::loadSound() {
 			std::string filename = entry.path().filename().generic_string();
 			sound->loadFromFile(path);
 			sounds_map[filename] = sound;
+		}
+		else if (entry.path().filename().generic_string().substr(0, 3) == "bgm") {
+			musicList.push_back(entry.path().filename().generic_string());
 		}
 	}
 }
@@ -29,6 +39,24 @@ void soundManager::playSound(std::string fileName) {
 	}
 }
 
+void soundManager::changeVolume(int audio, int volume) {
+	if (audio == 1) {
+		bgmVolume += volume;
+		bgm->setVolume(bgmVolume);
+		if (bgmVolume < 0)bgmVolume = 0;
+		if (bgmVolume > 100)bgmVolume = 100;
+	}
+	else if (audio == 2) {
+		sfxVolume += volume;
+		if (sfxVolume < 0)sfxVolume = 0;
+		if (sfxVolume > 100)sfxVolume = 100;
+	}
+}
+
+int soundManager::getVolume(int audio) {
+	return (audio == 1) ? bgmVolume : sfxVolume;
+}
+
 void soundManager::monitoring() {
 	for (auto it = soundPlayed.begin(); it != soundPlayed.end();) {
 		sf::Sound* sound = *it;
@@ -39,5 +67,13 @@ void soundManager::monitoring() {
 		else {
 			it++;
 		}
+	}
+	if (bgm->getStatus() == sf::SoundSource::Stopped) {
+		static int playing = 0;
+		std::string filename = "audio/" + musicList[playing++];
+		bgm->openFromFile(filename);
+		bgm->play();
+		bgm->setVolume(bgmVolume);
+		if (playing == musicList.size()) playing = 0;
 	}
 }

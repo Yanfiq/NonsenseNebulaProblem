@@ -15,7 +15,7 @@ bullet::bullet(int _object_id, std::string texture_filename, float _positionX, f
 	else if (velocityX < 0.0f) {
 		enemyBullet_map[enemyBullet_obj + _object_id] = this;
 	}
-	soundManager::playSound("sfx_shoot.ogg");
+	soundManager::Instance()->playSound("sfx_shoot.ogg");
 }
 
 bullet* bullet::getObjectPtr(int id) {

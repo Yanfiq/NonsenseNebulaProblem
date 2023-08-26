@@ -15,9 +15,6 @@
 #include "animation.h"
 #include "collisionHandler.h"
 
-extern int bgmVolume;
-extern int sfxVolume;
-
 int main() {
 	sf::RenderWindow window;
 	window.create(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close);
@@ -29,15 +26,11 @@ int main() {
 	sf::Clock clock;
 	sf::Clock elapsed;
 	sf::Event event;
-	sf::Music bgmusic;
-	bgmusic.openFromFile("audio/bgm_Boooring.ogg");
-	bgmusic.play();
-	bgmusic.setLoop(true);
 	
 	//texture initialization
 	textRenderer TextRenderer("fonts/Poppins-SemiBold.ttf");
 	textureManager::initializeTexture();
-	soundManager::loadSound();
+	soundManager::Instance()->loadSound();
  
 	// enumeration for scene changes
 	enum part { start, settings , tutorial, credits, transition, singleMulti, play, pause };
@@ -67,8 +60,7 @@ int main() {
 
 	// main game loop
 	while (window.isOpen()) {
-		bgmusic.setVolume(bgmVolume);
-		soundManager::monitoring();
+		soundManager::Instance()->monitoring();
 
 		// POLL EVENT SECTION ----------------------------------------------------------------------------------------------------------------------------------------------------------
 		while (window.pollEvent(event)) {
@@ -161,8 +153,8 @@ int main() {
 
 			static int choice = 0;
 			std::string Cheat = (cheat) ? "Enabled" : "Disabled";
-			std::vector<std::string> choices = { "BGM Volume : <" + std::to_string(bgmVolume) + "%>",
-												 "SFX Volume : <" + std::to_string(sfxVolume) + "%>",
+			std::vector<std::string> choices = { "BGM Volume : <" + std::to_string(soundManager::Instance()->getVolume(1)) + "%>",
+												 "SFX Volume : <" + std::to_string(soundManager::Instance()->getVolume(2)) + "%>",
 												 "Cheat : < " + Cheat + " >",
 												 "Tutorial",
 												 "Credit",
@@ -178,8 +170,8 @@ int main() {
 			// Decrease / disable
 			if (InputManager::Instance()->KeyPress("Left_1")) {
 				switch (choice) {
-				case 0:bgmVolume = (bgmVolume == 0) ? 0 : bgmVolume - 5; break; 
-				case 1:sfxVolume = (sfxVolume == 0) ? 0 : sfxVolume - 5; soundManager::playSound("sfx_shoot.ogg"); break;
+				case 0:soundManager::Instance()->changeVolume(1, -5); break;
+				case 1:soundManager::Instance()->changeVolume(2, -5); soundManager::Instance()->playSound("sfx_shoot.ogg"); break;
 				case 2:cheat = false; window.create(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close); window.setFramerateLimit(60);  break;
 				}
 			}
@@ -187,8 +179,8 @@ int main() {
 			// Increase / enable
 			if (InputManager::Instance()->KeyPress("Right_1")) {
 				switch (choice) {
-				case 0:bgmVolume = (bgmVolume == 100) ? 100 : bgmVolume + 5; break;
-				case 1:sfxVolume = (sfxVolume == 100) ? 100 : sfxVolume + 5; soundManager::playSound("sfx_shoot.ogg"); break;
+				case 0:soundManager::Instance()->changeVolume(1, +5); break;
+				case 1:soundManager::Instance()->changeVolume(2, +5); soundManager::Instance()->playSound("sfx_shoot.ogg"); break;
 				case 2:cheat = true; window.create(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize); window.setFramerateLimit(60);  break;
 				}
 			}

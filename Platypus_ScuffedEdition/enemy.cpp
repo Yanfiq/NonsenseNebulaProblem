@@ -26,7 +26,7 @@ enemy* enemy::getObjectPtr(int id) {
 
 void enemy::deleteObject(int id) {
 	animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(enemy_map[id]->getPosition().x, enemy_map[id]->getPosition().y));
-	soundManager::playSound("sfx_boom.ogg");
+	soundManager::Instance()->playSound("sfx_boom.ogg");
 	delete enemy_map[id];
 	enemy_map.erase(id);
 }
