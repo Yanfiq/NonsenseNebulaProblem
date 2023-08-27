@@ -1,17 +1,20 @@
 #pragma once
 #include "objects.h"
 #include "bullet.h"
-#include "soundManager.h"
-#include "animation.h"
 #include "bar.h"
+#include "RNG.h"
 #include "textureManager.h"
+#include "soundManager.h"
+#include "animationManager.h"
 #define MAX_ENEMY_HEALTH 100
 
 class enemy : public object {
 protected:
 	float hp = 100.0f;
+	sf::Vector2f rangeVelocity;
 	static int bullet_count;
 	static std::unordered_map<int, enemy*> enemy_map;
+	static sf::Clock randomize;
 	bar HPBar;
 
 public:
@@ -20,6 +23,7 @@ public:
 	void reduceHp(float damage);
 	void shoot();
 	float getHp();
+	sf::Vector2f* getBaseV();
 
 	static std::unordered_map<int, enemy*>* getEnemyMap();
 	static enemy* getObjectPtr(int id);

@@ -1,6 +1,7 @@
 #include "enemy.h"
 
 std::unordered_map<int, enemy*> enemy::enemy_map;
+sf::Clock enemy::randomize;
 int enemy::bullet_count = 1;
 
 enemy::enemy(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY) : 
@@ -12,8 +13,23 @@ enemy::enemy(int _object_id, std::string texture_filename, float _positionX, flo
 	object_sprite.setSize(sf::Vector2f(texture->getSize()));
 	object_sprite.setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
 
+	float lowest, highest;
+	if (_velocityX < _velocityY) {
+		lowest = (_velocityX < 0) ? _velocityX : _velocityX * -1;
+	}
+	else {
+		lowest = (_velocityY < 0) ? _velocityY : _velocityY * -1;
+	}
+
+	if (lowest == _velocityX || lowest == _velocityX * -1) {
+		highest = (_velocityY > 0) ? _velocityY : _velocityY * -1;
+	}
+	else {
+		highest = (_velocityX > 0) ? _velocityX : _velocityX * -1;
+	}
+	rangeVelocity = sf::Vector2f(lowest, highest);
 	enemy_map[enemy_obj + _object_id] = this;
-	animate::play("gameplay_spawn.png", 4, 4, getPosition());
+	animationManager::Instance()->play("gameplay_spawn.png", 4, 4, getPosition());
 }
 
 std::unordered_map<int, enemy*>* enemy::getEnemyMap() {
@@ -25,7 +41,7 @@ enemy* enemy::getObjectPtr(int id) {
 }
 
 void enemy::deleteObject(int id) {
-	animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(enemy_map[id]->getPosition().x, enemy_map[id]->getPosition().y));
+	animationManager::Instance()->play("gameplay_explode.png", 4, 5, sf::Vector2f(enemy_map[id]->getPosition().x, enemy_map[id]->getPosition().y));
 	soundManager::Instance()->playSound("sfx_boom.ogg");
 	delete enemy_map[id];
 	enemy_map.erase(id);
@@ -37,6 +53,10 @@ void enemy::reduceHp(float damage) {
 
 float enemy::getHp() {	
 	return hp;
+}
+
+sf::Vector2f* enemy::getBaseV() {
+	return &rangeVelocity;
 }
 
 void enemy::shoot() {
@@ -71,6 +91,15 @@ void enemy::renderAllObject(double dt, sf::RenderWindow& window, bool Update) {
 				else if (it.second->getPosition().x > window.getSize().x)
 					it.second->setPosition(window.getSize().x, it.second->getPosition().y);
 			}
+		}
+
+		//more RNG
+		if (randomize.getElapsedTime().asSeconds() > 5) {
+			sf::Vector2f previousVelocity = it.second->getVelocity();
+			it.second->setVelocity(RNG::generateRandomFloat(it.second->getBaseV()->x, it.second->getBaseV()->x * -1), RNG::generateRandomFloat(it.second->getBaseV()->y, it.second->getBaseV()->y * -1));
+			std::unordered_map<int, enemy*>::iterator last = enemy_map.end(); last--;
+			if (it.first == last->first)
+				randomize.restart();
 		}
 
 		sf::RectangleShape* sprite = it.second->getSprite();
