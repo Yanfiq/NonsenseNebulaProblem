@@ -45,7 +45,7 @@
     <ClCompile Include="soundManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="animation.cpp">
+    <ClCompile Include="animationManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="animationFrame.cpp">
@@ -89,7 +89,7 @@
     <ClInclude Include="soundManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="animation.h">
+    <ClInclude Include="animationManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="animationFrame.h">

@@ -57,7 +57,7 @@ int soundManager::getVolume(int audio) {
 	return (audio == 1) ? bgmVolume : sfxVolume;
 }
 
-void soundManager::monitoring() {
+void soundManager::monitor() {
 	for (auto it = soundPlayed.begin(); it != soundPlayed.end();) {
 		sf::Sound* sound = *it;
 		if (sound->getStatus() == sf::SoundSource::Status::Stopped) {

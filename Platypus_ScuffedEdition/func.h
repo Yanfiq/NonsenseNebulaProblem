@@ -3,7 +3,6 @@
 #include "enemy.h"
 #include "textureManager.h"
 #include "player.h"
-#include "animation.h"
 #include <unordered_map>
 
 // unodular function, created just to make main function cleaner

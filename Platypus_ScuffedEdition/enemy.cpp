@@ -96,10 +96,12 @@ void enemy::renderAllObject(double dt, sf::RenderWindow& window, bool Update) {
 		//more RNG
 		if (randomize.getElapsedTime().asSeconds() > 5) {
 			sf::Vector2f previousVelocity = it.second->getVelocity();
-			it.second->setVelocity(RNG::generateRandomFloat(it.second->getBaseV()->x, it.second->getBaseV()->x * -1), RNG::generateRandomFloat(it.second->getBaseV()->y, it.second->getBaseV()->y * -1));
+			it.second->setVelocity(RNG::generateRandomFloat(it.second->getBaseV()->x, it.second->getBaseV()->y), RNG::generateRandomFloat(it.second->getBaseV()->x, it.second->getBaseV()->y));
 			std::unordered_map<int, enemy*>::iterator last = enemy_map.end(); last--;
-			if (it.first == last->first)
+			if (it.first == last->first) {
+				std::cout << randomize.getElapsedTime().asSeconds() << std::endl;
 				randomize.restart();
+			}
 		}
 
 		sf::RectangleShape* sprite = it.second->getSprite();

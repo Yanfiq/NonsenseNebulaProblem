@@ -29,5 +29,5 @@ public:
 	// audio -> 1 = music & 2 = sfx
 	// volume -> changing the volume relative to the current volume
 	void changeVolume(int audio, int volume);
-	void monitoring();
+	void monitor();
 };

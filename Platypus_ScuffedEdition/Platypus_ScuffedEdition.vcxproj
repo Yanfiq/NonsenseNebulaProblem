@@ -142,7 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="animation.cpp" />
+    <ClCompile Include="animationManager.cpp" />
     <ClCompile Include="animationFrame.cpp" />
     <ClCompile Include="bar.cpp" />
     <ClCompile Include="bullet.cpp" />
@@ -159,7 +159,7 @@
     <ClCompile Include="RichText.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="animation.h" />
+    <ClInclude Include="animationManager.h" />
     <ClInclude Include="animationFrame.h" />
     <ClInclude Include="bar.h" />
     <ClInclude Include="bullet.h" />

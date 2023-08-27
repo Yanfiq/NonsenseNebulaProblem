@@ -12,7 +12,7 @@
 #include "bar.h"
 #include "textureManager.h"
 #include "InputManager.h"
-#include "animation.h"
+#include "animationManager.h"
 #include "collisionHandler.h"
 
 int main() {
@@ -41,8 +41,6 @@ int main() {
 	bool generateEnemy = false;		// decides whether to generate new enemies
 	bool endless = false;			// endless mode
 	bool cheat = false;				// cheat
-
-	// variables that'll be used on multiple choices scene
 	int scene = start;				// decide what scene is being run
 
 	//binding keys
@@ -60,8 +58,6 @@ int main() {
 
 	// main game loop
 	while (window.isOpen()) {
-		soundManager::Instance()->monitoring();
-
 		// POLL EVENT SECTION ----------------------------------------------------------------------------------------------------------------------------------------------------------
 		while (window.pollEvent(event)) {
 			switch (event.type) {
@@ -107,7 +103,8 @@ int main() {
 			enemy::renderAllObject(dt, window, true);
 		}
 		currentPoint += collisionHandler::handleCollision();
-		animate::monitoringAnimation(window);
+		animationManager::Instance()->monitor(window);
+		soundManager::Instance()->monitor();
 		// END OF RENDER RECTION -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		// SCENES AND VIDEO GAME LOGIC -----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -323,7 +320,6 @@ int main() {
 					int counter = 0;
 					for (int i = counts; i < counts + ((RNG::generateRandomFloat(window.getSize().x / 288, window.getSize().y / 176)) * difficulty); i++) {
 						enemy* Enemy = new enemy(i, "gameplay_enemy.png", RNG::generateRandomFloat(400, window.getSize().x), RNG::generateRandomFloat(0, window.getSize().y), RNG::generateRandomFloat(-1000, 1000), RNG::generateRandomFloat(-1000, 1000));
-						animate::play("gameplay_spawn.png", 4, 4, sf::Vector2f(Enemy->getPosition().x, Enemy->getPosition().y));
 						counter++;
 					}
 					counts += counter;
@@ -367,6 +363,7 @@ int main() {
 			//level up when the enemy is 0
 			if ((enemy::getEnemyMap()->empty() || player::getPlayerMap()->empty())) {
 				scene = transition;
+				enemy::clearObject();
 				level = (player::getPlayerMap()->empty()) ? -1 : level;
 				break;
 			}
@@ -384,8 +381,8 @@ int main() {
 				enemy* Enemy = enemy_object->second;
 				for (auto player_object = playerMap->begin(); player_object != playerMap->end(); player_object++) {
 					player* Player = player_object->second;
-					if ((Enemy->getPosition().y < Player->getPosition().y + 5) &&
-						(Enemy->getPosition().y > Player->getPosition().y - 5)) {
+					if ((Enemy->getPosition().y < Player->getPosition().y + 15) &&
+						(Enemy->getPosition().y > Player->getPosition().y - 15)) {
 						Enemy->shoot();
 					}
 				}

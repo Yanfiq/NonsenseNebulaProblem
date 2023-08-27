@@ -15,7 +15,7 @@ player::player(int _object_id, std::string texture_filename, float _positionX, f
 	object_sprite.setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
 	
 	player_map[player_obj + _object_id] = this;
-	animate::play("gameplay_spawn.png", 4, 4, getPosition());
+	animationManager::Instance()->play("gameplay_spawn.png", 4, 4, getPosition());
 }
 
 player* player::getObjectPtr(int id) {
@@ -69,7 +69,7 @@ std::unordered_map<int, player*>* player::getPlayerMap() {
 }
 
 void player::deleteObject(int id) {
-	animate::play("gameplay_explode.png", 4, 5, sf::Vector2f(player_map[id]->getPosition().x, player_map[id]->getPosition().y));
+	animationManager::Instance()->play("gameplay_explode.png", 4, 5, sf::Vector2f(player_map[id]->getPosition().x, player_map[id]->getPosition().y));
 	soundManager::Instance()->playSound("sfx_boom.ogg");
 	delete player_map[id];
 	player_map.erase(id);

@@ -6,6 +6,8 @@
 #include "textureManager.h"
 #include "soundManager.h"
 #include "animationManager.h"
+
+#include <iostream>
 #define MAX_ENEMY_HEALTH 100
 
 class enemy : public object {
