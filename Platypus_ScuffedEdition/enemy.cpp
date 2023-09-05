@@ -14,19 +14,9 @@ enemy::enemy(int _object_id, std::string texture_filename, float _positionX, flo
 	object_sprite.setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
 
 	float lowest, highest;
-	if (_velocityX < _velocityY) {
-		lowest = (_velocityX < 0) ? _velocityX : _velocityX * -1;
-	}
-	else {
-		lowest = (_velocityY < 0) ? _velocityY : _velocityY * -1;
-	}
+	highest = (std::abs(_velocityX) > std::abs(_velocityY)) ? std::abs(_velocityX) : std::abs(_velocityY);
+	lowest = highest * -1;
 
-	if (lowest == _velocityX || lowest == _velocityX * -1) {
-		highest = (_velocityY > 0) ? _velocityY : _velocityY * -1;
-	}
-	else {
-		highest = (_velocityX > 0) ? _velocityX : _velocityX * -1;
-	}
 	rangeVelocity = sf::Vector2f(lowest, highest);
 	enemy_map[enemy_obj + _object_id] = this;
 	animationManager::Instance()->play("gameplay_spawn.png", 4, 4, getPosition());

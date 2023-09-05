@@ -8,6 +8,7 @@
 #include "animationManager.h"
 
 #include <iostream>
+#include <cmath>
 #define MAX_ENEMY_HEALTH 100
 
 class enemy : public object {
