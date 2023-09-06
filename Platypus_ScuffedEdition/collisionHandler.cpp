@@ -13,21 +13,28 @@ int collisionHandler::handleCollision() {
 		bool collide = false;
 		for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
 
-			//collision happens between enemy and bullet
+			//collision occurs between the enemy and the player's bullet
 			if (object::isintersect(enemy_object->second->getSprite(), bullet_object->second->getSprite())) {
-				enemy_object->second->reduceHp(bullet_object->second->getDamageValue());
 
+				//Increase points and reduce enemy's HP
+				enemy_object->second->reduceHp(bullet_object->second->getDamageValue());
 				points += bullet_object->second->getDamageValue();
+
+				//Remove enemiy if HP is below 0
 				if (enemy_object->second->getHp() <= 0) {
 					enemy::deleteObject(enemy_object->first);
 				}
-				//bullet::deleteObject(bullet_object->first);
+				
+				//remove the bullet and move the bullet's map iterator
 				delete bullet_object->second;
 				bullet_object = bulletPlayerMap->erase(bullet_object);
 				collide = true;
 				break;
 			}
 		}
+
+		//if there is a collision, don't shift the iterator, 
+		//because it has been shifted inside the innermost for loop
 		if (!collide)
 			++bullet_object;
 	}
@@ -36,22 +43,27 @@ int collisionHandler::handleCollision() {
 	for (auto bullet_object = bulletEnemyMap->begin(); bullet_object != bulletEnemyMap->end();) {
 		bool collide = false;
 		for (auto player_object = playerMap->begin(); player_object != playerMap->end(); player_object++) {
-			//collision happens between player and the bullet
+
+			//collision occurs between the player and the enemy's bullet
 			if (object::isintersect(player_object->second->getSprite(), bullet_object->second->getSprite())) {
-				//add the bullet's id and player's id to the map
+
+				//reduce player's HP
 				player_object->second->reducePlayerHp(bullet_object->second->getDamageValue());
 
-				points -= bullet_object->second->getDamageValue();
 				if (player_object->second->getPlayerHp() <= 0) {
 					player::deleteObject(player_object->first);
 				}
-				//bullet::deleteObject(bullet_object->first);
+
+				//remove the bullet and move the bullet's map iterator
 				delete bullet_object->second;
 				bullet_object = bulletEnemyMap->erase(bullet_object);
 				collide = true;
 				break;
 			}
 		}
+
+		//if there is a collision, don't shift the iterator, 
+		//because it has been shifted inside the innermost for loop
 		if(!collide)
 			++bullet_object;
 	}
