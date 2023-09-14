@@ -11,6 +11,7 @@ int collisionHandler::handleCollision() {
 	//bullets from the player
 	for (auto bullet_object = bulletPlayerMap->begin(); bullet_object != bulletPlayerMap->end();) {
 		bool collide = false;
+		bullet* Bullet = bullet_object->second;
 		for (auto enemy_object = enemyMap->begin(); enemy_object != enemyMap->end(); enemy_object++) {
 
 			//collision occurs between the enemy and the player's bullet

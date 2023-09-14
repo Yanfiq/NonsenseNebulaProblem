@@ -42,9 +42,9 @@ void soundManager::playSound(std::string fileName) {
 void soundManager::changeVolume(int audio, int volume) {
 	if (audio == 1) {
 		bgmVolume += volume;
-		bgm->setVolume(bgmVolume);
 		if (bgmVolume < 0)bgmVolume = 0;
 		if (bgmVolume > 100)bgmVolume = 100;
+		bgm->setVolume(bgmVolume);
 	}
 	else if (audio == 2) {
 		sfxVolume += volume;

@@ -6,7 +6,7 @@
 #include "textureManager.h"
 #include "soundManager.h"
 #include "animationManager.h"
-#define MAX_PLAYER_HEALTH 300
+#define MAX_PLAYER_HEALTH 4000000000000000000
 #define MAX_PLAYER_BULLET 40
 
 class player : public object {

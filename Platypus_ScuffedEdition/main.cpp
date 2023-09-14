@@ -24,6 +24,7 @@ int main() {
 	window.setView(view);
 
 	sf::Clock clock;
+	sf::Clock updateFps;
 	sf::Clock elapsed;
 	sf::Event event;
 	
@@ -105,6 +106,13 @@ int main() {
 		currentPoint += collisionHandler::handleCollision();
 		animationManager::Instance()->monitor(window);
 		soundManager::Instance()->monitor();
+		static int fpsShowed = 0;
+		int fpsReal = 1 / dt;
+		if (updateFps.getElapsedTime().asSeconds() > 1 || std::abs(fpsReal - fpsShowed) > 5) {
+			fpsShowed = fpsReal;
+			updateFps.restart();
+		}
+		TextRenderer.displayText(window, std::to_string(fpsShowed) + " FPS", 2, 40, sf::Color::White, window.getSize().x - 10, 10);
 		// END OF RENDER RECTION -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		// SCENES AND VIDEO GAME LOGIC -----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -196,13 +204,14 @@ int main() {
 
 		case credits:
 		{
-			static float positionY = window.getSize().y;
-			sfe::RichText text = displayCredit(TextRenderer.getFont(), 100, positionY);
+			float windowY = window.getSize().y;
+			static float slideUp = 0;
+			sfe::RichText text = displayCredit(TextRenderer.getFont(), 100, windowY - slideUp);
 			window.draw(text);
-			positionY -= 5;
-			if (positionY < (- 1500)) {
+			slideUp += 10;
+			if (slideUp > 1500 + windowY) {
 				scene = settings;
-				positionY = 800;
+				slideUp = 0;
 			}
 			break;
 		}
@@ -298,7 +307,9 @@ int main() {
 				case 1:
 					scene = start; 
 					level = 0;
+					endless = false;
 					player::clearObject();
+					enemy::clearObject();
 					break;
 				}
 			}
