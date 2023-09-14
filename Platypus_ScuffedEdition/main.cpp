@@ -208,8 +208,8 @@ int main() {
 			static float slideUp = 0;
 			sfe::RichText text = displayCredit(TextRenderer.getFont(), 100, windowY - slideUp);
 			window.draw(text);
-			slideUp += 10;
-			if (slideUp > 1500 + windowY) {
+			slideUp += 5;
+			if (slideUp > 2050 + windowY) {
 				scene = settings;
 				slideUp = 0;
 			}

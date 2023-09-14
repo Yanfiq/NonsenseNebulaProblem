@@ -36,7 +36,6 @@ public:
 	// returns a bullet_count variable with integer data type
 	int getBulletRemain();
 
-	// 
 	void thrustUp();
 	void thrustDown();
 	float getPlayerHp() const;

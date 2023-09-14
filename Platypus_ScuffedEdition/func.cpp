@@ -116,6 +116,15 @@ sfe::RichText displayCredit(sf::Font* font, float position_x, float position_y) 
 		<< sf::Color::Cyan << sf::Text::Underlined << "Music: \n"
 		<< sf::Color::White << sf::Text::Regular << "Boooring! [Instrumental]\n"
 		<< sf::Color::White << sf::Text::Regular << "By Assertive Fluttershy\n\n"
+		<< sf::Color::White << sf::Text::Regular << "Everything is Okay\n"
+		<< sf::Color::White << sf::Text::Regular << "By Context Sensitive\n"
+		<< sf::Color::White << sf::Text::Regular << "https://www.youtube.com/ContextSensitive\n"
+		<< sf::Color::White << sf::Text::Regular << "https://contextsensitive.bandcamp.com/\n\n"
+		<< sf::Color::Cyan << sf::Text::Underlined << "SFX: \n"
+		<< sf::Color::White << sf::Text::Regular << "BLASTER 2 by Pixabay\n"
+		<< sf::Color::White << sf::Text::Regular << "https://pixabay.com/sound-effects/blaster-2-81267/\n\n"
+		<< sf::Color::White << sf::Text::Regular << "Medium Explosion by Pixabay\n"
+		<< sf::Color::White << sf::Text::Regular << "https://pixabay.com/sound-effects/medium-explosion-40472/\n\n"
 		<< sf::Color::Cyan << sf::Text::Underlined << "Font: \n"
 		<< sf::Color::White << sf::Text::Regular << "Poppins\n"
 		<< sf::Color::White << sf::Text::Regular << "Designed by Indian Type Foundry, Jonny Pinhorn\n\n"
@@ -128,8 +137,10 @@ sfe::RichText displayCredit(sf::Font* font, float position_x, float position_y) 
 		<< sf::Color::White << sf::Text::Regular << "https://www.pngwing.com/en/free-png-ykqrx\n\n"
 		<< sf::Color::White << sf::Text::Regular << "Bullet's texture by GintasDX\n"
 		<< sf::Color::White << sf::Text::Regular << "https://www.deviantart.com/gintasdx\n\n"
-		<< sf::Color::White << sf::Text::Regular << "Explosion APNG from pngwing.com\n"
-		<< sf::Color::White << sf::Text::Regular << "https://www.pngwing.com/en/free-png-plgdq\n\n";
+		<< sf::Color::White << sf::Text::Regular << "Explosion animation from pngwing.com\n"
+		<< sf::Color::White << sf::Text::Regular << "https://www.pngwing.com/en/free-png-plgdq\n\n"
+		<< sf::Color::White << sf::Text::Regular << "Portal animation from imgbin.com\n"
+		<< sf::Color::White << sf::Text::Regular << "https://imgbin.com/png/XY3ZriNQ/portal-sprite-animation-two-dimensional-space-png\n\n";
 
 	return text;
 }
