@@ -14,7 +14,7 @@ Just download the .zip file found in the release tab, extract the file, run the 
 # FAQ
 ### I get an error <insert error's name here>, what should I do?
   
-  Clone this repository, open the .sln file in visual studio community, find the solution on stackoverflow, and fix the code. easy peasy lemon squeezy.
+  Clone this repository, open the .sln file in visual studio community, find the solution on stackoverflow, and fix the code. easy peasy lemon squeezy. and don't forget to make a PR.
 
 ### Why is there so much RNG in this game. Won't this make the gameplay less consistent?
 
