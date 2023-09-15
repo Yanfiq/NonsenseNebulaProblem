@@ -17,7 +17,7 @@
 
 int main() {
 	sf::RenderWindow window;
-	window.create(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close);
+	window.create(sf::VideoMode(1280, 720), "Nonsense Nebula's Problem Goes Pew Pew", sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(60);
 
 	sf::View view(sf::FloatRect(0.f, 0.f, 1280.f, 720.f));
@@ -121,7 +121,7 @@ int main() {
 		{
 			bullet::clearObject();
 			enemy::clearObject();
-			TextRenderer.displayText(window, "something is happening somewhere", 1, 60, sf::Color::White, window.getSize().x / 2, 100);
+			TextRenderer.displayText(window, "Nonsense Nebula's Problem\n\t\t\t\tGoes Pew Pew", 1, 60, sf::Color::White, window.getSize().x / 2, 100);
 
 			static int choice = 0;
 			std::vector<std::string> choices = { "START", "SETTINGS", "EXIT" };
@@ -154,7 +154,7 @@ int main() {
 
 		case settings:
 		{
-			TextRenderer.displayText(window, "something is happening somewhere", 1, 60, sf::Color::White, window.getSize().x / 2, 100);
+			TextRenderer.displayText(window, "Nonsense Nebula's Problem\n\t\t\t\tGoes Pew Pew", 1, 60, sf::Color::White, window.getSize().x / 2, 100);
 
 			static int choice = 0;
 			std::string Cheat = (cheat) ? "Enabled" : "Disabled";
@@ -177,7 +177,7 @@ int main() {
 				switch (choice) {
 				case 0:soundManager::Instance()->changeVolume(1, -5); break;
 				case 1:soundManager::Instance()->changeVolume(2, -5); soundManager::Instance()->playSound("sfx_shoot.ogg"); break;
-				case 2:cheat = false; window.create(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close); window.setFramerateLimit(60);  break;
+				case 2:cheat = false; window.create(sf::VideoMode(1280, 720), "Nonsense Nebula's Problem Goes Pew Pew", sf::Style::Titlebar | sf::Style::Close); window.setFramerateLimit(60);  break;
 				}
 			}
 
@@ -186,7 +186,7 @@ int main() {
 				switch (choice) {
 				case 0:soundManager::Instance()->changeVolume(1, +5); break;
 				case 1:soundManager::Instance()->changeVolume(2, +5); soundManager::Instance()->playSound("sfx_shoot.ogg"); break;
-				case 2:cheat = true; window.create(sf::VideoMode(1280, 720), "Platypus Scuffed Edition", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize); window.setFramerateLimit(60);  break;
+				case 2:cheat = true; window.create(sf::VideoMode(1280, 720), "Nonsense Nebula's Problem Goes Pew Pew", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize); window.setFramerateLimit(60);  break;
 				}
 			}
 
@@ -220,7 +220,7 @@ int main() {
 		{
 			static int choice;
 			std::vector<std::string> choices = { "Singleplayer", "Multiplayer" };
-			TextRenderer.displayText(window, "something is happening somewhere", 1, 50, sf::Color::White, window.getSize().x/2, 100);
+			TextRenderer.displayText(window, "Nonsense Nebula's Problem\n\t\t\t\tGoes Pew Pew", 1, 50, sf::Color::White, window.getSize().x/2, 100);
 			TextRenderer.displayText(window, "Choose your gamemode: ", 0, 40, sf::Color::White, 100, window.getSize().y - 220);
 			TextRenderer.displayMultipleChoice(window, choices, choice, 40, sf::Color::Cyan, sf::Color::White, 100, window.getSize().y - 180);
 
