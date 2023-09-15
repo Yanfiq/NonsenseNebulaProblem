@@ -24,7 +24,7 @@
     <ProjectGuid>{7c0491c6-7e62-42ea-bd4e-4b714a6ebab9}</ProjectGuid>
     <RootNamespace>Platypus_ScuffedEdition</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Platypus_ScuffedEdition</ProjectName>
+    <ProjectName>NonsenseNebulaProblem</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
