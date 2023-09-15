@@ -11,7 +11,7 @@ Just download the .zip file found in the release tab, extract the file, run the 
 
 ### Why is there so much RNG in this game. Won't this make the gameplay less consistent?
 
-  "Why?", you ask. Of course because it's my game, I can do whatever I want. Cry your way out of here.
+  "Why?", you ask. Of course because it's my game, I can do whatever I want. Go cry about it.
 
 ### Why don't you use one of the popular game engines like unreal engine, godot, or unity, but instead just use the SFML library?
 
