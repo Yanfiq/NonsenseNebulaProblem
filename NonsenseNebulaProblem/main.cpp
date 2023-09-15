@@ -24,9 +24,13 @@ int main() {
 	window.setView(view);
 
 	sf::Clock clock;
-	sf::Clock updateFps;
 	sf::Clock elapsed;
 	sf::Event event;
+
+	//fps
+	const int numFramesToAverage = 60;
+	std::vector<float> frameTimes(numFramesToAverage, 0.0f);
+	int frameTimeIndex = 0;
 	
 	//texture initialization
 	textRenderer TextRenderer("fonts/Poppins-SemiBold.ttf");
@@ -106,13 +110,17 @@ int main() {
 		currentPoint += collisionHandler::handleCollision();
 		animationManager::Instance()->monitor(window);
 		soundManager::Instance()->monitor();
-		static int fpsShowed = 0;
-		int fpsReal = 1 / dt;
-		if (updateFps.getElapsedTime().asSeconds() > 1 || std::abs(fpsReal - fpsShowed) > 5) {
-			fpsShowed = fpsReal;
-			updateFps.restart();
+
+		//fps displayer
+		frameTimes[frameTimeIndex] = dt;
+		frameTimeIndex = (frameTimeIndex + 1) % numFramesToAverage;
+		float averageFrameTime = 0.0f;
+		for (int i = 0; i < numFramesToAverage; i++) {
+			averageFrameTime += frameTimes[i];
 		}
-		TextRenderer.displayText(window, std::to_string(fpsShowed) + " FPS", 2, 40, sf::Color::White, window.getSize().x - 10, 10);
+		averageFrameTime /= numFramesToAverage;
+		int fps = static_cast<int>(1.0f / averageFrameTime);
+		TextRenderer.displayText(window, std::to_string(fps) + " FPS", 2, 40, sf::Color::White, window.getSize().x - 20, 20);
 		// END OF RENDER RECTION -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		// SCENES AND VIDEO GAME LOGIC -----------------------------------------------------------------------------------------------------------------------------------------------------
