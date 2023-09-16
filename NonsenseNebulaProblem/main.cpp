@@ -15,7 +15,12 @@
 #include "animationManager.h"
 #include "collisionHandler.h"
 
+#include <Windows.h>
+
 int main() {
+	HMODULE dllHandle_1 = LoadLibrary(L"redist/msvcp140.dll");
+	HMODULE dllHandle_2 = LoadLibrary(L"redist/vcruntime140.dll");
+
 	sf::RenderWindow window;
 	window.create(sf::VideoMode(1280, 720), "Nonsense Nebula's Problem Goes Pew Pew", sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(60);
