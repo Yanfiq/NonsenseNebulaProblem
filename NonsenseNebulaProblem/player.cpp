@@ -16,6 +16,8 @@ player::player(int _object_id, std::string texture_filename, float _positionX, f
 	
 	player_map[player_obj + _object_id] = this;
 	animationManager::Instance()->play("gameplay_spawn.png", 4, 4, getPosition());
+
+	QuadtreeNode::root->insert(player_obj + _object_id, static_cast<object*>(this));
 }
 
 player* player::getObjectPtr(int id) {
@@ -23,11 +25,15 @@ player* player::getObjectPtr(int id) {
 }
 
 void player::shoot() {
-	bullet* Bullet = new bullet(allBullet++, "gameplay_bullet_2.png", getPosition().x, getPosition().y, 900, 0);
-	bulletAvailable--;
-	Bullet->setDamageValue(20.0f);
-	if (allBullet == 999)
-		allBullet = 0;
+	if (allowedFire) {
+		allowedFire = false;
+		attackTimer.restart();
+		bullet* Bullet = new bullet(allBullet++, "gameplay_bullet_2.png", getPosition().x, getPosition().y, 900, 0);
+		bulletAvailable--;
+		Bullet->setDamageValue(20.0f);
+		if (allBullet == 999)
+			allBullet = 0;
+	}
 }
 
 void player::reloadBullet(int num) {
@@ -71,12 +77,14 @@ std::unordered_map<int, player*>* player::getPlayerMap() {
 void player::deleteObject(int id) {
 	animationManager::Instance()->play("gameplay_explode.png", 4, 5, sf::Vector2f(player_map[id]->getPosition().x, player_map[id]->getPosition().y));
 	soundManager::Instance()->playSound("sfx_boom.ogg");
+	QuadtreeNode::root->erase(id, static_cast<object*>(player_map[id]));
 	delete player_map[id];
 	player_map.erase(id);
 }
 
 void player::clearObject() {
 	for (auto it = player_map.begin(); it != player_map.end();) {
+		QuadtreeNode::root->erase(it->first, static_cast<object*>(it->second));
 		delete it->second;
 		it = player_map.erase(it);
 	}
@@ -94,11 +102,17 @@ void player::update(float time) {
 		healPlayer(10);
 		healTime.restart();
 	}
+
+	//attack cooldown
+	if (attackTimer.getElapsedTime() >= attackCooldown) {
+		allowedFire = true;
+	}
 }
 
 void player::renderAllObject(double dt, sf::RenderWindow& window, bool Update) {
 	for (const auto& it : player_map) {
 		if (Update) {
+			QuadtreeNode::root->erase(it.first, it.second);
 			it.second->update(dt);
 			if (it.second->getPosition().y >= window.getSize().y) {
 				it.second->setPosition(it.second->getPosition().x, window.getSize().y);
@@ -108,6 +122,7 @@ void player::renderAllObject(double dt, sf::RenderWindow& window, bool Update) {
 				it.second->setPosition(it.second->getPosition().x, 0);
 				it.second->setVelocity(it.second->getVelocity().x, it.second->getVelocity().y * -1 - 0.05);
 			}
+			QuadtreeNode::root->insert(it.first, it.second);
 		}
 
 		sf::RectangleShape* sprite = it.second->getSprite();

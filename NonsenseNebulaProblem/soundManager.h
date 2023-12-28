@@ -9,8 +9,8 @@ class soundManager {
 private:
 	static soundManager* pInstance;
 	soundManager();
-	int bgmVolume = 100;
-	int sfxVolume = 100;
+	int bgmVolume = 25;
+	int sfxVolume = 25;
 
 	std::vector<sf::Sound*> soundPlayed;
 	std::vector<std::string> musicList;

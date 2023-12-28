@@ -6,6 +6,7 @@
 #include "textureManager.h"
 #include "soundManager.h"
 #include "animationManager.h"
+#include "QuadtreeNode.h"
 #define MAX_PLAYER_HEALTH 400
 #define MAX_PLAYER_BULLET 40
 
@@ -18,6 +19,9 @@ protected:
 	int bulletAvailable = MAX_PLAYER_BULLET;
 	float hp = MAX_PLAYER_HEALTH;
 	sf::Clock healTime;
+	sf::Clock attackTimer;
+	sf::Time attackCooldown = sf::milliseconds(150);
+	bool allowedFire = false;
 	bar HPBar;
 
 public:

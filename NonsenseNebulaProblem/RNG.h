@@ -1,6 +1,5 @@
 #pragma once
 #include <random>
-#include <ctime>
 
 namespace RNG {
 	int generateRandomInteger(int num_1, int num_2);

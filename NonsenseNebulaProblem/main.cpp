@@ -14,6 +14,7 @@
 #include "InputManager.h"
 #include "animationManager.h"
 #include "collisionHandler.h"
+#include "QuadtreeNode.h"
 
 #include <Windows.h>
 
@@ -34,7 +35,7 @@ int main() {
 
 	//fps
 	const int numFramesToAverage = 60;
-	std::vector<float> frameTimes(numFramesToAverage, 0.0f);
+	std::vector<float> frameTimes(numFramesToAverage, 1.0f/60.0f);
 	int frameTimeIndex = 0;
 	
 	//texture initialization
@@ -65,6 +66,9 @@ int main() {
 	InputManager::Instance()->KBind("Left_2", sf::Keyboard::A);
 	InputManager::Instance()->KBind("Right_1", sf::Keyboard::Right);
 	InputManager::Instance()->KBind("Right_2", sf::Keyboard::D);
+
+	//quadtree generation
+	QuadtreeNode quadtree(0, 0, window.getSize().x, window.getSize().y, window);
 
 	// main game loop
 	while (window.isOpen()) {
@@ -112,7 +116,8 @@ int main() {
 			bullet::renderAllObject(dt, window, object::Type::enemyBullet_obj, true);
 			enemy::renderAllObject(dt, window, true);
 		}
-		currentPoint += collisionHandler::handleCollision();
+		currentPoint += collisionHandler::handleCollision(window);
+		QuadtreeNode::root->displayQuadtreeVisual();
 		animationManager::Instance()->monitor(window);
 		soundManager::Instance()->monitor();
 

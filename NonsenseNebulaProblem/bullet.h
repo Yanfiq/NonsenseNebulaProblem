@@ -2,6 +2,7 @@
 #include "objects.h"
 #include "soundManager.h"
 #include "textureManager.h"
+#include "QuadtreeNode.h"
 
 class bullet : public object {
 protected:

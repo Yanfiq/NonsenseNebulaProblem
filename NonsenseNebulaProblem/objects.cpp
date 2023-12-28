@@ -17,6 +17,21 @@ void object::setVelocity(float vx, float vy) {
 	velocityY = vy;
 }
 
+int object::getObjectType(int id) {
+	if (player_obj <= id && id < playerBullet_obj) {
+		return 1; //player
+	}
+	if (playerBullet_obj <= id && id < enemy_obj) {
+		return 2; //player's bullet
+	}
+	if (enemy_obj <= id && id < enemyBullet_obj) {
+		return 3; //enemy
+	}
+	if (enemyBullet_obj <= id) {
+		return 4; //enemy's bullet
+	}
+}
+
 void object::setPosition(float px, float py) {
 	object_sprite.setPosition(sf::Vector2f(px, py));
 }

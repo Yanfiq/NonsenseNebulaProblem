@@ -26,6 +26,7 @@ public:
 	sf::Vector2f getPosition();
 	sf::Vector2f getVelocity();
 	sf::Vector2f getSize();
+	static int getObjectType(int id);
 	void setVelocity(float vx, float vy);
 	void setPosition(float px, float py);
 	virtual void update(float time); 

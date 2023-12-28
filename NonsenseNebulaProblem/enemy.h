@@ -6,6 +6,7 @@
 #include "textureManager.h"
 #include "soundManager.h"
 #include "animationManager.h"
+#include "QuadtreeNode.h"
 
 #include <iostream>
 #include <cmath>
@@ -18,11 +19,15 @@ protected:
 	static int bullet_count;
 	static std::unordered_map<int, enemy*> enemy_map;
 	static sf::Clock randomize;
+	sf::Clock attackTimer;
+	sf::Time attackCooldown = sf::milliseconds(500);
+	bool allowedFire = false;
 	bar HPBar;
 
 public:
 	enemy(int _object_id, std::string texture_filename, float _positionX, float _positionY, float _velocityX, float _velocityY);
 
+	void update(float time) override;
 	void reduceHp(float damage);
 	void shoot();
 	float getHp();
