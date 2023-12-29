@@ -26,7 +26,8 @@ public:
     void insert(int id, object* Object);
     void normalize();
     void erase(int id, object* Object);
-    void checkCollision();
+    int checkCollision();
     std::unordered_map<int, object*> getObjects();
     void displayQuadtreeVisual();
+    static void reset(sf::RenderWindow& _window);
 };

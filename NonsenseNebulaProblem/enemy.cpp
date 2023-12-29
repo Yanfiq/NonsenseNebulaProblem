@@ -47,6 +47,10 @@ float enemy::getHp() {
 	return hp;
 }
 
+float enemy::getMaxHp() {
+	return MAX_ENEMY_HEALTH;
+}
+
 sf::Vector2f* enemy::getBaseV() {
 	return &rangeVelocity;
 }

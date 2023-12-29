@@ -31,6 +31,7 @@ public:
 	void reduceHp(float damage);
 	void shoot();
 	float getHp();
+	float getMaxHp();
 	sf::Vector2f* getBaseV();
 
 	static std::unordered_map<int, enemy*>* getEnemyMap();

@@ -8,7 +8,6 @@ QuadtreeNode::QuadtreeNode(double _x, double _y, double _width, double _height, 
         this->depth = 0;
     }
     children.resize(4, nullptr);
-
 }
 
 QuadtreeNode::~QuadtreeNode() {
@@ -113,16 +112,18 @@ std::unordered_map<int, object*> QuadtreeNode::getObjects() {
     return items;
 }
 
-void QuadtreeNode::checkCollision() {
-    if (this == nullptr) return;
+int QuadtreeNode::checkCollision() {
+    if (this == nullptr) return 0;
+    int score = 0;
     if(hasChild) {
         for (int i = 0; i < children.size(); i++) {
             auto it = children[i];
-           if(it != nullptr) it->checkCollision();
+           if(it != nullptr) score+=it->checkCollision();
         }
-        return;
+        return score;
     }
 
+    
     for (auto i = objects.begin(); i != objects.end(); i++) {
         for (auto j = objects.begin(); j != objects.end(); j++) {
             if (i->first == j->first) continue;
@@ -142,9 +143,8 @@ void QuadtreeNode::checkCollision() {
 
                     if (Player->getPlayerHp() <= 0) {
                         player::deleteObject(id1);
-                        return;
                     }
-                    return;
+                    return score;
                 }
             }
 
@@ -159,10 +159,10 @@ void QuadtreeNode::checkCollision() {
                     bullet::deleteObject(id2);
 
                     if (Enemy->getHp() <= 0) {
+                        score+=Enemy->getMaxHp();
                         enemy::deleteObject(id1);
-                        return;
                     }
-                    return;
+                    return score;
                 }
             }
 
@@ -178,6 +178,7 @@ void QuadtreeNode::checkCollision() {
             }
         }
     }
+    return score;
 }
 
 void QuadtreeNode::displayQuadtreeVisual() {
@@ -191,5 +192,37 @@ void QuadtreeNode::displayQuadtreeVisual() {
     if (!hasChild) return;
     for (int i = 0; i < children.size(); i++) {
         children[i]->displayQuadtreeVisual();
+    }
+}
+
+void QuadtreeNode::reset(sf::RenderWindow& _window) {
+    //for (auto it = player::getPlayerMap()->begin(); it != player::getPlayerMap()->end(); it++) {
+    //    root->erase(it->first, static_cast<object*>(it->second));
+    //}
+    //for (auto it = bullet::getBulletMap(object::Type::playerBullet_obj)->begin(); it != bullet::getBulletMap(object::Type::playerBullet_obj)->end(); it++) {
+    //    root->erase(it->first, static_cast<object*>(it->second));
+    //}
+    //for (auto it = enemy::getEnemyMap()->begin(); it != enemy::getEnemyMap()->end(); it++) {
+    //    root->erase(it->first, static_cast<object*>(it->second));
+    //}
+    //for (auto it = bullet::getBulletMap(object::Type::enemyBullet_obj)->begin(); it != bullet::getBulletMap(object::Type::enemyBullet_obj)->end(); it++) {
+    //    root->erase(it->first, static_cast<object*>(it->second));
+    //}
+
+    delete root;
+    root = nullptr;
+    QuadtreeNode* quadtree = new QuadtreeNode(0, 0, _window.getSize().x, _window.getSize().y, _window);
+
+    for (auto it = player::getPlayerMap()->begin(); it != player::getPlayerMap()->end(); it++) {
+        quadtree->insert(it->first, static_cast<object*>(it->second));
+    }
+    for (auto it = bullet::getBulletMap(object::Type::playerBullet_obj)->begin(); it != bullet::getBulletMap(object::Type::playerBullet_obj)->end(); it++) {
+        quadtree->insert(it->first, static_cast<object*>(it->second));
+    }
+    for (auto it = enemy::getEnemyMap()->begin(); it != enemy::getEnemyMap()->end(); it++) {
+        quadtree->insert(it->first, static_cast<object*>(it->second));
+    }
+    for (auto it = bullet::getBulletMap(object::Type::enemyBullet_obj)->begin(); it != bullet::getBulletMap(object::Type::enemyBullet_obj)->end(); it++) {
+        quadtree->insert(it->first, static_cast<object*>(it->second));
     }
 }

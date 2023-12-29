@@ -68,7 +68,7 @@ int main() {
 	InputManager::Instance()->KBind("Right_2", sf::Keyboard::D);
 
 	//quadtree generation
-	QuadtreeNode quadtree(0, 0, window.getSize().x, window.getSize().y, window);
+	QuadtreeNode* quadtree = new QuadtreeNode(0, 0, window.getSize().x, window.getSize().y, window);
 
 	// main game loop
 	while (window.isOpen()) {
@@ -86,6 +86,8 @@ int main() {
 				std::cout << width << " , " << height << std::endl;
 				window.setSize(sf::Vector2u(width, height));
 				window.setView(sf::View(visibleArea));
+				QuadtreeNode::reset(window);
+
 				break;
 			}
 			}
@@ -472,7 +474,6 @@ int main() {
 			}
 		}
 		/*^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ PLAYER'S CONTROL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^*/
-		sf::Listener::setPosition(0, 0, 0);
 		window.display();
 		window.clear();
 		InputManager::Instance()->Update();
