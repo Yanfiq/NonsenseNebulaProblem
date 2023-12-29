@@ -16,6 +16,7 @@ public:
     int depth;
     bool hasChild = false;
     static QuadtreeNode* root;
+    QuadtreeNode* parent = nullptr;
     int entityCount = 0;
     std::map<int, object*> objects;
     std::vector<QuadtreeNode*> children;
@@ -26,6 +27,7 @@ public:
     void insert(int id, object* Object);
     void normalize();
     void erase(int id, object* Object);
+    void erase(int id, sf::FloatRect Object);
     int checkCollision();
     std::map<int, object*> getObjects();
     void displayQuadtreeVisual();

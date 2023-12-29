@@ -2,7 +2,7 @@
 
 QuadtreeNode* QuadtreeNode::root = nullptr;
 
-QuadtreeNode::QuadtreeNode(double _x, double _y, double _width, double _height, sf::RenderWindow& _window) : x(_x), y(_y), width(_width), height(_height), window(_window){
+QuadtreeNode::QuadtreeNode(double _x, double _y, double _width, double _height, sf::RenderWindow& _window) : x(_x), y(_y), width(_width), height(_height), window(_window) {
     if (root == nullptr) {
         root = this;
         this->depth = 0;
@@ -22,7 +22,7 @@ void QuadtreeNode::insert(int id, object* Object) {
     if (!hasChild || depth == MAX_DEPTH) objects[id] = Object;
     if ((objects.size() <= MAX_OBJECT_PER_NODE && !hasChild) || depth == MAX_DEPTH) return;
 
-    if(!hasChild && depth < MAX_DEPTH) {
+    if (!hasChild && depth < MAX_DEPTH) {
         children[0] = new QuadtreeNode(x, y, width / 2, height / 2, window);
         children[1] = new QuadtreeNode(x + width / 2, y, width / 2, height / 2, window);
         children[2] = new QuadtreeNode(x, y + height / 2, width / 2, height / 2, window);
@@ -73,6 +73,23 @@ void QuadtreeNode::erase(int id, object* Object) {
     root->normalize();
 }
 
+void QuadtreeNode::erase(int id, sf::FloatRect Object) {
+    entityCount--;
+    if (!hasChild) {
+        objects.erase(id);
+        return;
+    }
+
+    for (int i = 0; i < children.size(); i++) {
+        if (children[i] == nullptr) return;
+        if (Object.intersects(sf::FloatRect(this->children[i]->x, this->children[i]->y, this->children[i]->width, this->children[i]->height))) {
+            children[i]->erase(id, Object);
+        }
+    }
+
+    root->normalize();
+}
+
 void QuadtreeNode::normalize() {
     if (!hasChild) {
         return;
@@ -115,10 +132,10 @@ std::map<int, object*> QuadtreeNode::getObjects() {
 int QuadtreeNode::checkCollision() {
     if (this == nullptr) return 0;
     int score = 0;
-    if(hasChild) {
+    if (hasChild) {
         for (int i = 0; i < children.size(); i++) {
             auto it = children[i];
-           if(it != nullptr) score+=it->checkCollision();
+            if (it != nullptr) score += it->checkCollision();
         }
         return score;
     }
@@ -139,7 +156,7 @@ int QuadtreeNode::checkCollision() {
                     if (Player == nullptr || Bullet == nullptr) return 0;
 
                     if (object::isintersect(Player->getSprite(), Bullet->getSprite())) {
-                        Player->reducePlayerHp(Bullet->getDamageValue());
+                        if(Bullet != NULL) Player->reducePlayerHp(Bullet->getDamageValue());
                         bullet::deleteObject(id2);
 
                         if (Player->getPlayerHp() <= 0) {
@@ -160,7 +177,7 @@ int QuadtreeNode::checkCollision() {
                         bullet::deleteObject(id1);
 
                         if (Enemy->getHp() <= 0) {
-                            score+=Enemy->getMaxHp();
+                            score += Enemy->getMaxHp();
                             enemy::deleteObject(id2);
                         }
                         return score;

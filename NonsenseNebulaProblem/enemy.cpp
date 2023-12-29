@@ -17,6 +17,8 @@ enemy::enemy(int _object_id, std::string texture_filename, float _positionX, flo
 	highest = (std::abs(_velocityX) > std::abs(_velocityY)) ? std::abs(_velocityX) : std::abs(_velocityY);
 	lowest = highest * -1;
 
+	Quadtree_old = object_sprite.getPosition();
+
 	rangeVelocity = sf::Vector2f(lowest, highest);
 	enemy_map[enemy_obj + _object_id] = this;
 	animationManager::Instance()->play("gameplay_spawn.png", 4, 4, getPosition());
@@ -85,7 +87,7 @@ void enemy::update(float time) {
 void enemy::renderAllObject(double dt, sf::RenderWindow& window, bool Update) {
 	for (const auto& it : enemy_map) {
 		if (Update) {
-			QuadtreeNode::root->erase(it.first, it.second);
+			QuadtreeNode::root->erase(it.first, static_cast<object*>(it.second));
 			it.second->update(dt);
 			if (it.second->getPosition().y > window.getSize().y || it.second->getPosition().y < 0) {
 				it.second->setVelocity(it.second->getVelocity().x, it.second->getVelocity().y * -1);
@@ -101,7 +103,16 @@ void enemy::renderAllObject(double dt, sf::RenderWindow& window, bool Update) {
 				else if (it.second->getPosition().x > window.getSize().x)
 					it.second->setPosition(window.getSize().x, it.second->getPosition().y);
 			}
-			QuadtreeNode::root->insert(it.first, it.second);
+			QuadtreeNode::root->insert(it.first, static_cast<object*>(it.second));
+			//sf::Vector2f old_position = it.second->Quadtree_old;
+			//sf::Vector2f new_position = it.second->getSprite()->getPosition();
+			//sf::Vector2f threshold = it.second->getSprite()->getSize();
+			//if ((fabs(old_position.x - new_position.x) > 0) ||
+			//	(fabs(old_position.y - new_position.y) > 0)) {
+			//	old_position = new_position;
+			//	QuadtreeNode::root->erase(it.first, sf::FloatRect(old_position.x, old_position.y, threshold.x, threshold.y));
+			//	QuadtreeNode::root->insert(it.first, static_cast<object*>(it.second));
+			//}
 		}
 
 		//more RNG
