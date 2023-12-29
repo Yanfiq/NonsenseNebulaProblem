@@ -7,7 +7,7 @@
 #include "soundManager.h"
 #include "animationManager.h"
 #include "QuadtreeNode.h"
-#define MAX_PLAYER_HEALTH 400
+#define MAX_PLAYER_HEALTH 4000
 #define MAX_PLAYER_BULLET 40
 
 class player : public object {

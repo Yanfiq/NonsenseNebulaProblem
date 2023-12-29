@@ -71,6 +71,32 @@
 //	return points;
 //}
 
+//int collisionHandler::handleCollision(sf::RenderWindow& window) {
+//	std::unordered_map<int, bullet*>* bulletPlayerMap = bullet::getBulletMap(object::Type::playerBullet_obj);
+//	std::unordered_map<int, bullet*>* bulletEnemyMap = bullet::getBulletMap(object::Type::enemyBullet_obj);
+//	std::unordered_map<int, enemy*>* enemyMap = enemy::getEnemyMap();
+//	std::unordered_map<int, player*>* playerMap = player::getPlayerMap();
+//
+//	QuadtreeNode quadtree(0, 0, window.getSize().x, window.getSize().y, window);
+//
+//	for (auto it = bulletPlayerMap->begin(); it != bulletPlayerMap->end(); it++) {
+//		quadtree.insert(it->first, static_cast<object*>(it->second));
+//	}
+//	for (auto it = bulletEnemyMap->begin(); it != bulletEnemyMap->end(); it++) {
+//		quadtree.insert(it->first, static_cast<object*>(it->second));
+//	}
+//	for (auto it = playerMap->begin(); it != playerMap->end(); it++) {
+//		quadtree.insert(it->first, static_cast<object*>(it->second));
+//	}
+//	for (auto it = enemyMap->begin(); it != enemyMap->end(); it++) {
+//		quadtree.insert(it->first, static_cast<object*>(it->second));
+//	}
+//
+//	quadtree.displayQuadtreeVisual();
+//	quadtree.checkCollision();
+//	return 0;
+//}
+
 int collisionHandler::handleCollision(sf::RenderWindow& window) {
 	QuadtreeNode::root->checkCollision();
 	return 0;

@@ -8,10 +8,12 @@
 #include "enemy.h"
 
 #define MAX_OBJECT_PER_NODE 3
+#define MAX_DEPTH 5
 
 class QuadtreeNode {
 public:
     double x, y, width, height;
+    int depth;
     bool hasChild = false;
     static QuadtreeNode* root;
     int entityCount = 0;
@@ -20,7 +22,9 @@ public:
     sf::RenderWindow& window;
 
     QuadtreeNode(double _x, double _y, double _width, double _height, sf::RenderWindow& _window);
+    ~QuadtreeNode();
     void insert(int id, object* Object);
+    void normalize();
     void erase(int id, object* Object);
     void checkCollision();
     std::unordered_map<int, object*> getObjects();
