@@ -95,15 +95,15 @@ void QuadtreeNode::normalize() {
     }
 }
 
-std::unordered_map<int, object*> QuadtreeNode::getObjects() {
+std::map<int, object*> QuadtreeNode::getObjects() {
     if (!hasChild) {
         return objects;
     }
 
-    std::unordered_map<int, object*> items;
+    std::map<int, object*> items;
     for (int i = 0; i < children.size(); i++) {
         auto it = children[i];
-        std::unordered_map<int, object*> box = it->getObjects();
+        std::map<int, object*> box = it->getObjects();
         if (box.empty()) continue;
         for (auto item = box.begin(); item != box.end(); item++) {
             items[item->first] = item->second;
@@ -123,58 +123,60 @@ int QuadtreeNode::checkCollision() {
         return score;
     }
 
-    
-    for (auto i = objects.begin(); i != objects.end(); i++) {
-        for (auto j = objects.begin(); j != objects.end(); j++) {
-            if (i->first == j->first) continue;
+    if (!objects.empty()) {
+        //collision check
+        for (auto i = objects.begin(); i != std::prev(objects.end()); i++) {
+            for (auto j = std::next(i); j != objects.end(); j++) {
+                if (i->first == j->first) continue;
 
-            int id1 = i->first; int obj1 = object::getObjectType(id1);
-            int id2 = j->first; int obj2 = object::getObjectType(id2);
+                int id1 = i->first; int obj1 = object::getObjectType(id1);
+                int id2 = j->first; int obj2 = object::getObjectType(id2);
 
-            if (obj1 == 1 && obj2 == 4) {
-                //player & enemy's bullet
-                player* Player = static_cast<player*>(i->second);
-                bullet* Bullet = static_cast<bullet*>(j->second);
-                //if (Player == nullptr || Bullet == nullptr) return;
+                if (obj1 == 1 && obj2 == 4) {
+                    //player & enemy's bullet
+                    player* Player = static_cast<player*>(i->second);
+                    bullet* Bullet = static_cast<bullet*>(j->second);
+                    if (Player == nullptr || Bullet == nullptr) return 0;
 
-                if (object::isintersect(Player->getSprite(), Bullet->getSprite())) {
-                    Player->reducePlayerHp(Bullet->getDamageValue());
-                    bullet::deleteObject(id2);
+                    if (object::isintersect(Player->getSprite(), Bullet->getSprite())) {
+                        Player->reducePlayerHp(Bullet->getDamageValue());
+                        bullet::deleteObject(id2);
 
-                    if (Player->getPlayerHp() <= 0) {
-                        player::deleteObject(id1);
+                        if (Player->getPlayerHp() <= 0) {
+                            player::deleteObject(id1);
+                        }
+                        return score;
                     }
-                    return score;
                 }
-            }
 
-            if (obj1 == 3 && obj2 == 2) {
-                //player's bullet & enemy
-                enemy* Enemy = static_cast<enemy*>(i->second);
-                bullet* Bullet = static_cast<bullet*>(j->second);
-                //if (Enemy == nullptr || Bullet == nullptr) return;
+                if (obj1 == 2 && obj2 == 3) {
+                    //player's bullet & enemy
+                    bullet* Bullet = static_cast<bullet*>(i->second);
+                    enemy* Enemy = static_cast<enemy*>(j->second);
+                    if (Enemy == nullptr || Bullet == nullptr) return 0;
 
-                if (object::isintersect(Enemy->getSprite(), Bullet->getSprite())) {
-                    Enemy->reduceHp(Bullet->getDamageValue());
-                    bullet::deleteObject(id2);
+                    if (object::isintersect(Enemy->getSprite(), Bullet->getSprite())) {
+                        Enemy->reduceHp(Bullet->getDamageValue());
+                        bullet::deleteObject(id1);
 
-                    if (Enemy->getHp() <= 0) {
-                        score+=Enemy->getMaxHp();
-                        enemy::deleteObject(id1);
+                        if (Enemy->getHp() <= 0) {
+                            score+=Enemy->getMaxHp();
+                            enemy::deleteObject(id2);
+                        }
+                        return score;
                     }
-                    return score;
                 }
-            }
 
-            if (obj1 == 3 && obj2 == 3) {
-                enemy* enemy1 = static_cast<enemy*>(i->second);
-                enemy* enemy2 = static_cast<enemy*>(j->second);
+                //if (obj1 == 3 && obj2 == 3) {
+                //    enemy* enemy1 = static_cast<enemy*>(i->second);
+                //    enemy* enemy2 = static_cast<enemy*>(j->second);
 
-                if (object::isintersect(enemy1->getSprite(), enemy2->getSprite())) {
-                    enemy1->setVelocity(enemy1->getVelocity().x * -1, enemy1->getVelocity().y * -1);
-                    enemy2->setVelocity(enemy2->getVelocity().x * -1, enemy2->getVelocity().y * -1);
-                    continue;
-                }
+                //    if (object::isintersect(enemy1->getSprite(), enemy2->getSprite())) {
+                //        enemy1->setVelocity(enemy1->getVelocity().x * -1, enemy1->getVelocity().y * -1);
+                //        enemy2->setVelocity(enemy2->getVelocity().x * -1, enemy2->getVelocity().y * -1);
+                //        continue;
+                //    }
+                //}
             }
         }
     }

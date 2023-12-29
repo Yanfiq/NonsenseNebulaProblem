@@ -1,5 +1,5 @@
 #pragma once
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include <set>
 #include "objects.h"
@@ -7,7 +7,7 @@
 #include "bullet.h"
 #include "enemy.h"
 
-#define MAX_OBJECT_PER_NODE 3
+#define MAX_OBJECT_PER_NODE 2
 #define MAX_DEPTH 5
 
 class QuadtreeNode {
@@ -17,7 +17,7 @@ public:
     bool hasChild = false;
     static QuadtreeNode* root;
     int entityCount = 0;
-    std::unordered_map<int, object*> objects;
+    std::map<int, object*> objects;
     std::vector<QuadtreeNode*> children;
     sf::RenderWindow& window;
 
@@ -27,7 +27,7 @@ public:
     void normalize();
     void erase(int id, object* Object);
     int checkCollision();
-    std::unordered_map<int, object*> getObjects();
+    std::map<int, object*> getObjects();
     void displayQuadtreeVisual();
     static void reset(sf::RenderWindow& _window);
 };
