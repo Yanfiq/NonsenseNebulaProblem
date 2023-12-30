@@ -17,8 +17,11 @@ enemy::enemy(int _object_id, std::string texture_filename, float _positionX, flo
 	highest = (std::abs(_velocityX) > std::abs(_velocityY)) ? std::abs(_velocityX) : std::abs(_velocityY);
 	lowest = highest * -1;
 
-	object* Object = static_cast<object*>(this);
-	old_state = new object(*Object);
+	float left = object_sprite.getPosition().x - object_sprite.getOrigin().x;
+	float top = object_sprite.getPosition().y - object_sprite.getOrigin().y;
+	float width = object_sprite.getSize().x;
+	float height = object_sprite.getSize().y;
+	before_state = sf::FloatRect(left, top, width, height);
 
 	rangeVelocity = sf::Vector2f(lowest, highest);
 	enemy_map[enemy_obj + _object_id] = this;
@@ -38,8 +41,8 @@ void enemy::deleteObject(int id) {
 	if (getObjectPtr(id) == NULL) return;
 	animationManager::Instance()->play("gameplay_explode.png", 4, 5, sf::Vector2f(enemy_map[id]->getPosition().x, enemy_map[id]->getPosition().y));
 	soundManager::Instance()->playSound("sfx_boom.ogg");
-	QuadtreeNode::root->erase(id, enemy_map[id]->old_state);
-	delete enemy_map[id]->old_state;
+	QuadtreeNode::root->erase(id, enemy_map[id]->before_state);
+	QuadtreeNode::root->erase(id, static_cast<object*>(enemy_map[id]));
 	delete enemy_map[id];
 	enemy_map.erase(id);
 }
@@ -63,7 +66,6 @@ sf::Vector2f* enemy::getBaseV() {
 void enemy::shoot() {
 	if (allowedFire) {
 		bullet* Bullet = new bullet(bullet_count, "gameplay_bullet_1.png", getPosition().x, getPosition().y, -900.0f, 0.0f);
-		//QuadtreeNode::root->insert(object::Type::enemyBullet_obj + bullet_count, static_cast<object*>(Bullet));
 		bullet_count = (bullet_count == 999) ? 0 : bullet_count + 1;
 
 		Bullet->setDamageValue(20.0f);
@@ -74,8 +76,8 @@ void enemy::shoot() {
 
 void enemy::clearObject() {
 	for (auto it = enemy_map.begin(); it != enemy_map.end();) {
-		QuadtreeNode::root->erase(it->first, it->second->old_state);
-		delete it->second->old_state;
+		QuadtreeNode::root->erase(it->first, it->second->before_state);
+		QuadtreeNode::root->erase(it->first, static_cast<object*>(it->second));
 		delete it->second;
 		it = enemy_map.erase(it);
 	}
@@ -108,17 +110,21 @@ void enemy::renderAllObject(double dt, sf::RenderWindow& window, bool Update) {
 					it.second->setPosition(window.getSize().x, it.second->getPosition().y);
 			}
 			//QuadtreeNode::root->insert(it.first, static_cast<object*>(it.second));
-			sf::Vector2f old_position = it.second->old_state->getPosition();
+			float x = it.second->before_state.getPosition().x + it.second->getSprite()->getSize().x / 2;
+			float y = it.second->before_state.getPosition().y + it.second->getSprite()->getSize().y / 2;
+			sf::Vector2f old_position(x, y);
 			sf::Vector2f new_position = it.second->getSprite()->getPosition();
 			sf::Vector2f threshold = it.second->getSprite()->getSize();
 			if ((fabs(old_position.x - new_position.x) >= threshold.x/2) ||
 				(fabs(old_position.y - new_position.y) >= threshold.y/2)) {
-				QuadtreeNode::root->erase(it.first, it.second->old_state);
-				delete it.second->old_state;
-				object* Object = static_cast<object*>(it.second);
-				it.second->old_state = new object(*Object);
+				QuadtreeNode::root->erase(it.first, it.second->before_state);
 				QuadtreeNode::root->insert(it.first, static_cast<object*>(it.second));
 				
+				float left = it.second->object_sprite.getPosition().x - it.second->object_sprite.getOrigin().x;
+				float top = it.second->object_sprite.getPosition().y - it.second->object_sprite.getOrigin().y;
+				float width = it.second->object_sprite.getSize().x;
+				float height = it.second->object_sprite.getSize().y;
+				it.second->before_state = sf::FloatRect(left, top, width, height);
 			}
 		}
 

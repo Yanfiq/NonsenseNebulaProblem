@@ -4,6 +4,7 @@ object::object(float _positionX, float _positionY, float _velocityX, float _velo
 	object_sprite.setPosition(sf::Vector2f(_positionX, _positionY));
 	velocityX = _velocityX;
 	velocityY = _velocityY;
+	before_state = sf::FloatRect(0, 0, 0, 0);
 }
 
 sf::RectangleShape* object::getSprite() {
@@ -18,16 +19,16 @@ void object::setVelocity(float vx, float vy) {
 }
 
 int object::getObjectType(int id) {
-	if (player_obj <= id && id < playerBullet_obj) {
+	if (player_obj < id && id < playerBullet_obj) {
 		return 1; //player
 	}
-	if (playerBullet_obj <= id && id < enemy_obj) {
+	if (playerBullet_obj < id && id < enemy_obj) {
 		return 2; //player's bullet
 	}
-	if (enemy_obj <= id && id < enemyBullet_obj) {
+	if (enemy_obj < id && id < enemyBullet_obj) {
 		return 3; //enemy
 	}
-	if (enemyBullet_obj <= id) {
+	if (enemyBullet_obj < id) {
 		return 4; //enemy's bullet
 	}
 }

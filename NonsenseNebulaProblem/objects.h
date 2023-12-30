@@ -12,12 +12,13 @@ protected:
 	float velocityX = 0.f, velocityY = 0.f;
 	float maxY = 0.5f;
 	float minY = -0.5f;
-	object* old_state;
+	sf::FloatRect before_state;
 	sf::RectangleShape object_sprite;
 
 public:
 	enum Type {
-		player_obj = 1000,
+		player_obj = 
+		0,
 		playerBullet_obj = 2000,
 		enemy_obj = 3000,
 		enemyBullet_obj = 4000

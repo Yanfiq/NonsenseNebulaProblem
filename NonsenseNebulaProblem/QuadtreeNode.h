@@ -7,7 +7,7 @@
 #include "bullet.h"
 #include "enemy.h"
 
-#define MAX_OBJECT_PER_NODE 2
+#define MAX_OBJECT_PER_NODE 3
 #define MAX_DEPTH 5
 
 class QuadtreeNode {
@@ -28,6 +28,7 @@ public:
     void insert(int id, object* Object);
     void normalize();
     void erase(int id, object* Object);
+    void erase(int id, sf::FloatRect Object);
     int checkCollision();
     std::map<int, object*> getObjects();
     void displayQuadtreeVisual();

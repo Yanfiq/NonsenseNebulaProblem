@@ -97,5 +97,6 @@
 //}
 
 int collisionHandler::handleCollision(sf::RenderWindow& window) {
+	//QuadtreeNode::reset(window);
 	return QuadtreeNode::root->checkCollision();
 }

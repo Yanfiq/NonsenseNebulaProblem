@@ -80,7 +80,31 @@ void QuadtreeNode::erase(int id, object* Object) {
         children.resize(4, nullptr);
         hasChild = false;
     }
+    //root->normalize();
+}
 
+void QuadtreeNode::erase(int id, sf::FloatRect Object) {
+    if (!hasChild) {
+        objects.erase(id);
+        return;
+    }
+
+    for (int i = 0; i < children.size(); i++) {
+        if (children[i] == nullptr) return;
+        if (Object.intersects(sf::FloatRect(this->children[i]->x, this->children[i]->y, this->children[i]->width, this->children[i]->height))) {
+            children[i]->erase(id, Object);
+        }
+    }
+
+    if (getObjects().size() <= MAX_OBJECT_PER_NODE) {
+        objects = getObjects();
+        for (int i = 0; i < children.size(); i++) {
+            delete children[i];
+        }
+        children.clear();
+        children.resize(4, nullptr);
+        hasChild = false;
+    }
     //root->normalize();
 }
 
@@ -187,7 +211,7 @@ int QuadtreeNode::checkCollision() {
                     if (Player == nullptr || Bullet == nullptr) return 0;
 
                     if (object::isintersect(Player->getSprite(), Bullet->getSprite())) {
-                        Player->reducePlayerHp(Bullet->getDamageValue());
+                        if(Bullet != nullptr) Player->reducePlayerHp(Bullet->getDamageValue());
                         bullet::deleteObject(id2);
 
                         if (Player->getPlayerHp() <= 0) {
@@ -204,7 +228,7 @@ int QuadtreeNode::checkCollision() {
                     if (Enemy == nullptr || Bullet == nullptr) return 0;
 
                     if (object::isintersect(Enemy->getSprite(), Bullet->getSprite())) {
-                        Enemy->reduceHp(Bullet->getDamageValue());
+                        if (Bullet != nullptr) Enemy->reduceHp(Bullet->getDamageValue());
                         bullet::deleteObject(id1);
 
                         if (Enemy->getHp() <= 0) {
@@ -232,14 +256,16 @@ int QuadtreeNode::checkCollision() {
 }
 
 void QuadtreeNode::displayQuadtreeVisual() {
-    sf::RectangleShape region(sf::Vector2f(width, height));
-    region.setPosition(x, y);
-    region.setOutlineColor(sf::Color::Red);
-    region.setOutlineThickness(0.5);
-    region.setFillColor(sf::Color::Transparent);
+    if (!hasChild) {
+        sf::RectangleShape region(sf::Vector2f(width, height));
+        region.setPosition(x, y);
+        region.setOutlineColor(sf::Color::Red);
+        region.setOutlineThickness(0.5);
+        region.setFillColor(sf::Color::Transparent);
 
-    window.draw(region);
-    if (!hasChild) return;
+        window.draw(region);
+        return;
+    }
     for (int i = 0; i < children.size(); i++) {
         children[i]->displayQuadtreeVisual();
     }
