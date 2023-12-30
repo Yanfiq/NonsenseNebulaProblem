@@ -1,6 +1,8 @@
 #include "QuadtreeNode.h"
 
 QuadtreeNode* QuadtreeNode::root = nullptr;
+sf::Clock QuadtreeNode::timer;
+sf::Time QuadtreeNode::cleanTime = sf::seconds(60);
 
 QuadtreeNode::QuadtreeNode(double _x, double _y, double _width, double _height, sf::RenderWindow& _window) : x(_x), y(_y), width(_width), height(_height), window(_window) {
     if (root == nullptr) {
@@ -18,7 +20,6 @@ QuadtreeNode::~QuadtreeNode() {
 
 void QuadtreeNode::insert(int id, object* Object) {
     if (Object == nullptr) return;
-    entityCount++;
     if (!hasChild || depth == MAX_DEPTH) objects[id] = Object;
     if ((objects.size() <= MAX_OBJECT_PER_NODE && !hasChild) || depth == MAX_DEPTH) return;
 
@@ -29,6 +30,7 @@ void QuadtreeNode::insert(int id, object* Object) {
         children[3] = new QuadtreeNode(x + width / 2, y + height / 2, width / 2, height / 2, window);
 
         for (int i = 0; i < children.size(); i++) {
+            children[i]->parent = this;
             children[i]->depth = depth + 1;
         }
 
@@ -56,7 +58,6 @@ void QuadtreeNode::insert(int id, object* Object) {
 
 void QuadtreeNode::erase(int id, object* Object) {
     if (Object == nullptr) return;
-    entityCount--;
     if (!hasChild) {
         objects.erase(id);
         return;
@@ -70,24 +71,17 @@ void QuadtreeNode::erase(int id, object* Object) {
         }
     }
 
-    root->normalize();
-}
-
-void QuadtreeNode::erase(int id, sf::FloatRect Object) {
-    entityCount--;
-    if (!hasChild) {
-        objects.erase(id);
-        return;
-    }
-
-    for (int i = 0; i < children.size(); i++) {
-        if (children[i] == nullptr) return;
-        if (Object.intersects(sf::FloatRect(this->children[i]->x, this->children[i]->y, this->children[i]->width, this->children[i]->height))) {
-            children[i]->erase(id, Object);
+    if (getObjects().size() <= MAX_OBJECT_PER_NODE) {
+        objects = getObjects();
+        for (int i = 0; i < children.size(); i++) {
+            delete children[i];
         }
+        children.clear();
+        children.resize(4, nullptr);
+        hasChild = false;
     }
 
-    root->normalize();
+    //root->normalize();
 }
 
 void QuadtreeNode::normalize() {
@@ -129,6 +123,40 @@ std::map<int, object*> QuadtreeNode::getObjects() {
     return items;
 }
 
+void QuadtreeNode::cleanTreeThroughly(sf::RenderWindow& window) {
+    if (timer.getElapsedTime() > cleanTime) {
+        timer.restart();
+        reset(window);
+    }
+}
+
+void QuadtreeNode::clean() {
+    if (!hasChild) {
+        for (auto it = objects.begin(); it != objects.end();) {
+            if (it->second == nullptr) {
+                it = objects.erase(it);
+            }
+            else {
+                it++;
+            }
+        }
+        return;
+    }
+    for (int i = 0; i < children.size(); i++) {
+        children[i]->clean();
+    }
+    
+    if (getObjects().size() <= MAX_OBJECT_PER_NODE) {
+        objects = getObjects();
+        for (int i = 0; i < children.size(); i++) {
+            delete children[i];
+        }
+        children.clear();
+        children.resize(4, nullptr);
+        hasChild = false;
+    }
+}
+
 int QuadtreeNode::checkCollision() {
     if (this == nullptr) return 0;
     int score = 0;
@@ -144,7 +172,10 @@ int QuadtreeNode::checkCollision() {
         //collision check
         for (auto i = objects.begin(); i != std::prev(objects.end()); i++) {
             for (auto j = std::next(i); j != objects.end(); j++) {
-                if (i->first == j->first) continue;
+                if (i->second == nullptr || j->second == nullptr) {
+                    parent->clean();
+                    return 0;
+                }
 
                 int id1 = i->first; int obj1 = object::getObjectType(id1);
                 int id2 = j->first; int obj2 = object::getObjectType(id2);
@@ -156,7 +187,7 @@ int QuadtreeNode::checkCollision() {
                     if (Player == nullptr || Bullet == nullptr) return 0;
 
                     if (object::isintersect(Player->getSprite(), Bullet->getSprite())) {
-                        if(Bullet != NULL) Player->reducePlayerHp(Bullet->getDamageValue());
+                        Player->reducePlayerHp(Bullet->getDamageValue());
                         bullet::deleteObject(id2);
 
                         if (Player->getPlayerHp() <= 0) {

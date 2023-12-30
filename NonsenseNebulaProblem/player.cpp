@@ -14,7 +14,8 @@ player::player(int _object_id, std::string texture_filename, float _positionX, f
 	object_sprite.setSize(sf::Vector2f(texture->getSize()));
 	object_sprite.setOrigin(sf::Vector2f(texture->getSize().x / 2, texture->getSize().y / 2));
 	
-	Quadtree_old = object_sprite.getPosition();
+	object* Object = static_cast<object*>(this);
+	old_state = new object(*Object);
 
 	player_map[player_obj + _object_id] = this;
 	animationManager::Instance()->play("gameplay_spawn.png", 4, 4, getPosition());
@@ -77,16 +78,19 @@ std::unordered_map<int, player*>* player::getPlayerMap() {
 }
 
 void player::deleteObject(int id) {
+	if (getObjectPtr(id) == NULL) return;
 	animationManager::Instance()->play("gameplay_explode.png", 4, 5, sf::Vector2f(player_map[id]->getPosition().x, player_map[id]->getPosition().y));
 	soundManager::Instance()->playSound("sfx_boom.ogg");
-	QuadtreeNode::root->erase(id, static_cast<object*>(player_map[id]));
+	QuadtreeNode::root->erase(id, player_map[id]->old_state);
+	delete player_map[id]->old_state;
 	delete player_map[id];
 	player_map.erase(id);
 }
 
 void player::clearObject() {
 	for (auto it = player_map.begin(); it != player_map.end();) {
-		QuadtreeNode::root->erase(it->first, static_cast<object*>(it->second));
+		QuadtreeNode::root->erase(it->first, it->second->old_state);
+		delete it->second->old_state;
 		delete it->second;
 		it = player_map.erase(it);
 	}
@@ -114,7 +118,7 @@ void player::update(float time) {
 void player::renderAllObject(double dt, sf::RenderWindow& window, bool Update) {
 	for (const auto& it : player_map) {
 		if (Update) {
-			QuadtreeNode::root->erase(it.first, static_cast<object*>(it.second));
+			//QuadtreeNode::root->erase(it.first, static_cast<object*>(it.second));
 			it.second->update(dt);
 			if (it.second->getPosition().y >= window.getSize().y) {
 				it.second->setPosition(it.second->getPosition().x, window.getSize().y);
@@ -124,15 +128,17 @@ void player::renderAllObject(double dt, sf::RenderWindow& window, bool Update) {
 				it.second->setPosition(it.second->getPosition().x, 0);
 				it.second->setVelocity(it.second->getVelocity().x, it.second->getVelocity().y * -1 - 0.05);
 			}
-			QuadtreeNode::root->insert(it.first, static_cast<object*>(it.second));
-			//sf::Vector2f old_position = it.second->Quadtree_old;
-			//sf::Vector2f new_position = it.second->getSprite()->getPosition();
-			//sf::Vector2f threshold = it.second->getSprite()->getSize();
-			//if (fabs(old_position.x - new_position.x) > 0 ){
-			//	old_position = new_position;
-			//	QuadtreeNode::root->erase(it.first, sf::FloatRect(old_position.x, old_position.y, threshold.x, threshold.y));
-			//	QuadtreeNode::root->insert(it.first, static_cast<object*>(it.second));
-			//}
+			//QuadtreeNode::root->insert(it.first, static_cast<object*>(it.second));
+			sf::Vector2f old_position = it.second->old_state->getPosition();
+			sf::Vector2f new_position = it.second->getSprite()->getPosition();
+			sf::Vector2f threshold = it.second->getSprite()->getSize();
+			if (fabs(old_position.y - new_position.y) >= threshold.y/2){
+				QuadtreeNode::root->erase(it.first, it.second->old_state);
+				delete it.second->old_state;
+				object* Object = static_cast<object*>(it.second);
+				it.second->old_state = new object(*Object);
+				QuadtreeNode::root->insert(it.first, static_cast<object*>(it.second));
+			}
 		}
 
 		sf::RectangleShape* sprite = it.second->getSprite();

@@ -120,6 +120,7 @@ int main() {
 		}
 		currentPoint += collisionHandler::handleCollision(window);
 		QuadtreeNode::root->displayQuadtreeVisual();
+		//QuadtreeNode::cleanTreeThroughly(window);
 		animationManager::Instance()->monitor(window);
 		soundManager::Instance()->monitor();
 
@@ -347,16 +348,18 @@ int main() {
 				static float difficulty = 3;
 				static int counts = 1; // just for id
 				if (elapsed.getElapsedTime().asSeconds() > 10 || enemy::getEnemyMap()->size() < 3) {
-					//generate enemy
-					int counter = 0;
-					for (int i = counts; i < counts + ((RNG::generateRandomFloat(window.getSize().x / 288, window.getSize().y / 176)) * difficulty); i++) {
-						enemy* Enemy = new enemy(i, "gameplay_enemy.png", RNG::generateRandomFloat(400, window.getSize().x), RNG::generateRandomFloat(0, window.getSize().y), RNG::generateRandomFloat(-1000, 1000), RNG::generateRandomFloat(-1000, 1000));
-						counter++;
+					if (enemy::getEnemyMap()->size() <= 30) {
+						//generate enemy
+						int counter = 0;
+						for (int i = counts; i < counts + ((RNG::generateRandomFloat(window.getSize().x / 288, window.getSize().y / 176)) * difficulty); i++) {
+							enemy* Enemy = new enemy(i, "gameplay_enemy.png", RNG::generateRandomFloat(400, window.getSize().x), RNG::generateRandomFloat(0, window.getSize().y), RNG::generateRandomFloat(-1000, 1000), RNG::generateRandomFloat(-1000, 1000));
+							counter++;
+						}
+						counts += counter;
+						if (counts == 999)counts = 1;
+						difficulty += 0.5;
+						elapsed.restart();
 					}
-					counts += counter;
-					if (counts == 999)counts = 1;
-					difficulty += 0.5;
-					elapsed.restart();
 				}
 			}
 

@@ -12,7 +12,7 @@ protected:
 	float velocityX = 0.f, velocityY = 0.f;
 	float maxY = 0.5f;
 	float minY = -0.5f;
-	sf::Vector2f Quadtree_old;
+	object* old_state;
 	sf::RectangleShape object_sprite;
 
 public:

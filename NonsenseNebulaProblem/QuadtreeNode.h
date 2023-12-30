@@ -17,9 +17,10 @@ public:
     bool hasChild = false;
     static QuadtreeNode* root;
     QuadtreeNode* parent = nullptr;
-    int entityCount = 0;
     std::map<int, object*> objects;
     std::vector<QuadtreeNode*> children;
+    static sf::Clock timer;
+    static sf::Time cleanTime;
     sf::RenderWindow& window;
 
     QuadtreeNode(double _x, double _y, double _width, double _height, sf::RenderWindow& _window);
@@ -27,9 +28,10 @@ public:
     void insert(int id, object* Object);
     void normalize();
     void erase(int id, object* Object);
-    void erase(int id, sf::FloatRect Object);
     int checkCollision();
     std::map<int, object*> getObjects();
     void displayQuadtreeVisual();
     static void reset(sf::RenderWindow& _window);
+    static void cleanTreeThroughly(sf::RenderWindow& window);
+    void clean();
 };
